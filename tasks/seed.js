@@ -111,6 +111,8 @@ async function main() {
         console.error('Error during seeding:', e);
         process.exit(1);
     }
+
+
 }
 
 main().then(() => {
