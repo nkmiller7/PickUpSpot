@@ -1,0 +1,9 @@
+import courtDataFunctions from './posts.js';
+import userDataFunctions from './users.js';
+import reviewDataFunctions from './reviews.js';
+import forumDataFunctions from './forums.js';
+
+export const courtData = courtDataFunctions;
+export const userData = userDataFunctions;
+export const reviewData = reviewDataFunctions;
+export const forumData = forumDataFunctions;
