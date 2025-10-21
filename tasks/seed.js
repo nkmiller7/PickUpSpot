@@ -11,7 +11,6 @@ const __dirname = path.dirname(__filename);
 const db = await dbConnection();
 await db.dropDatabase();
 
-// Helper functions for data cleaning
 function cleanString(str) {
     return str ? str.trim() : null;
 }
@@ -83,7 +82,6 @@ async function main() {
         process.exit(1);
     } 
 }
-
 
 main().then(() => {
     console.log('Done seeding database');

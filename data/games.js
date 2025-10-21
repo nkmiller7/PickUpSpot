@@ -53,22 +53,17 @@ const exportedMethods = {
     const startMinutes = startHour * 60 + startMinute;
     const endMinutes = endHour * 60 + endMinute;
 
-    if (endMinutes <= startMinutes) {
-      throw 'Error: End time must be after start time';
-    }
-
-    if (endMinutes - startMinutes > 180) {
-      throw 'Error: Game duration cannot exceed 3 hours';
-    }
-
+    if (endMinutes <= startMinutes) throw 'Error: End time must be after start time';
+    if (endMinutes - startMinutes > 180) throw 'Error: Game duration cannot exceed 3 hours';
+    
     const newGame = {
       userId: new ObjectId(userId),
       courtId: new ObjectId(courtId),
       date: dateObj,
       startTime: startTime,
       endTime: endTime,
-      maxPlayers: numOfPlayers,
-      currentPlayers: [new ObjectId(userId)], 
+      desiredParticipants: numOfPlayers,
+      registeredPlayers: [new ObjectId(userId)], 
       status: "scheduled",
       createdAt: new Date(),
       updatedAt: new Date()
@@ -76,10 +71,8 @@ const exportedMethods = {
 
     const gameCollection = await games();
     const insertInfo = await gameCollection.insertOne(newGame);
-    if (!insertInfo.acknowledged || !insertInfo.insertedId) {
-      throw 'Error: Could not add game';
-    }
-
+    if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add game';
+ 
     const newId = insertInfo.insertedId.toString();
     const game = await this.getGameById(newId);
     return game;
