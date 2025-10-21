@@ -1,5 +1,5 @@
 import userRoutes from './users.js';
-import courtRoutes from './posts.js';
+import courtRoutes from './courts.js';
 import reviewRoutes from './reviews.js';
 import forumRoutes from './forums.js';
 

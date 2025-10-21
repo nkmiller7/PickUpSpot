@@ -1,4 +1,4 @@
-import courtDataFunctions from './posts.js';
+import courtDataFunctions from './courts.js';
 import userDataFunctions from './users.js';
 import reviewDataFunctions from './reviews.js';
 import forumDataFunctions from './forums.js';

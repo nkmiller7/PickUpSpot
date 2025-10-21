@@ -1,4 +1,4 @@
-import { reviews } from "../config/mongoCollections";
+import { reviews } from "../config/mongoCollections.js";
 import validation from './validation.js';
 
 const exportedMethods = {

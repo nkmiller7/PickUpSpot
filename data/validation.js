@@ -9,6 +9,24 @@ const exportedMethods = {
       throw 'Error: id cannot be an empty string or just spaces';
     if (!ObjectId.isValid(id)) throw 'Error: invalid object ID';
     return id;
+  },
+  checkString(strVal, varName) {
+    if (!strVal) throw `Error: You must supply a ${varName}!`;
+    if (typeof strVal !== 'string') throw `Error: ${varName} must be a string!`;
+    strVal = strVal.trim();
+    if (strVal.length === 0)
+        throw `Error: ${varName} cannot be an empty string or string with just spaces`;
+    return strVal;
+  },
+
+  checkNumber(numVal, varName) {
+    if (numVal === undefined || numVal === null) throw `Error: You must supply a ${varName}.`;
+    if (typeof numVal === 'string') {
+      numVal = Number(numVal);
+    }
+    if (isNaN(numVal)) throw `Error: ${varName} must be a number.`;
+    if (numVal < 0) throw `Error: ${varName} cannot be negative.`;
+    return numVal;
   }
 };
 

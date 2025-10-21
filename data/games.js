@@ -1,4 +1,4 @@
-import { games } from "../config/mongoCollections";
+import { games } from "../config/mongoCollections.js";
 import validation from './validation.js';
 import { ObjectId } from 'mongodb';
 

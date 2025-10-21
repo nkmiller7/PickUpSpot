@@ -1,4 +1,4 @@
-import { forums } from "../config/mongoCollections";
+import { forums } from "../config/mongoCollections.js";
 import validation from './validation.js';
 import { ObjectId } from 'mongodb';
 
