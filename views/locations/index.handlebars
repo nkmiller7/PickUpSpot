@@ -1,0 +1,17 @@
+<![CDATA[<div class="locations-container">
+    {{#each locations}}
+    <div class="location-card">
+        <h2 class="location-name">{{name}}</h2>
+        <div class="location-info">
+            <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
+            {{#if phone}}
+            <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
+            {{/if}}
+            {{#if info}}
+            <p class="location-details">{{info}}</p>
+            {{/if}}
+        </div>
+        <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
+    </div>
+    {{/each}}
+</div>]]>

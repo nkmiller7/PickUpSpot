@@ -16,11 +16,11 @@ const exportedMethods = {
     return review;
   },
 
-  async getReviewByCourtId(courtId) {
-    courtId = validation.checkId(courtId);
+  async getReviewByLocationId(locationId) {
+    locationId = validation.checkId(locationId);
     const reviewCollection = await reviews();
-    const review = await reviewCollection.findOne({ courtId: courtId });
-    if (!review) throw 'Error: Review not found for the given courtId';
+    const review = await reviewCollection.findOne({ locationId: locationId });
+    if (!review) throw 'Error: Review not found for the given locationId';
     return review;
   },
 
@@ -31,9 +31,9 @@ const exportedMethods = {
     return reviewList;
   },
 
-  async addReview(userId, courtId, rating, comment) {
+  async addReview(userId, locationId, rating, comment) {
     userId = validation.checkId(userId);
-    courtId = validation.checkId(courtId);
+    locationId = validation.checkId(locationId);
     rating = validation.checkNumber(rating, 'Rating');
     if (rating < 1 || rating > 5) throw 'Error: Rating must be between 1 and 5';
     comment = validation.checkString(comment, 'Comment');
@@ -41,7 +41,7 @@ const exportedMethods = {
 
     const newReview = {
       userId: new ObjectId(userId),
-      courtId: new ObjectId(courtId),
+      locationId: new ObjectId(locationId),
       rating: rating,
       comment: comment,
       createdAt: new Date(),

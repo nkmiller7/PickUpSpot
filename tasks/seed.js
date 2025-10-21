@@ -1,6 +1,6 @@
 import { dbConnection, closeConnection } from '../config/mongoConnection.js';
-import { courts } from '../config/mongoCollections.js';
-import  courtMethods from '../data/courts.js';
+import { locations } from '../config/mongoCollections.js';
+import  locationMethods from '../data/locations.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -24,27 +24,27 @@ function parseCoordinates(lat, lon) {
     };
 }
 
-function formatCourtData(courtData, type) {
-    const coords = parseCoordinates(courtData.lat, courtData.lon);
-    
+function formatLocationData(locationData, type) {
+    const coords = parseCoordinates(locationData.lat, locationData.lon);
+
     return {
-        propId: cleanString(courtData.Prop_ID),
-        name: cleanString(courtData.Name),
-        location: cleanString(courtData.Location),
-        phone: cleanString(courtData.Phone),
-        info: cleanString(courtData.Info),
+        propId: cleanString(locationData.Prop_ID),
+        name: cleanString(locationData.Name),
+        location: cleanString(locationData.Location),
+        phone: cleanString(locationData.Phone),
+        info: cleanString(locationData.Info),
         lat: coords.lat,
         lon: coords.lon,
         tennis: type === 'tennis' ? {
-            numCourts: parseInt(courtData.Courts) || 0,
-            indoorOutdoor: courtData.Indoor_Outdoor || null,
-            surfaceType: courtData.Tennis_Type || 'Unknown',
-            accessible: courtData.Accessible === 'Y'
+            numCourts: parseInt(locationData.Courts) || 0,
+            indoorOutdoor: locationData.Indoor_Outdoor || null,
+            surfaceType: locationData.Tennis_Type || 'Unknown',
+            accessible: locationData.Accessible === 'Y'
         } : null,
         basketball: type === 'basketball' ? {
-            numCourts: parseInt(courtData.Courts) || 0,
-            indoorOutdoor: courtData.Indoor_Outdoor || null,
-            accessible: courtData.Accessible === 'Y'
+            numCourts: parseInt(locationData.Courts) || 0,
+            indoorOutdoor: locationData.Indoor_Outdoor || null,
+            accessible: locationData.Accessible === 'Y'
         } : null
     };
 }
@@ -64,15 +64,15 @@ async function main() {
         let successCount = 0;
         let errorCount = 0;
         
-        for (const court of tennisData) {
+        for (const location of tennisData) {
             try {
-                const courtData = formatCourtData(court, 'tennis');
-                await courtMethods.createOrUpdateCourt(courtData);
+                const locationData = formatLocationData(location, 'tennis');
+                await locationMethods.createOrUpdateLocation(locationData);
                 successCount++;
-                console.log(`Successfully added/updated ${court.Name}`);
+                console.log(`Successfully added/updated ${location.Name}`);
             } catch (e) {
                 errorCount++;
-                console.error(`Error adding court ${court.Name}: ${e}`);
+                console.error(`Error adding location ${location.Name}: ${e}`);
             }
         }
         console.log(`Tennis courts seeding completed. Successfully added/updated ${successCount} courts. Failed to add ${errorCount} courts.`);
@@ -94,15 +94,15 @@ async function main() {
         let successCount = 0;
         let errorCount = 0;
 
-        for (const court of basketballData) {
+        for (const location of basketballData) {
             try {
-                const courtData = formatCourtData(court, 'basketball');
-                await courtMethods.createOrUpdateCourt(courtData);
+                const locationData = formatLocationData(location, 'basketball');
+                await locationMethods.createOrUpdateLocation(locationData);
                 successCount++;
-                console.log(`Successfully added/updated ${court.Name}`);
+                console.log(`Successfully added/updated ${location.Name}`);
             } catch (e) {
                 errorCount++;
-                console.error(`Error adding court ${court.Name}: ${e}`);
+                console.error(`Error adding location ${location.Name}: ${e}`);
             }
         }
         console.log(`Basketball courts seeding completed. Successfully added/updated ${successCount} courts. Failed to add ${errorCount} courts.`);

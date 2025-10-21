@@ -14,10 +14,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.get('/courts/:id', async (req, res) => {
+router.get('/locations/:id', async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
-    const forum = await forumData.getForumMessagesByCourtId(id);
+    const forum = await forumData.getForumMessagesByLocationId(id);
     res.json(forum);
   } catch (e) {
     res.status(404).json({ error: e.toString() });
