@@ -20,4 +20,7 @@ export const courts = getCollectionFn('courts');
 export const users = getCollectionFn('users');
 export const reviews = getCollectionFn('reviews');
 export const forums = getCollectionFn('forums');
+export const games = getCollectionFn('games');
+
+
 

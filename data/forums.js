@@ -14,6 +14,14 @@ const exportedMethods = {
     const forum = await forumCollection.findOne({ _id: new ObjectId(id) });
     if (!forum) throw 'Error: Forum not found';
     return forum;
+  },
+
+  async getForumByCourtId(courtId) {
+    courtId = validation.checkId(courtId);
+    const forumCollection = await forums();
+    const forum = await forumCollection.findOne({ courtId: courtId });
+    if (!forum) throw 'Error: Forum not found for the given courtId';
+    return forum;
   }
 };
 

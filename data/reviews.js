@@ -14,7 +14,23 @@ const exportedMethods = {
     const review = await reviewCollection.findOne({ _id: new ObjectId(id) });
     if (!review) throw 'Error: Review not found';
     return review;
-  }
+  },
+
+  async getReviewByCourtId(courtId) {
+    courtId = validation.checkId(courtId);
+    const reviewCollection = await reviews();
+    const review = await reviewCollection.findOne({ courtId: courtId });
+    if (!review) throw 'Error: Review not found for the given courtId';
+    return review;
+  },
+
+  async getReviewsByUserId(userId) {
+    userId = validation.checkId(userId);
+    const reviewCollection = await reviews();
+    const reviewList = await reviewCollection.find({ userId: userId }).toArray();
+    return reviewList;
+  },
+
 };
 
 export default exportedMethods;

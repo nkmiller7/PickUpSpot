@@ -1,13 +1,13 @@
 import {Router} from 'express';
-import { forumData } from '../data/index.js';
+import { gameData } from '../data/index.js';
 import validation from '../data/validation.js';
 
 const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    const forumList = await forumData.getAllForums();
-    res.json(forumList);
+    const gameList = await gameData.getAllGames();
+    res.json(gameList);
   } catch (e) {
     res.status(500).json({ error: e.toString() });
   }
@@ -16,8 +16,18 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
-    const forum = await forumData.getForumById(id);
-    res.json(forum);
+    const game = await gameData.getGameById(id);
+    res.json(game);
+  } catch (e) {
+    res.status(404).json({ error: e.toString() });
+  }
+});
+
+router.get('/users/:id', async (req, res) => {
+  try {
+    const id = validation.checkId(req.params.id);
+    const gameList = await gameData.getGamesByUserId(id);
+    res.json(gameList);
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
@@ -26,11 +36,12 @@ router.get('/:id', async (req, res) => {
 router.get('/courts/:id', async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
-    const forum = await forumData.getForumByCourtId(id);
-    res.json(forum);
+    const gameList = await gameData.getGamesByCourtId(id);
+    res.json(gameList);
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
 });
 
 export default router;
+
