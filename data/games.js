@@ -17,10 +17,10 @@ const exportedMethods = {
     return game;
   },
 
-  async getGamesByCourtId(courtId) {
-    courtId = validation.checkId(courtId);
+  async getGamesByLocationId(locationId) {
+    locationId = validation.checkId(locationId);
     const gameCollection = await games();
-    const gameList = await gameCollection.find({ courtId: courtId }).toArray();
+    const gameList = await gameCollection.find({ locationId: locationId }).toArray();
     return gameList;
   },
   
@@ -31,10 +31,10 @@ const exportedMethods = {
     return gameList;
   },
 
-  async addGame(userId, courtId, date, startTime, endTime, numOfPlayers) {
+  async addGame(userId, locationId, date, startTime, endTime, numOfPlayers) {
     userId = validation.checkId(userId);
-    courtId = validation.checkId(courtId);
-    
+    locationId = validation.checkId(locationId);
+
     if (!date || typeof date !== 'string') throw 'Error: Date must be provided as a string';
     const dateObj = new Date(date);
     if (isNaN(dateObj.getTime())) throw 'Error: Invalid date format';
@@ -58,7 +58,7 @@ const exportedMethods = {
     
     const newGame = {
       userId: new ObjectId(userId),
-      courtId: new ObjectId(courtId),
+      locationId: new ObjectId(locationId),
       date: dateObj,
       startTime: startTime,
       endTime: endTime,

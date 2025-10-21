@@ -33,10 +33,10 @@ router.get('/users/:id', async (req, res) => {
   }
 });
 
-router.get('/courts/:id', async (req, res) => {
+router.get('/locations/:id', async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
-    const gameList = await gameData.getGamesByCourtId(id);
+    const gameList = await gameData.getGamesByLocationId(id);
     res.json(gameList);
   } catch (e) {
     res.status(404).json({ error: e.toString() });

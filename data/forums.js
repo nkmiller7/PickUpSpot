@@ -3,12 +3,12 @@ import validation from './validation.js';
 import { ObjectId } from 'mongodb';
 
 const exportedMethods = {
- 
-    async getForumMessagesByCourtId(courtId, limit = 50) {
-        courtId = validation.checkId(courtId);
+
+    async getForumMessagesByLocationId(locationId, limit = 50) {
+        locationId = validation.checkId(locationId);
         if (typeof limit !== 'number' || limit < 1) throw 'Error: limit must be a positive number';
         const forumCollection = await forums();
-        const messages = await forumCollection.find({ courtId: new ObjectId(courtId) }).sort({ createdAt: -1 }).limit(limit).toArray();
+        const messages = await forumCollection.find({ locationId: new ObjectId(locationId) }).sort({ createdAt: -1 }).limit(limit).toArray();
         return messages;
     },
 
@@ -20,13 +20,13 @@ const exportedMethods = {
         return message;
     },
 
-    async createMessage(courtId, userId, content) {
-        courtId = validation.checkId(courtId);
+    async createMessage(locationId, userId, content) {
+        locationId = validation.checkId(locationId);
         userId = validation.checkId(userId);
         if (!content || typeof content !== 'string' || content.trim().length === 0) throw 'Error: Message content must be a non-empty string';
-        if (content.trim().length > 500) 'Error: Message content cannot exceed 500 characters';
+        if (content.trim().length > 500) throw 'Error: Message content cannot exceed 500 characters';
         const newMessage = {
-            courtId: new ObjectId(courtId),
+            locationId: new ObjectId(locationId),
             userId: new ObjectId(userId),
             content: content.trim(),
             createdAt: new Date()
