@@ -71,7 +71,7 @@ const exportedMethods = {
                 const basketballIndoorOutdoor = courtData.basketball.indoorOutdoor ? validation.checkString(courtData.basketball.indoorOutdoor, 'Indoor/Outdoor') : null;
                 
                 facilities.basketball = {
-                    numCourts: basketballCourts ? parseInt(basketballCourts) : null,
+                    numCourts: basketballCourts ? parseInt(basketballCourts) : 1,
                     indoorOutdoor: basketballIndoorOutdoor,
                     accessible: courtData.basketball.accessible === 'Y'
                 };
@@ -100,7 +100,7 @@ const exportedMethods = {
                         accessible: courtData.tennis.accessible === 'Y'
                     } : null,
                     basketball: courtData.basketball ? {
-                        numCourts: courtData.basketball.numCourts ? validation.checkNumber(courtData.basketball.numCourts, 'Basketball Courts') : null,
+                        numCourts: courtData.basketball.numCourts ? validation.checkNumber(courtData.basketball.numCourts, 'Basketball Courts') : 1,
                         indoorOutdoor: courtData.basketball.indoorOutdoor ? validation.checkString(courtData.basketball.indoorOutdoor, 'Indoor/Outdoor') : null,
                         accessible: courtData.basketball.accessible === 'Y'
                     } : null
