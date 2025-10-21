@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>PickUpSpot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/components/header.css">
+    {{#if courts}}
+    <link rel="stylesheet" href="/public/css/pages/courts.css">
+    {{/if}}
+</head>
+
+<body>
+    <header class="header">
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="/parks" class="nav-item">Parks</a></li>
+                <li><a href="/games" class="nav-item">Games</a></li>
+                <li><a href="/about" class="nav-item">About</a></li>
+            </ul>
+        </nav>
+
+        <span class="app-text">PickUpSpot</span>
+       
+        <div class="auth-section">
+            {{#if user}}
+            <div class="profile-section">
+                {{#if user.profileImage}}
+                <img src="{{user.profileImage}}" alt="Profile" class="profile-image">
+                {{/if}}
+                <a href="/profile" class="profile-name">{{user.username}}</a>
+                <a href="/logout" class="auth-button sign-in">Sign Out</a>
+            </div>
+            {{else}}
+            <a href="/login" class="auth-button sign-in">Sign In</a>
+            <a href="/register" class="auth-button sign-up">Sign Up</a>
+            {{/if}}
+        </div>
+    </header>
+    <main>
+        {{{body}}}
+    </main>
+    <footer>Footer</footer>
+
+
+
+</body>
+
+</html>
