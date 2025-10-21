@@ -31,6 +31,30 @@ const exportedMethods = {
     return reviewList;
   },
 
+  async addReview(userId, courtId, rating, comment) {
+    userId = validation.checkId(userId);
+    courtId = validation.checkId(courtId);
+    rating = validation.checkNumber(rating, 'Rating');
+    if (rating < 1 || rating > 5) throw 'Error: Rating must be between 1 and 5';
+    comment = validation.checkString(comment, 'Comment');
+    if (comment.length > 250) throw 'Error: Comment cannot exceed 250 characters';
+
+    const newReview = {
+      userId: new ObjectId(userId),
+      courtId: new ObjectId(courtId),
+      rating: rating,
+      comment: comment,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    const reviewCollection = await reviews();
+    const insertInfo = await reviewCollection.insertOne(newReview);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add review';
+    const newId = insertInfo.insertedId.toString();
+    const review = await this.getReviewById(newId);
+    return review;
+  }
 };
 
 export default exportedMethods;

@@ -81,6 +81,36 @@ async function main() {
         console.error('Error during seeding:', e);
         process.exit(1);
     } 
+
+    try {
+        const basketballData = JSON.parse(
+            await fs.readFile(
+                path.join(__dirname, 'DPR_Basketball_001.json'),
+                'utf8'
+            )
+        );
+
+        console.log('Inserting basketball courts...');
+        let successCount = 0;
+        let errorCount = 0;
+
+        for (const court of basketballData) {
+            try {
+                const courtData = formatCourtData(court, 'basketball');
+                await courtMethods.createOrUpdateCourt(courtData);
+                successCount++;
+                console.log(`Successfully added/updated ${court.Name}`);
+            } catch (e) {
+                errorCount++;
+                console.error(`Error adding court ${court.Name}: ${e}`);
+            }
+        }
+        console.log(`Basketball courts seeding completed. Successfully added/updated ${successCount} courts. Failed to add ${errorCount} courts.`);
+        console.log('Seeding completed!');
+    } catch (e) {
+        console.error('Error during seeding:', e);
+        process.exit(1);
+    }
 }
 
 main().then(() => {
