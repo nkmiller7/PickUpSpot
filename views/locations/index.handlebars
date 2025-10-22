@@ -1,4 +1,4 @@
-<![CDATA[<div class="locations-container">
+<div class="locations-container">
     {{#each locations}}
     <div class="location-card">
         <h2 class="location-name">{{name}}</h2>
@@ -7,11 +7,9 @@
             {{#if phone}}
             <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
             {{/if}}
-            {{#if info}}
-            <p class="location-details">{{info}}</p>
-            {{/if}}
+            <p class="location-details">Click view details to learn more about this particular location.</p>
         </div>
         <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
     </div>
     {{/each}}
-</div>]]>
+</div>
