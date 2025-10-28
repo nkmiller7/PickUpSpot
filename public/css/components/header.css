@@ -1,9 +1,10 @@
 .header {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto 1fr auto auto;
     align-items: center;
+    gap: 2rem;
     padding: 1rem 2rem;
-    background-color: #a0d2eb;;
+    background-color: #a0d2eb;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
@@ -19,7 +20,7 @@
 .logo img {
     height: 40px;
     width: auto;
-    margin-right: 10px;
+    display: block;
 }
 
 .app-text {

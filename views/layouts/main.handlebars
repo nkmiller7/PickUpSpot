@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/components/header.css">
+    <link rel="stylesheet" href="/public/css/components/footer.css">
     {{#if locations}}
     <link rel="stylesheet" href="/public/css/pages/locations.css">
     {{/if}}
@@ -14,6 +15,9 @@
 
 <body>
     <header class="header">
+        <a href="/" class="logo">
+        <img src="/public/images/logo.svg" alt="PickUpSpot Logo" />
+        </a>
         <nav>
             <ul class="nav-menu">
                 <li><a href="/parks" class="nav-item">Parks</a></li>
@@ -42,7 +46,13 @@
     <main>
         {{{body}}}
     </main>
-    <footer>Footer</footer>
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>PickUpSpot | Created by Noah Miller, Jacob Pellini, Jared Soiferman, Marc Sulsenti</p>
+    <p>CS 546B - Web Programming, Stevens Institute of Technology</p>
+    <p>GitHub: <a href="https://github.com/nkmiller7/PickUpSpot" target="_blank">nkmiller7/PickUpSpot</a></p>
+  </div>
+</footer>
 
 
 
