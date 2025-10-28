@@ -24,15 +24,3 @@ Based on current JSON Data
 
 //Seed the database, then we need to see how the actual data looks
 // From that we know how to query, atleast something like the locations page
-
-
-export const searchLocations = async (collection,filters) => {
-    // where collection is some collection and filters is an object with possible filter keys
-    if (!collection || !Array.isArray(collection)) {
-        throw new Error('Collection provided is null or not an array');
-    }
-
-    
-
-return filteredResults
-}
