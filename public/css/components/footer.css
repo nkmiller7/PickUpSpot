@@ -1,0 +1,24 @@
+/* 
+This file contains all the properties of the footer component
+The actual footer content is in the main handlebar
+*/
+.site-footer {
+  width: 100%;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 2.5px 0 10px 0;
+  margin-top: auto;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+.site-footer .footer-content a {
+  color: #4fc3f7;
+  text-decoration: underline;
+}
+.site-footer .footer-content a:hover {
+  color: #81d4fa;
+}
+.site-footer .footer-content p {
+  margin: 3px 0;
+}
