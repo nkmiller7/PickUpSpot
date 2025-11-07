@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { locationData } from './index.js';
 
 
@@ -108,7 +109,3 @@ export const searchLocation = async (
         throw new Error(`Search failed: ${error.message}`);
     }
 };
-
-
-
-
