@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { locationData } from './index.js';
 
 
