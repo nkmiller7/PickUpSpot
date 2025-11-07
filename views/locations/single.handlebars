@@ -49,8 +49,16 @@
         <div class = "forum comments">
             <h2>Forum Comments</h2>
             <ul>
-                <li></li>
+            {{#each forum}}
+                <li>
+                    {{#if forum.userName}}
+                    Name: {{forum.userName}}<br>
+                    {{/if}}
+                    Comment: {{forum.content}}<br>
+                    Posted: {{forum.createdAt}}
+                </li>
             </ul>
+            {{/each}}
         </div>
         {{/if}}
     </div>

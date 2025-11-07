@@ -24,7 +24,7 @@ router.get('/locations/:id', async (req, res) => {
     for(let c of forumOld){
       let user = await userData.getUserById(c.userId);
       if(user.isAnonymous === false){
-        forum.append(
+        forum.push(
           {
             userName: user.firstName+" "+user.lastName,
             content: c.content,
@@ -32,7 +32,7 @@ router.get('/locations/:id', async (req, res) => {
           }
         )
       }else{
-        forum.append(
+        forum.push(
           {
             content: c.content,
             createdAt: c.createdAt
