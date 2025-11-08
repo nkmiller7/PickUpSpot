@@ -1,7 +1,8 @@
 import { dbConnection, closeConnection } from '../config/mongoConnection.js';
 import { locations } from '../config/mongoCollections.js';
-import  locationMethods from '../data/locations.js';
+import  userMethods from '../data/users.js';
 import forumMethods from '../data/forums.js';
+import locationMethods from '../data/locations.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -13,15 +14,31 @@ const db = await dbConnection();
 
 async function main() {
     try {
-        const forumData = JSON.parse(
-            await fs.readFile(
-                path.join(__dirname, 'Sample_Comments.json'),
-                'utf8'
-            )
-        );
         console.log('Inserting comments...');
         let successCount = 0;
         let errorCount = 0;
+        let users = await userMethods.getAllUsers();
+        let locations = await locationMethods.getAllLocations();
+        if(!users){
+            throw 'Failed to get users!';
+        }
+        const forumData=[
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[0]._id.toString(),
+                "content": "This park is awesome! I had so much fun!"
+            },
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[9]._id.toString(),
+                "content": "What's up guys, looking for a couple buddies to play a few games of basketball with, preferably at advanced difficulty. Keep up if you can!"
+            },
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[7]._id.toString(),
+                "content": "This park is falling apart! It's sad to see :("
+            },
+        ]
         for (const comment of forumData) {
             try {
                 await forumMethods.createMessage(comment.locationId, comment.userId, comment.content);
