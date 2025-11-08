@@ -10,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const db = await dbConnection();
+await db.dropDatabase();
 
 async function main() {
     try {
