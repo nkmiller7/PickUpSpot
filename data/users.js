@@ -27,7 +27,10 @@ const exportedMethods = {
       lastName: lastName,
       email: email,
       password: password,
-      isAnnonymous: isAnnonymous
+      isAnnonymous: isAnnonymous,
+      favorites: [],
+      parksAttended: [],
+      createdAt: new Date()
     };
     const userCollection = await users();
     const newInsertInformation = await userCollection.insertOne(newUser);
