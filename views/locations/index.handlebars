@@ -1,3 +1,11 @@
+<div class ="search-bar">
+    <form action="/locations" method="GET" class="search-form">
+        <input type="text" name="searchTerm" placeholder="Search locations..." value="{{searchTerm}}" class="search-input">
+        <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+
+
 <div class="locations-container">
     {{#each locations}}
     <div class="location-card">

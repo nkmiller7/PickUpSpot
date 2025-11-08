@@ -1,3 +1,64 @@
+
+/*  SearchBox CSS */
+.search-bar {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 1rem 0; /* keep spacing but no visual container */
+}
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    border-radius: 25px; 
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    padding: 0.75rem 1rem;
+    font-size: 16px;
+    flex-grow: 1;
+    border-radius: 20px;
+    background: transparent;
+}
+
+.search-input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.search-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.search-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+/* Locations Container/Cards */
+
 .locations-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
