@@ -45,14 +45,6 @@ router.get('/locations/:id', async (req, res) => {
     res.status(404).json({ error: e.toString() });
   }
 });
-router.post('/locations/:id', async (req, res) =>{
-  try{
-    const id = validation.checkId(req.params.id);
-    const newComment = await 
-  }
-  catch(e){
-    res.status(404).json({ error: e.toString() })
-  }
-})
+
 
 export default router;
