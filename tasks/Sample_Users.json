@@ -1,0 +1,72 @@
+[
+    {
+    "firstName": "Noah",
+    "lastName": "Miller",
+    "email": "noah@example.com",
+    "password": "$2a$10$XdvNkfdNIL8F8xsuIUeSbN",
+    "isAnonymous": false
+    },
+    {
+    "firstName": "Jared",
+    "lastName": "Soiferman",
+    "email": "jared@example.com",
+    "password": "fe6we78$#fB",
+    "isAnonymous": false
+    },
+    {
+    "firstName": "Jacob",
+    "lastName": "Pellini",
+    "email": "jacob@example.com",
+    "password": "fGM9wef92323nf%",
+    "isAnonymous": false
+    },
+    {
+    "firstName": "Marc",
+    "lastName": "Sulsenti",
+    "email": "marc@example.com",
+    "password": "bfo^Rbvnmwpef",
+    "isAnonymous": true
+    },
+    {
+    "firstName": "Patrick",
+    "lastName": "Hill",
+    "email": "patrick@example.com",
+    "password": "m9*4dXwQkV",
+    "isAnonymous": false
+    },
+    {
+    "firstName": "Shudong",
+    "lastName": "Hao",
+    "email": "shudong@example.com",
+    "password": "vLi81eQv9*",
+    "isAnonymous": true
+    },
+    {
+    "firstName": "Phillipe",
+    "lastName": "Meunier",
+    "email": "phillipe@example.com",
+    "password": "X3wk1@aD9",
+    "isAnonymous": false
+    },
+    {
+    "firstName": "Sam",
+    "lastName": "Kim",
+    "email": "sam@example.com",
+    "password": "K7@wx064",
+    "isAnonymous": true
+    },
+    {
+    "firstName": "Reza",
+    "lastName": "Peruvian",
+    "email": "reza@example.com",
+    "password": "Gp1Q#n+sK",
+    "isAnonymous": false
+    },
+    {
+    "firstName": "Aaron",
+    "lastName": "Klappholtz",
+    "email": "aaron@example.com",
+    "password": "Cy72q3fonieg&",
+    "isAnonymous": false
+    }
+]

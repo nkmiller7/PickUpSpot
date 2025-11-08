@@ -44,8 +44,28 @@
             </ul>
         </div>
         {{/if}}
+    <div class="forum-section">
+        {{#if forum}}
+        <div class = "forum-comments">
+            <h2>Forum Comments</h2>
+            <ul>
+            {{#each forum}}
+                <li>
+                    {{#if forum.userName}}
+                    Name: {{forum.userName}}<br>
+                    {{/if}}
+                    Comment: {{forum.content}}<br>
+                    Posted: {{forum.createdAt}}
+                </li>
+            </ul>
+            {{/each}}
+        </div>
+        {{/if}}
+        <div class = "add-comment">
+            
+        </div>
     </div>
-
+    </div>
     <div class="actions">
         <a href="/locations" class="back-btn">Back to All Locations</a>
     </div>
