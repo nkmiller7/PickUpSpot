@@ -2,6 +2,7 @@ import {Router} from 'express';
 import { locationData } from '../data/index.js';
 import { forumData } from '../data/index.js';
 import { userData } from '../data/index.js';
+import { reviewData } from '../data/index.js';
 import validation from '../data/validation.js';
 
 const router = Router();
@@ -40,7 +41,32 @@ router.get('/:id', async (req, res) => {
         )
       }
     }
-    res.render('locations/single', { location: location, forum: forum });
+    const reviewsOld= await reviewData.getReviewsByLocationId(id);
+    const reviews = [];
+    for(let r of reviewsOld.reverse()){
+      let user = await userData.getUserById(r.userId.toString());
+      if(user.isAnonymous === false){
+        reviews.push(
+          {
+            userName: user.firstName+" "+user.lastName,
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            updatedAt: r.updatedAt
+          }
+        )
+      }else{
+        reviews.push(
+          {
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            updatedAt: r.updatedAt
+          }
+        )
+      }
+    }
+    res.render('locations/single', { location: location, forum: forum, reviews: reviews});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }

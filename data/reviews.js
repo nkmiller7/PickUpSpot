@@ -19,7 +19,7 @@ const exportedMethods = {
   async getReviewsByLocationId(locationId) {
     locationId = validation.checkId(locationId);
     const reviewCollection = await reviews();
-    const review = await reviewCollection.find({ locationId: locationId });
+    const review = await reviewCollection.find({ locationId: locationId }).toArray();
     if (!review) throw 'Error: Review not found for the given locationId';
     return review;
   },
