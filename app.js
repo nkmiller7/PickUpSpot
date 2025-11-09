@@ -56,19 +56,6 @@ app.use("/login", (req, res, next) => {
   req.method = "POST";
   next();
 });
-app.post("/login", (req, res) => {
-  //Auth
-  req.session.user = {
-    firstName: "DbgFirst",
-    lastName: "DbgLast",
-    email: "DbgEmail",
-  };
-  return res.redirect("/locations");
-});
-app.use("/logout", (req, res) => {
-  req.session.destroy();
-  return res.redirect("/");
-});
 
 configRoutesFunction(app);
 
