@@ -1,6 +1,8 @@
 import {ObjectId} from 'mongodb';
 import pkg from 'validator';
 const { isEmail } = pkg;
+import { locations } from "../config/mongoCollections.js";
+import { users } from "../config/mongoCollections.js";
 
 const exportedMethods = {
   checkId(id) {
@@ -34,6 +36,20 @@ const exportedMethods = {
     emailVal = this.checkString(emailVal);
     if (!isEmail(emailVal)) throw `Error: ${varName} must be a valid email address.`;
     return emailVal;
+  },
+  async locationExists(locationId){
+    const locationCollection = await locations();
+    if(!(await locationCollection.find({ _id: new ObjectId(locationId)}))){
+      throw `Error: Location with ID ${locationId} does not exist`;
+    }
+    return locationId;
+  },
+  async userExists(userId){
+    const userCollection = await users();
+    if(!(await userCollection.find({ _id: new ObjectId(userId)}))){
+       throw `Error: Location with ID ${userId} does not exist`;
+    }
+    return userId;
   }
 };
 
