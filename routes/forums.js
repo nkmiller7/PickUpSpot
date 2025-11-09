@@ -2,7 +2,6 @@ import {Router} from 'express';
 import { forumData } from '../data/index.js';
 import { userData } from '../data/index.js';
 import validation from '../data/validation.js';
-import { useReducer } from 'react';
 
 const router = Router();
 
