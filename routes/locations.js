@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
     res.render('locations/index', { 
       locations: locationList,
       isLocationsPage: true,
+      user: req.session.user,
       searchValues: {
         searchTerm: searchTerm || '',
         sport: sport || '',
@@ -102,7 +103,7 @@ router.get('/:id', async (req, res) => {
       ratings_sum+=rating;
     }
     const averageRating = ratings_sum/ratings.length;
-    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, singleLocation: true});
+    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, user: req.session.user, singleLocation: true});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
