@@ -44,6 +44,7 @@
             </ul>
         </div>
         {{/if}}
+    </div>
     <div class="forum-section">
         {{#if forum}}
         <div class = "forum-comments">
@@ -64,10 +65,15 @@
              </ul>
         </div>
         {{/if}}
-        <div class = "add-comment">
+        
+    </div>
+    <div class = "review-section">
+        {{#if reviews}}
+        <div class = "reviews">
+            <h2>Overall Rating: {{}}</h2>
             
         </div>
-    </div>
+        {{/if}}
     </div>
     <div class="actions">
         <a href="/locations" class="back-btn">Back to All Locations</a>
