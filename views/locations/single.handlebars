@@ -51,14 +51,17 @@
             <ul>
             {{#each forum}}
                 <li>
-                    {{#if forum.userName}}
-                    Name: {{forum.userName}}<br>
+                    {{#if userName}}
+                    Name: {{userName}}<br>
                     {{/if}}
-                    Comment: {{forum.content}}<br>
-                    Posted: {{forum.createdAt}}
+                    {{#unless userName}}
+                    Name: Anonymous<br>
+                    {{/unless}}
+                    Comment: {{content}}<br>
+                    Posted: {{createdAt}}
                 </li>
-            </ul>
             {{/each}}
+             </ul>
         </div>
         {{/if}}
         <div class = "add-comment">
