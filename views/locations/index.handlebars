@@ -1,36 +1,49 @@
 <div class="search-bar">
     <form action="/locations" method="GET" class="search-form">
-        <input type="text" name="searchTerm" placeholder="Search locations..." value="{{searchTerm}}"
-            class="search-input">
-        <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+        <div class="search-input-row">
+            <input type="text" name="searchTerm" placeholder="Search locations..." value="{{searchValues.searchTerm}}"
+                class="search-input">
+            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        
+        <div class="search-bar-filters">
+            <select name="sport" class="search-bar-filter">
+                <option value="">Any Sport</option>
+                <option value="basketball">Basketball</option>
+                <option value="tennis">Tennis</option>
+            </select>
+
+            <select name="accessible" class="search-bar-filter">
+                <option value="">Any Accessibility</option>
+                <option value="true">Accessible Only</option>
+            </select>
+
+            <select name="courtType" class="search-bar-filter">
+                <option value="">Any Court Type</option>
+                <option value="hard">Hard Court</option>
+                <option value="clay">Clay Court</option>
+            </select>
+
+            <select name="indoorOutdoor" class="search-bar-filter">
+                <option value="">Any Environment</option>
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+            </select>
+        </div>
     </form>
+</div>
 
-    <div class="search-bar-filters">
-        <select name="sport" class="search-bar-filter">
-            <option value="">Any Sport</option>
-            <option value="basketball">Basketball</option>
-            <option value="tennis">Tennis</option>
-        </select>
-
-        <select name="accessible" class="search-bar-filter">
-            <option value="">Any Accessibility</option>
-            <option value="true">Accessible Only</option>
-        </select>
-
-        <select name="courtType" class="search-bar-filter">
-            <option value="">Any Court Type</option>
-            <option value="hard">Hard Court</option>
-            <option value="clay">Clay Court</option>
-            <option value="grass">Grass Court</option>
-        </select>
-
-        <select name="indoorOutdoor" class="search-bar-filter">
-            <option value="">Any Environment</option>
-            <option value="indoor">Indoor</option>
-            <option value="outdoor">Outdoor</option>
-        </select>
-
+{{#if searchValues.searchTerm}}
+    <div class="search-results-info">
+        <p>Found {{resultCount}} location(s) {{#if searchValues.searchTerm}}for "{{searchValues.searchTerm}}"{{/if}}</p>
     </div>
+{{else}}
+    {{#if resultCount}}
+        <div class="search-results-info">
+            <p>Showing {{resultCount}} location(s)</p>
+        </div>
+    {{/if}}
+{{/if}}
 
     <div class="locations-container">
         {{#each locations}}
@@ -49,3 +62,56 @@
         </div>
         {{/each}}
     </div>
+
+<script>
+    //runs after page load
+    // preserves search values, disableds irrelevant filters
+document.addEventListener('DOMContentLoaded', function() {
+    const searchValues = {
+        sport: '{{searchValues.sport}}',
+        accessible: '{{searchValues.accessible}}',
+        courtType: '{{searchValues.courtType}}',
+        indoorOutdoor: '{{searchValues.indoorOutdoor}}'
+    };
+
+    const sportSelect = document.querySelector('select[name="sport"]');
+    const accessibleSelect = document.querySelector('select[name="accessible"]');
+    const courtTypeSelect = document.querySelector('select[name="courtType"]');
+    const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
+
+    if (sportSelect && searchValues.sport) {
+        sportSelect.value = searchValues.sport;
+    }
+    if (accessibleSelect && searchValues.accessible) {
+        accessibleSelect.value = searchValues.accessible;
+    }
+    if (courtTypeSelect && searchValues.courtType) {
+        courtTypeSelect.value = searchValues.courtType;
+    }
+    if (indoorOutdoorSelect && searchValues.indoorOutdoor) {
+        indoorOutdoorSelect.value = searchValues.indoorOutdoor;
+    }
+
+    function toggleFilters() {
+        const selectedSport = sportSelect.value;
+        
+        if (selectedSport === 'basketball') {
+            courtTypeSelect.disabled = true;
+            indoorOutdoorSelect.disabled = true;
+            courtTypeSelect.style.opacity = '0.5';
+            indoorOutdoorSelect.style.opacity = '0.5';
+        } else {
+            courtTypeSelect.disabled = false;
+            indoorOutdoorSelect.disabled = false;
+            courtTypeSelect.style.opacity = '1';
+            indoorOutdoorSelect.style.opacity = '1';
+        }
+    }
+
+    toggleFilters();
+
+    if (sportSelect) {
+        sportSelect.addEventListener('change', toggleFilters);
+    }
+});
+</script>
