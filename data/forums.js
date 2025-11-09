@@ -23,7 +23,7 @@ const exportedMethods = {
     async createMessage(locationId, userId, content) {
         locationId = validation.checkId(locationId);
         userId = validation.checkId(userId);
-        if (!content || typeof content !== 'string' || content.trim().length === 0) throw 'Error: Message content must be a non-empty string';
+        content = validation.checkString(content);
         if (content.trim().length > 500) throw 'Error: Message content cannot exceed 500 characters';
         const newMessage = {
             locationId: new ObjectId(locationId),
