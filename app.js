@@ -5,6 +5,9 @@ import session from "express-session";
 
 const app = express();
 
+app.use("/public", express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
   name: "PickUpSpotSession",
   secret: "960ad0d5e52653b8ba4ea4d5a96b59af1ea965f848eb380287f56f94a1a729bd",
@@ -13,12 +16,59 @@ app.use(session({
   cookie: { maxAge: 60000 }
 }));
 
-app.use("/public", express.static("public"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+
+app.use("/about", (req, res, next) => {
+  if (!req.session.user)
+    return res.redirect("/");
+  next();
+});
+app.use("/forums", (req, res, next) => {
+  if (!req.session.user)
+    return res.redirect("/");
+  next();
+});
+app.use("/games", (req, res, next) => {
+  if (!req.session.user)
+    return res.redirect("/");
+  next();
+});
+app.use("/locations", (req, res, next) => {
+  if (!req.session.user)
+    return res.redirect("/");
+  next();
+});
+app.use("/reviews", (req, res, next) => {
+  if (!req.session.user)
+    return res.redirect("/");
+  next();
+});
+app.use("/users", (req, res, next) => {
+  if (!req.session.user)
+    return res.redirect("/");
+  next();
+});
+
+app.use("/login", (req, res, next) => {
+  if (req.session.user)
+    return res.redirect("/locations");
+  req.method = "POST";
+  next();
+});
+app.post("/login", (req, res) => {
+  //Auth
+  req.session.user = {
+    firstName: "DbgFirst",
+    lastName: "DbgLast",
+    email: "DbgEmail",
+  };
+  return res.redirect("/locations");
+});
+app.use("/logout", (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+});
 
 configRoutesFunction(app);
 
