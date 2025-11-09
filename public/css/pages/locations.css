@@ -4,7 +4,7 @@
     background: none;
     border: none;
     box-shadow: none;
-    padding: 1rem 0; /* keep spacing but no visual container */
+    padding: 1rem 0;
 }
 .search-form {
     display: flex;
@@ -52,6 +52,35 @@
 .search-button:hover {
     transform: scale(1.1);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Search Bar Filters */
+
+.search-bar-filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-bar-filter {
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 25px; 
+    background: white;
+    font-size: 14px;
+    min-width: 120px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.search-bar-filter:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 2px 12px rgba(0, 123, 255, 0.3);
 }
 
 

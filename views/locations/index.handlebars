@@ -1,25 +1,51 @@
-<div class ="search-bar">
+<div class="search-bar">
     <form action="/locations" method="GET" class="search-form">
-        <input type="text" name="searchTerm" placeholder="Search locations..." value="{{searchTerm}}" class="search-input">
+        <input type="text" name="searchTerm" placeholder="Search locations..." value="{{searchTerm}}"
+            class="search-input">
         <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
     </form>
-</div>
 
+    <div class="search-bar-filters">
+        <select name="sport" class="search-bar-filter">
+            <option value="">Any Sport</option>
+            <option value="basketball">Basketball</option>
+            <option value="tennis">Tennis</option>
+        </select>
 
-<div class="locations-container">
-    {{#each locations}}
-    <div class="location-card">
-        <h2 class="location-name">{{name}}</h2>
-        <div class="location-info">
-            <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
-            {{#if phone}}
-            <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
-            {{/if}}
-            {{#if info}}
-            <p class="location-details">{{info}}</p>
-            {{/if}}
-        </div>
-        <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
+        <select name="accessible" class="search-bar-filter">
+            <option value="">Any Accessibility</option>
+            <option value="true">Accessible Only</option>
+        </select>
+
+        <select name="courtType" class="search-bar-filter">
+            <option value="">Any Court Type</option>
+            <option value="hard">Hard Court</option>
+            <option value="clay">Clay Court</option>
+            <option value="grass">Grass Court</option>
+        </select>
+
+        <select name="indoorOutdoor" class="search-bar-filter">
+            <option value="">Any Environment</option>
+            <option value="indoor">Indoor</option>
+            <option value="outdoor">Outdoor</option>
+        </select>
+
     </div>
-    {{/each}}
-</div>
+
+    <div class="locations-container">
+        {{#each locations}}
+        <div class="location-card">
+            <h2 class="location-name">{{name}}</h2>
+            <div class="location-info">
+                <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
+                {{#if phone}}
+                <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
+                {{/if}}
+                {{#if info}}
+                <p class="location-details">{{info}}</p>
+                {{/if}}
+            </div>
+            <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
+        </div>
+        {{/each}}
+    </div>
