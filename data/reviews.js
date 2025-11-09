@@ -1,5 +1,6 @@
 import { reviews } from "../config/mongoCollections.js";
 import validation from './validation.js';
+import { ObjectId } from 'mongodb';
 
 const exportedMethods = {
   async getAllReviews() {
@@ -19,7 +20,7 @@ const exportedMethods = {
   async getReviewsByLocationId(locationId) {
     locationId = validation.checkId(locationId);
     const reviewCollection = await reviews();
-    const review = await reviewCollection.find({ locationId: locationId }).toArray();
+    const review = await reviewCollection.find({ locationId: new ObjectId(locationId) }).toArray();
     if (!review) throw 'Error: Review not found for the given locationId';
     return review;
   },

@@ -44,7 +44,7 @@ router.get('/:id', async (req, res) => {
     const reviewsOld= await reviewData.getReviewsByLocationId(id);
     const reviews = [];
     const ratings = [];
-    for(let r of reviewsOld.reverse()){
+    for(let r of reviewsOld){
       let user = await userData.getUserById(r.userId.toString());
       if(user.isAnonymous === false){
         reviews.push(
