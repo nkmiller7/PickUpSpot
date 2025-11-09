@@ -1,10 +1,10 @@
-import {Router} from 'express';
-import { userData } from '../data/index.js';
-import validation from '../data/validation.js';
+import { Router } from "express";
+import { userData } from "../data/index.js";
+import validation from "../data/validation.js";
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const userList = await userData.getAllUsers();
     res.json(userList);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
     const user = await userData.getUserById(id);
@@ -22,5 +22,7 @@ router.get('/:id', async (req, res) => {
     res.status(404).json({ error: e.toString() });
   }
 });
+
+router.post("/login", async (req, res) => {});
 
 export default router;
