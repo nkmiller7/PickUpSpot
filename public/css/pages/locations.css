@@ -8,15 +8,24 @@
 }
 .search-form {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border-radius: 25px; 
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.search-input-row {
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    background: white;
-    border-radius: 25px; 
-    padding: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 .search-input {
@@ -60,19 +69,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
 }
 
 .search-bar-filter {
     align-items: center;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.75rem;
     border: 1px solid #ddd;
-    border-radius: 25px; 
+    border-radius: 20px; 
     background: white;
-    font-size: 14px;
-    min-width: 120px;
+    font-size: 13px;
+    min-width: 100px;
+    flex-shrink: 0;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
 }
@@ -83,18 +94,88 @@
     box-shadow: 0 2px 12px rgba(0, 123, 255, 0.3);
 }
 
+/* Search Results Info */
+.search-results-info {
+    text-align: center;
+    margin: 1rem 0;
+    color: #666;
+    font-size: 14px;
+}
 
+.search-results-info p {
+    margin: 0;
+}
 
+/* No Results Styling */
+.no-results {
+    text-align: center;
+    max-width: 500px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-results-icon {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.no-results-title {
+    color: #333;
+    margin: 1rem 0;
+    font-size: 1.5rem;
+}
+
+.no-results-message {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.no-results-suggestions {
+    text-align: left;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.suggestions-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.no-results-suggestions ul {
+    margin: 0.5rem 0 0 1rem;
+    color: #666;
+}
+
+.no-results-suggestions li {
+    margin-bottom: 0.25rem;
+}
 
 /* Locations Container/Cards */
 
 .locations-container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    padding: 1rem;
-    max-width: 1200px;
-    margin: auto auto;
+}
+
+/* Override layout when there is no results */
+.locations-container.no-results-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    grid-template-columns: none;
 }
 
 .location-card {
