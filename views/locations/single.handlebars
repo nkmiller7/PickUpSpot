@@ -37,7 +37,9 @@
             <h2>Basketball Facilities</h2>
             <ul>
                 <li>Number of Courts: {{location.facilities.basketball.numCourts}}</li>
-                <li>{{location.facilities.basketball.indoorOutdoor}} Courts</li>
+                {{#if location.facilities.basketball.indoorOutdoor}}
+                    <li>{{location.facilities.basketball.indoorOutdoor}} Courts</li>
+                {{/if}}
                 {{#if location.facilities.basketball.accessible}}
                 <li>Wheelchair Accessible</li>
                 {{/if}}
@@ -45,7 +47,50 @@
         </div>
         {{/if}}
     </div>
-
+    <div class="forum-section">
+        {{#if forum}}
+        <div class = "forum-comments">
+            <h2>Forum Comments</h2>
+            <ul>
+            {{#each forum}}
+                <li>
+                    {{#if userName}}
+                    Name: {{userName}}<br>
+                    {{/if}}
+                    {{#unless userName}}
+                    Name: Anonymous<br>
+                    {{/unless}}
+                    Comment: {{content}}<br>
+                    Posted: {{createdAt}}
+                </li>
+            {{/each}}
+             </ul>
+        </div>
+        {{/if}}
+        
+    </div>
+    <div class = "review-section">
+        {{#if reviews}}
+        <div class = "reviews">
+            <h2>Overall Rating: {{averageRating}}</h2>
+            <ul>
+            {{#each reviews}}
+                <li>
+                    {{#if userName}}
+                    Name: {{userName}}<br>
+                    {{/if}}
+                    {{#unless userName}}
+                    Name: Anonymous<br>
+                    {{/unless}}
+                    Rating: {{rating}}<br>
+                    Comment: {{comment}}<br>
+                    Posted: {{updatedAt}}<br>
+                </li>
+             {{/each}}
+             </ul>
+        </div>
+        {{/if}}
+    </div>
     <div class="actions">
         <a href="/locations" class="back-btn">Back to All Locations</a>
     </div>

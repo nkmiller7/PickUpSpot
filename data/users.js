@@ -1,5 +1,6 @@
 import { users } from "../config/mongoCollections.js";
 import validation from './validation.js';
+import { ObjectId } from "mongodb";
 
 const exportedMethods = {
   async getAllUsers() {
@@ -16,7 +17,7 @@ const exportedMethods = {
     return user;
   },
 
-  async addUser(firstName, lastName, email, password, isAnnonymous = false) {
+  async addUser(firstName, lastName, email, password, isAnonymous = false) {
     firstName = validation.checkString(firstName, 'First name');
     lastName = validation.checkString(lastName, 'Last name');
     email = validation.checkEmail(email, "Email");
@@ -27,7 +28,10 @@ const exportedMethods = {
       lastName: lastName,
       email: email,
       password: password,
-      isAnnonymous: isAnnonymous
+      isAnonymous: isAnonymous,
+      favorites: [],
+      parksAttended: [],
+      createdAt: new Date()
     };
     const userCollection = await users();
     const newInsertInformation = await userCollection.insertOne(newUser);
