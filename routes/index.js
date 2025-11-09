@@ -13,7 +13,7 @@ const constructorMethod = (app) => {
   app.use('/about', aboutRoutes);
 
   app.use('{*splat}', (req, res) => {
-    return res.status(404).json({error: 'Not found'});
+    return res.status(404).render('errors/404');
   });
 };
 
