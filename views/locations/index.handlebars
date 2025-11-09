@@ -45,22 +45,42 @@
     {{/if}}
 {{/if}}
 
-    <div class="locations-container">
-        {{#each locations}}
-        <div class="location-card">
-            <h2 class="location-name">{{name}}</h2>
-            <div class="location-info">
-                <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
-                {{#if phone}}
-                <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
-                {{/if}}
-                {{#if info}}
-                <p class="location-details">{{info}}</p>
-                {{/if}}
+    <div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
+        {{#if locations.length}}
+            {{#each locations}}
+            <div class="location-card">
+                <h2 class="location-name">{{name}}</h2>
+                <div class="location-info">
+                    <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
+                    {{#if phone}}
+                    <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
+                    {{/if}}
+                    {{#if info}}
+                    <p class="location-details">{{info}}</p>
+                    {{/if}}
+                </div>
+                <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
             </div>
-            <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
-        </div>
-        {{/each}}
+            {{/each}}
+        {{else}}
+            <div class="no-results">
+                <div class="no-results-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="no-results-title">No locations found</h3>
+                <p class="no-results-message">
+                    Try adjusting your search filters or search for something else.
+                </p>
+                <div class="no-results-suggestions">
+                    <p class="suggestions-title">Suggestions:</p>
+                    <ul>
+                        <li>Try searching for a different location name</li>
+                        <li>Clear some filters to broaden your search</li>
+                        <li>Check for typos in your search term</li>
+                    </ul>
+                </div>
+            </div>
+        {{/if}}
     </div>
 
 <script>

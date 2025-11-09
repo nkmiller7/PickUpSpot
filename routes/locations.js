@@ -30,6 +30,7 @@ router.get('/', async (req, res) => {
 
     res.render('locations/index', { 
       locations: locationList,
+      isLocationsPage: true,
       searchValues: {
         searchTerm: searchTerm || '',
         sport: sport || '',
