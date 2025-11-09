@@ -37,7 +37,9 @@
             <h2>Basketball Facilities</h2>
             <ul>
                 <li>Number of Courts: {{location.facilities.basketball.numCourts}}</li>
-                <li>{{location.facilities.basketball.indoorOutdoor}} Courts</li>
+                {{#if location.facilities.basketball.indoorOutdoor}}
+                    <li>{{location.facilities.basketball.indoorOutdoor}} Courts</li>
+                {{/if}}
                 {{#if location.facilities.basketball.accessible}}
                 <li>Wheelchair Accessible</li>
                 {{/if}}
@@ -82,8 +84,7 @@
                     {{/unless}}
                     Rating: {{rating}}<br>
                     Comment: {{comment}}<br>
-                    Created At: {{createdAt}}<br>
-                    Updated At: {{updatedAt}}<br>
+                    Posted: {{updatedAt}}<br>
                 </li>
              {{/each}}
              </ul>
