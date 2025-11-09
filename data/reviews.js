@@ -1,5 +1,6 @@
 import { reviews } from "../config/mongoCollections.js";
 import validation from './validation.js';
+import { ObjectId } from 'mongodb';
 
 const exportedMethods = {
   async getAllReviews() {
@@ -16,10 +17,10 @@ const exportedMethods = {
     return review;
   },
 
-  async getReviewByLocationId(locationId) {
+  async getReviewsByLocationId(locationId) {
     locationId = validation.checkId(locationId);
     const reviewCollection = await reviews();
-    const review = await reviewCollection.findOne({ locationId: locationId });
+    const review = await reviewCollection.find({ locationId: new ObjectId(locationId) }).toArray();
     if (!review) throw 'Error: Review not found for the given locationId';
     return review;
   },
@@ -36,6 +37,9 @@ const exportedMethods = {
     locationId = validation.checkId(locationId);
     rating = validation.checkNumber(rating, 'Rating');
     if (rating < 1 || rating > 5) throw 'Error: Rating must be between 1 and 5';
+    if (rating.toString().includes(".") && rating.toString().split(".")[1].length > 1){
+      throw "Error: At most one decimal place is allowed for Ratings";
+    }
     comment = validation.checkString(comment, 'Comment');
     if (comment.length > 250) throw 'Error: Comment cannot exceed 250 characters';
 

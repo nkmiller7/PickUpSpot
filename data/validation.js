@@ -1,4 +1,6 @@
 import {ObjectId} from 'mongodb';
+import pkg from 'validator';
+const { isEmail } = pkg;
 
 const exportedMethods = {
   checkId(id) {
@@ -27,6 +29,11 @@ const exportedMethods = {
     if (isNaN(numVal)) throw `Error: ${varName} must be a number.`;
     if (numVal < 0) throw `Error: ${varName} cannot be negative.`;
     return numVal;
+  },
+  checkEmail(emailVal, varName){
+    emailVal = this.checkString(emailVal);
+    if (!isEmail(emailVal)) throw `Error: ${varName} must be a valid email address.`;
+    return emailVal;
   }
 };
 
