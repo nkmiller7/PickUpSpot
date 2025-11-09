@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="/public/css/components/footer.css">
     {{#if locations}}
     <link rel="stylesheet" href="/public/css/pages/locations.css">
+    {{/if }}
+
+    {{#if singleLocation}}
+      <link rel="stylesheet" href="/public/css/pages/location-single.css">
     {{/if}}
 </head>
 
@@ -49,8 +53,10 @@
     <footer class="site-footer">
   <div class="footer-content">
     <p>PickUpSpot | Created by Noah Miller, Jacob Pellini, Jared Soiferman, Marc Sulsenti</p>
-    <p>CS 546B - Web Programming, Stevens Institute of Technology</p>
-    <p>GitHub: <a href="https://github.com/nkmiller7/PickUpSpot" target="_blank">nkmiller7/PickUpSpot</a></p>
+    <p>
+        CS 546B - Web Programming, Stevens Institute of Technology |
+        GitHub: <a href="https://github.com/nkmiller7/PickUpSpot" target="_blank">nkmiller7/PickUpSpot</a>
+    </p>
   </div>
 </footer>
 
