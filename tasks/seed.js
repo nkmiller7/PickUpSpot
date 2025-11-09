@@ -1,6 +1,8 @@
 import { dbConnection, closeConnection } from '../config/mongoConnection.js';
-import { locations } from '../config/mongoCollections.js';
-import  locationMethods from '../data/locations.js';
+import locationMethods from '../data/locations.js';
+import userMethods from '../data/users.js';
+import forumMethods from '../data/forums.js';
+import reviewMethods from '../data/reviews.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -49,16 +51,16 @@ function formatLocationData(locationData, type) {
     };
 }
 
-async function main() {
+async function seedLocations() {
+    console.log('\n=== SEEDING LOCATIONS ===');
     try {
+        // Seed Tennis Courts
         const tennisData = JSON.parse(
             await fs.readFile(
                 path.join(__dirname, 'DPR_Tennis_001.json'),
                 'utf8'
             )
         );
-        
-        // can add basketball courts data here later
         
         console.log('Inserting tennis courts...');
         let successCount = 0;
@@ -76,13 +78,8 @@ async function main() {
             }
         }
         console.log(`Tennis courts seeding completed. Successfully added/updated ${successCount} courts. Failed to add ${errorCount} courts.`);
-        console.log('Seeding completed!');
-    } catch (e) {
-        console.error('Error during seeding:', e);
-        process.exit(1);
-    } 
 
-    try {
+        // Seed Basketball Courts
         const basketballData = JSON.parse(
             await fs.readFile(
                 path.join(__dirname, 'DPR_Basketball_001.json'),
@@ -91,8 +88,8 @@ async function main() {
         );
 
         console.log('Inserting basketball courts...');
-        let successCount = 0;
-        let errorCount = 0;
+        successCount = 0;
+        errorCount = 0;
 
         for (const location of basketballData) {
             try {
@@ -106,17 +103,169 @@ async function main() {
             }
         }
         console.log(`Basketball courts seeding completed. Successfully added/updated ${successCount} courts. Failed to add ${errorCount} courts.`);
-        console.log('Seeding completed!');
+        console.log('Locations seeding completed!');
     } catch (e) {
-        console.error('Error during seeding:', e);
+        console.error('Error during location seeding:', e);
+        throw e;
+    }
+}
+
+async function seedUsers() {
+    console.log('\n=== SEEDING USERS ===');
+    try {
+        const userData = JSON.parse(
+            await fs.readFile(
+                path.join(__dirname, 'Sample_Users.json'),
+                'utf8'
+            )
+        );
+        console.log('Inserting users...');
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (const user of userData) {
+            try {
+                await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous);
+                successCount++;
+            } catch (e) {
+                errorCount++;
+                console.error(`Error adding user ${user.firstName}: ${e}`);
+            }
+        }
+        console.log(`User seeding completed. Successfully added/updated ${successCount} users. Failed to add ${errorCount} users.`);
+        console.log('Users seeding completed!');
+    } catch (e) {
+        console.error('Error during user seeding:', e);
+        throw e;
+    }
+}
+
+async function seedReviews() {
+    console.log('\n=== SEEDING REVIEWS ===');
+    try {
+        console.log('Inserting reviews...');
+        let successCount = 0;
+        let errorCount = 0;
+        
+        let users = await userMethods.getAllUsers();
+        let locations = await locationMethods.getAllLocations();
+        
+        if (!users || users.length === 0) {
+            throw 'Failed to get users! Cannot seed reviews.';
+        }
+        if (!locations || locations.length === 0) {
+            throw 'Failed to get locations! Cannot seed reviews.';
+        }
+        
+        const reviewData = [
+            {
+                "userId": users[0]._id.toString(),
+                "locationId": locations[0]._id.toString(),
+                "rating": 5,
+                "comment": "This park is awesome! I had so much fun!"
+            },
+            {
+                "userId": users[9]._id.toString(),
+                "locationId": locations[0]._id.toString(),
+                "rating": 3,
+                "comment": "This park is just ok."
+            },
+            {
+                "userId": users[7]._id.toString(),
+                "locationId": locations[0]._id.toString(),
+                "rating": 1,
+                "comment": "This park is falling apart! It's sad to see :("
+            },
+        ];
+        
+        for (const review of reviewData) {
+            try {
+                await reviewMethods.addReview(review.userId, review.locationId, review.rating, review.comment);
+                successCount++;
+            } catch (e) {
+                errorCount++;
+                console.error(`Error adding review ${review.rating}: ${e}`);
+            }
+        }
+        console.log(`Review seeding completed. Successfully added/updated ${successCount} reviews. Failed to add ${errorCount} reviews.`);
+        console.log('Reviews seeding completed!');
+    } catch (e) {
+        console.error('Error during review seeding:', e);
+        throw e;
+    }
+}
+
+async function seedForums() {
+    console.log('\n=== SEEDING FORUM MESSAGES ===');
+    try {
+        console.log('Inserting forum messages...');
+        let successCount = 0;
+        let errorCount = 0;
+        
+        let users = await userMethods.getAllUsers();
+        let locations = await locationMethods.getAllLocations();
+        
+        if (!users || users.length === 0) {
+            throw 'Failed to get users! Cannot seed forum messages.';
+        }
+        if (!locations || locations.length === 0) {
+            throw 'Failed to get locations! Cannot seed forum messages.';
+        }
+        
+        const forumData = [
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[0]._id.toString(),
+                "content": "This park is awesome! I had so much fun!"
+            },
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[9]._id.toString(),
+                "content": "What's up guys, looking for a couple buddies to play a few games of basketball with, preferably at advanced difficulty. Keep up if you can!"
+            },
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[7]._id.toString(),
+                "content": "This park is falling apart! It's sad to see :("
+            },
+        ];
+        
+        for (const comment of forumData) {
+            try {
+                await forumMethods.createMessage(comment.locationId, comment.userId, comment.content);
+                successCount++;
+            } catch (e) {
+                errorCount++;
+                console.error(`Error adding forum message: ${e}`);
+            }
+        }
+        console.log(`Forum seeding completed. Successfully added/updated ${successCount} messages. Failed to add ${errorCount} messages.`);
+        console.log('Forum messages seeding completed!');
+    } catch (e) {
+        console.error('Error during forum seeding:', e);
+        throw e;
+    }
+}
+
+async function main() {
+    try {
+        console.log('Starting database seeding...\n');
+        
+        //order matters users needs to go first with respect to reviews and forumns 
+        await seedLocations();
+        await seedUsers();
+        await seedReviews();
+        await seedForums();
+        
+        console.log('\nAll seeding completed successfully!');
+    } catch (e) {
+        console.error('\nError during seeding:', e);
         process.exit(1);
     }
-
-
 }
 
 main().then(() => {
-    console.log('Done seeding database');
+    console.log('\nDone seeding database');
 }).catch((e) => {
     console.error(e);
 }).finally(() => {
