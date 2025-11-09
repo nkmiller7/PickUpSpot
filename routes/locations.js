@@ -43,6 +43,7 @@ router.get('/:id', async (req, res) => {
     }
     const reviewsOld= await reviewData.getReviewsByLocationId(id);
     const reviews = [];
+    const ratings = [];
     for(let r of reviewsOld.reverse()){
       let user = await userData.getUserById(r.userId.toString());
       if(user.isAnonymous === false){
@@ -65,8 +66,14 @@ router.get('/:id', async (req, res) => {
           }
         )
       }
+      ratings.push(r.rating);
     }
-    res.render('locations/single', { location: location, forum: forum, reviews: reviews});
+    let ratings_sum = 0;
+    for(let rating of ratings){
+      ratings_sum+=rating;
+    }
+    const averageRating = ratings_sum/ratings.length;
+    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
