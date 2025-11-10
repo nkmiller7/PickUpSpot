@@ -10,7 +10,7 @@ const exportedMethods = {
     },
 
     async getLocationById(id) {
-        id = validation.checkId(id);
+        id = validation.checkId(id, "Location ID");
         const locationCollection = await locations();
         const location = await locationCollection.findOne({ _id: new ObjectId(id) });
         if (!location) throw 'Error: Location not found';

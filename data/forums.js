@@ -1,11 +1,13 @@
 import { forums } from "../config/mongoCollections.js";
+import { locations } from "../config/mongoCollections.js";
 import validation from './validation.js';
 import { ObjectId } from 'mongodb';
 
 const exportedMethods = {
 
     async getForumMessagesByLocationId(locationId, limit = 50) {
-        locationId = validation.checkId(locationId);
+        locationId = validation.checkId(locationId, "Location ID");
+        locationId = await validation.locationExists(locationId);
         if (typeof limit !== 'number' || limit < 1) throw 'Error: limit must be a positive number';
         const forumCollection = await forums();
         const messages = await forumCollection.find({ locationId: new ObjectId(locationId) }).sort({ createdAt: -1 }).limit(limit).toArray();
@@ -13,7 +15,7 @@ const exportedMethods = {
     },
 
     async getMessageById(messageId) {
-        messageId = validation.checkId(messageId);
+        messageId = validation.checkId(messageId, "Message ID");
         const forumCollection = await forums();
         const message = await forumCollection.findOne({ _id: new ObjectId(messageId) });
         if (!message) throw 'Error: Message not found';
@@ -21,10 +23,12 @@ const exportedMethods = {
     },
 
     async createMessage(locationId, userId, content) {
-        locationId = validation.checkId(locationId);
-        userId = validation.checkId(userId);
-        if (!content || typeof content !== 'string' || content.trim().length === 0) throw 'Error: Message content must be a non-empty string';
-        if (content.trim().length > 500) throw 'Error: Message content cannot exceed 500 characters';
+        locationId = validation.checkId(locationId, "Location ID");
+        locationId = await validation.locationExists(locationId);
+        userId = validation.checkId(userId, "User ID");
+        userId = await validation.userExists(userId);
+        content = validation.checkString(content);
+        if (content.trim().length < 5 || content.trim().length > 500) throw 'Error: Message content must be between 5 and 500 characters, inclusive';
         const newMessage = {
             locationId: new ObjectId(locationId),
             userId: new ObjectId(userId),
@@ -40,8 +44,9 @@ const exportedMethods = {
 
 
     async deleteMessage(messageId, userId) {
-        messageId = validation.checkId(messageId);
-        userId = validation.checkId(userId);
+        messageId = validation.checkId(messageId, "Message ID");
+        userId = validation.checkId(userId, "User ID");
+        userId= await validation.userExists(userId);
         const forumCollection = await forums();
         const message = await this.getMessageById(messageId);
         if (message.userId.toString() !== userId) throw 'Error: You can only delete your own messages';
