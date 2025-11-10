@@ -41,12 +41,12 @@ function formatLocationData(locationData, type) {
             numCourts: parseInt(locationData.Courts) || 0,
             indoorOutdoor: locationData.Indoor_Outdoor || null,
             surfaceType: locationData.Tennis_Type || 'Unknown',
-            accessible: locationData.Accessible === 'Y'
+            accessible: locationData.Accessible
         } : null,
         basketball: type === 'basketball' ? {
             numCourts: parseInt(locationData.Courts) || 0,
             indoorOutdoor: locationData.Indoor_Outdoor || null,
-            accessible: locationData.Accessible === 'Y'
+            accessible: locationData.Accessible
         } : null
     };
 }

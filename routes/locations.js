@@ -15,14 +15,29 @@ router.get('/', async (req, res) => {
       searchTerm = req.query.searchTerm.trim();
     }
     
-    const sport = req.query.sport || null;
-    const accessible = req.query.accessible || null;
-    const indoorOutdoor = req.query.indoorOutdoor || null;
-    const courtType = req.query.courtType || null;
+    let sport = null;
+    if (req.query.sport && req.query.sport.trim()) {
+      sport = req.query.sport.trim();
+    }
+    
+    let accessible = null;
+    if (req.query.accessible && req.query.accessible.trim() && req.query.accessible === 'true') {
+      accessible = true;
+    }
+    
+    let indoorOutdoor = null;
+    if (req.query.indoorOutdoor && req.query.indoorOutdoor.trim()) {
+      indoorOutdoor = req.query.indoorOutdoor.trim();
+    }
+    
+    let courtType = null;
+    if (req.query.courtType && req.query.courtType.trim()) {
+      courtType = req.query.courtType.trim();
+    }
 
     let locationList;
     
-    if (searchTerm || sport || accessible || indoorOutdoor || courtType) {
+    if (searchTerm || sport || accessible !== null || indoorOutdoor || courtType) {
       locationList = await searchLocation(searchTerm, sport, accessible, courtType, indoorOutdoor);
     } else {
       locationList = await locationData.getAllLocations();
@@ -31,11 +46,10 @@ router.get('/', async (req, res) => {
     res.render('locations/index', { 
       locations: locationList,
       isLocationsPage: true,
-      user: req.session.user,
       searchValues: {
         searchTerm: searchTerm || '',
         sport: sport || '',
-        accessible: accessible || '',
+        accessible: accessible !== null ? accessible.toString() : '',
         indoorOutdoor: indoorOutdoor || '',
         courtType: courtType || ''
       },
@@ -103,7 +117,7 @@ router.get('/:id', async (req, res) => {
       ratings_sum+=rating;
     }
     const averageRating = ratings_sum/ratings.length;
-    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, user: req.session.user, singleLocation: true});
+    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, singleLocation: true});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }

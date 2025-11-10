@@ -41,66 +41,54 @@ export const searchLocation = async (
         // Specifically filter tennis court type (basketball doesn't have surface types)
         if (courtType && courtType.trim()) {
             results = results.filter(location => {
-                if (sport === 'all') {
+                if (sport === 'all' || sport === null) {
                     return location.facilities?.tennis?.surfaceType?.toLowerCase() === courtType.toLowerCase();
                 }
                 else if (sport === 'tennis') {
                     return location.facilities?.tennis?.surfaceType?.toLowerCase() === courtType.toLowerCase();
                 }
                 else if (sport === 'basketball') {
-                    return true;
+                    return true; 
                 }
-                return true;
+                return false;
             });
         }
 
         // Filter for indoor/outdoor
         if (indoorOutdoor && indoorOutdoor.trim()) {
             results = results.filter(location => {
-                if (sport === 'all') {
+                if (sport === 'all' || sport === null) {
                     const tennisMatch = location.facilities?.tennis?.indoorOutdoor?.toLowerCase() === indoorOutdoor.toLowerCase();
-                    return tennisMatch;
+                    const basketballMatch = location.facilities?.basketball?.indoorOutdoor?.toLowerCase() === indoorOutdoor.toLowerCase();
+                    return tennisMatch || basketballMatch;
                 }
                 else if (sport === 'tennis') {
                     return location.facilities?.tennis?.indoorOutdoor?.toLowerCase() === indoorOutdoor.toLowerCase();
                 } 
                 else if (sport === 'basketball') {
-                    return true;
+                    const basketballIndoorOutdoor = location.facilities?.basketball?.indoorOutdoor;
+                    return basketballIndoorOutdoor && basketballIndoorOutdoor.toLowerCase() === indoorOutdoor.toLowerCase();
                 }
-                return true;
+                return false;
             });
         }
 
-        // Filter by accessibility
-        if (accessible !== null && accessible !== '') {
+        // Filter by accessibility 
+        if (accessible === true) {
             results = results.filter(location => {
-                const tennisAccessible = location.facilities?.tennis?.accessible === true;
-                const basketballAccessible = location.facilities?.basketball?.accessible === true;
-                
-                if (sport === 'all') {
-                    const isAccessible = tennisAccessible || basketballAccessible;
-                    if (accessible) {
-                        return isAccessible;
-                    } else {
-                        return !isAccessible;
-                    }
+                if (sport === 'all' || sport === null) {
+                    const tennisAccessible = location.facilities?.tennis?.accessible === true;
+                    const basketballAccessible = location.facilities?.basketball?.accessible === true;
+                    return tennisAccessible || basketballAccessible;
                 }
                 else if (sport === 'tennis') {
-                    if (accessible) {
-                        return tennisAccessible;
-                    } else {
-                        return !tennisAccessible;
-                    }
+                    return location.facilities?.tennis?.accessible === true;
                 }
                 else if (sport === 'basketball') {
-                    if (accessible) {
-                        return basketballAccessible;
-                    } else {
-                        return !basketballAccessible;
-                    }
+                    return location.facilities?.basketball?.accessible === true;
                 }
                 
-                return true;
+                return false;
             });
         }
 
