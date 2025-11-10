@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/components/header.css">
     <link rel="stylesheet" href="/public/css/components/footer.css">
-    {{#if locations}}
+    {{#if isLocationsPage}}
     <link rel="stylesheet" href="/public/css/pages/locations.css">
     {{/if }}
 
@@ -35,11 +35,15 @@
         <div class="auth-section">
             {{#if user}}
             <div class="profile-section">
-                {{#if user.profileImage}}
-                <img src="{{user.profileImage}}" alt="Profile" class="profile-image">
-                {{/if}}
-                <a href="/profile" class="profile-name">{{user.username}}</a>
-                <a href="/logout" class="auth-button sign-in">Sign Out</a>
+                <div class="profile-dropdown">
+                    <button class="profile-icon">
+                        <i class="fa fa-user-circle"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="/profile">View Profile</a>
+                        <a href="/logout">Sign Out</a>
+                    </div>
+                    </div>
             </div>
             {{else}}
             <a href="/login" class="auth-button sign-in">Sign In</a>
@@ -60,8 +64,14 @@
   </div>
 </footer>
 
-
+<script>
+  document.addEventListener("click", function (e) {
+    const dropdown = document.querySelector(".profile-dropdown");
+    const isButton = dropdown.contains(e.target) && e.target.closest(".profile-icon");
+    dropdown.classList.toggle("show", isButton);
+    if (!isButton) dropdown.classList.remove("show");
+  });
+</script>
 
 </body>
-
 </html>

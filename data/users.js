@@ -17,6 +17,14 @@ const exportedMethods = {
     return user;
   },
 
+  async getUserByEmail(email) {
+    email = validation.checkEmail(email);
+    const userCollection = await users();
+    const user = await userCollection.findOne({ email: email});
+    if (!user) throw 'Error: User not found';
+    return user;
+  },
+
   async addUser(firstName, lastName, email, password, isAnonymous = false) {
     firstName = validation.checkString(firstName, 'First name');
     lastName = validation.checkString(lastName, 'Last name');

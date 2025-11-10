@@ -3,14 +3,44 @@ import { locationData } from '../data/index.js';
 import { forumData } from '../data/index.js';
 import { userData } from '../data/index.js';
 import { reviewData } from '../data/index.js';
+import { searchLocation } from '../data/Query.js';  
 import validation from '../data/validation.js';
 
 const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    const locationList = await locationData.getAllLocations();
-    res.render('locations/index', { locations: locationList });
+    let searchTerm = null;
+    if (req.query.searchTerm && req.query.searchTerm.trim()) {
+      searchTerm = req.query.searchTerm.trim();
+    }
+    
+    const sport = req.query.sport || null;
+    const accessible = req.query.accessible || null;
+    const indoorOutdoor = req.query.indoorOutdoor || null;
+    const courtType = req.query.courtType || null;
+
+    let locationList;
+    
+    if (searchTerm || sport || accessible || indoorOutdoor || courtType) {
+      locationList = await searchLocation(searchTerm, sport, accessible, courtType, indoorOutdoor);
+    } else {
+      locationList = await locationData.getAllLocations();
+    }
+
+    res.render('locations/index', { 
+      locations: locationList,
+      isLocationsPage: true,
+      user: req.session.user,
+      searchValues: {
+        searchTerm: searchTerm || '',
+        sport: sport || '',
+        accessible: accessible || '',
+        indoorOutdoor: indoorOutdoor || '',
+        courtType: courtType || ''
+      },
+      resultCount: locationList.length
+    });
   } catch (e) {
     res.status(500).json({ error: e.toString() });
   }
@@ -73,7 +103,7 @@ router.get('/:id', async (req, res) => {
       ratings_sum+=rating;
     }
     const averageRating = ratings_sum/ratings.length;
-    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, singleLocation: true});
+    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, user: req.session.user, singleLocation: true});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }

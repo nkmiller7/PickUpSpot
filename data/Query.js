@@ -19,7 +19,7 @@ export const searchLocation = async (
 
 
         // Filter by name against the searchBox entry term
-        if (searchTerm && typeof searchTerm === 'string') {
+        if (searchTerm && typeof searchTerm === 'string' && searchTerm.trim()) {
             const searchTermLower = searchTerm.toLowerCase().trim();
             results = results.filter(location =>
                 location.name && location.name.toLowerCase().includes(searchTermLower)
@@ -27,7 +27,7 @@ export const searchLocation = async (
         }
 
         // Filter location by sport
-        if (sport && sport !== 'all') {
+        if (sport && sport !== 'all' && sport.trim()) {
             results = results.filter(location => {
                 if (sport === 'tennis') {
                     return location.facilities?.tennis;
@@ -38,39 +38,41 @@ export const searchLocation = async (
             });
         }
 
-        // Specifically filter tennis court type
-        if (courtType) {
+        // Specifically filter tennis court type (basketball doesn't have surface types)
+        if (courtType && courtType.trim()) {
             results = results.filter(location => {
                 if (sport === 'all') {
                     return location.facilities?.tennis?.surfaceType?.toLowerCase() === courtType.toLowerCase();
                 }
                 else if (sport === 'tennis') {
                     return location.facilities?.tennis?.surfaceType?.toLowerCase() === courtType.toLowerCase();
+                }
+                else if (sport === 'basketball') {
+                    return true;
                 }
                 return true;
             });
         }
 
         // Filter for indoor/outdoor
-        if (indoorOutdoor) {
+        if (indoorOutdoor && indoorOutdoor.trim()) {
             results = results.filter(location => {
                 if (sport === 'all') {
                     const tennisMatch = location.facilities?.tennis?.indoorOutdoor?.toLowerCase() === indoorOutdoor.toLowerCase();
-                    const basketballMatch = location.facilities?.basketball?.indoorOutdoor?.toLowerCase() === indoorOutdoor.toLowerCase();
-                    return tennisMatch || basketballMatch;
+                    return tennisMatch;
                 }
                 else if (sport === 'tennis') {
                     return location.facilities?.tennis?.indoorOutdoor?.toLowerCase() === indoorOutdoor.toLowerCase();
                 } 
                 else if (sport === 'basketball') {
-                    return location.facilities?.basketball?.indoorOutdoor?.toLowerCase() === indoorOutdoor.toLowerCase();
+                    return true;
                 }
                 return true;
             });
         }
 
         // Filter by accessibility
-        if (accessible !== null) {
+        if (accessible !== null && accessible !== '') {
             results = results.filter(location => {
                 const tennisAccessible = location.facilities?.tennis?.accessible === true;
                 const basketballAccessible = location.facilities?.basketball?.accessible === true;
