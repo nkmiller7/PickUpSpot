@@ -50,6 +50,12 @@ const exportedMethods = {
        throw `Error: Location with ID ${userId} does not exist`;
     }
     return userId;
+  },
+  isLetter(c){
+    return ((c.charCodeAt(0) >= 65 && c.charCodeAt(0) <= 90) || (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122));
+  },
+  isAccented(c){
+    return (c.charCodeAt(0) >= 128 && c.charCodeAt(0) <= 165)
   }
 };
 
