@@ -1,6 +1,8 @@
 import { games } from "../config/mongoCollections.js";
 import validation from './validation.js';
 import { ObjectId } from 'mongodb';
+import { locations } from "../config/mongoCollections.js";
+import { locationData } from '../data/index.js';
 
 const exportedMethods = {
   async getAllGames() {
@@ -10,7 +12,7 @@ const exportedMethods = {
   },
 
   async getGameById(id) {
-    id = validation.checkId(id);
+    id = validation.checkId(id, "Game ID");
     const gameCollection = await games();
     const game = await gameCollection.findOne({ _id: new ObjectId(id) });
     if (!game) throw 'Error: Game not found';
@@ -18,7 +20,7 @@ const exportedMethods = {
   },
 
   async getGamesByLocationId(locationId) {
-    locationId = validation.checkId(locationId);
+    locationId = validation.checkId(locationId, "Location ID");
     locationId = validation.locationExists(locationId);
     const gameCollection = await games();
     const gameList = await gameCollection.find({ locationId: locationId }).toArray();
@@ -26,27 +28,29 @@ const exportedMethods = {
   },
   
   async getGamesByUserId(userId) {
-    userId = validation.checkId(userId);
+    userId = validation.checkId(userId, "User ID");
     userId = validation.userExists(userId);
     const gameCollection = await games();
     const gameList = await gameCollection.find({ userId: userId }).toArray();
     return gameList;
   },
 
-  async addGame(userId, locationId, date, startTime, endTime, numOfPlayers) {
+  async addGame(userId, locationId, date, startTime, endTime, sport, numOfPlayers, skillLevel) {
+    //validate userId and locationId
     userId = validation.checkId(userId, "User ID");
     userId = validation.userExists(userId);
     locationId = validation.checkId(locationId, "Location ID");
     locationId= validation.locationExists(locationId);
-    date = validation.checkString(date);
-    //Remember to test all sorts of dates!
+    date = validation.checkString(date, "Date");
+
+    //Validate dates- needs fixing!
     const dateObj = new Date(date);
     if (isNaN(dateObj.getTime())) throw 'Error: Invalid date format';
     if (dateObj < new Date()) throw 'Error: Game date must be in the future';
 
-    // Validate start and end times (HH:MM format)
-    if (!startTime || typeof startTime !== 'string') throw 'Error: Start time must be provided as a string';
-    if (!endTime || typeof endTime !== 'string') throw 'Error: End time must be provided as a string';
+    // Validate start and end times (HH:MM format)- needs fixing!
+    startTime= validation.checkString(startTime, "Start Time");
+    endTime = validation.checkString(endTime, "End Time");
     
     const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(startTime)) throw 'Error: Start time must be in HH:MM format';
@@ -59,7 +63,44 @@ const exportedMethods = {
 
     if (endMinutes <= startMinutes) throw 'Error: End time must be after start time';
     if (endMinutes - startMinutes > 180) throw 'Error: Game duration cannot exceed 3 hours';
-    
+
+    //Validate Sport
+    sport= validation.checkString(sport, "Sport");
+    if(sport.toLowerCase!== "basketball" && sport.toLowerCase !== "tennis"){
+      throw 'Error: Sport must be either basketball or tennis';
+    }
+    locationCollection = await locations();
+    const location = await locationData.getLocationById(locationId);
+    if(sport==="tennis"){
+      if(!location.facilities.tennis){
+        throw 'Error: No tennis courts at this location.'
+      }
+    }
+    if(sport==="basketball"){
+      if(!location.facilities.basketball){
+        throw 'Error: No basketball courts at this location.'
+      }
+    }
+
+
+    numOfPlayers = validation.checkNumber(numOfPlayers, "Number of Players");
+    if(numOfPlayers < 1){
+      throw "Error: Must have at least one player";
+    }
+    if(sport==="tennis"){
+      if(numOfPlayers > 8 * location.facilities.tennis.numCourts){
+        throw "Error: Too many players for tennis";
+      }
+    }
+    if(sport==="basketball"){
+      if(numOfPlayers > 20 * location.facilities.basketball.numCourts){
+        throw "Error: Too many players for basketball";
+      }
+    }
+    skillLevel= validation.checkString(skillLevel, "Skill Level");
+    if(skillLevel.toLowerCase() !== "beginner" && skillLevel.toLowerCase() !== "intermediate" && skillLevel.toLowerCase() !== "advanced"){
+      throw "Error: Skill leve must be either beginner, intermediate, or advanced"
+    }
     const newGame = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),

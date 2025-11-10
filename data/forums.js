@@ -44,8 +44,8 @@ const exportedMethods = {
 
 
     async deleteMessage(messageId, userId) {
-        messageId = validation.checkId(messageId);
-        userId = validation.checkId(userId);
+        messageId = validation.checkId(messageId, "Message ID");
+        userId = validation.checkId(userId, "User ID");
         userId= validation.userExists(userId);
         const forumCollection = await forums();
         const message = await this.getMessageById(messageId);
