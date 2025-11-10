@@ -28,6 +28,8 @@ const exportedMethods = {
   async addUser(firstName, lastName, email, password, isAnonymous = false) {
     firstName = validation.checkString(firstName, 'First name');
     lastName = validation.checkString(lastName, 'Last name');
+    firstName= validation.checkName(firstName, "First name");
+    lastName= validation.checkName(lastName, "Last name");
     email = validation.checkEmail(email, "Email");
     //We need to come up with password criteria
     password = validation.checkString(password, 'Password');

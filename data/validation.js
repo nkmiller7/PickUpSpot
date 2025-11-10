@@ -56,6 +56,20 @@ const exportedMethods = {
   },
   isAccented(c){
     return (c.charCodeAt(0) >= 128 && c.charCodeAt(0) <= 165)
+  },
+  checkName(name, varName){
+    if(name.length < 2 || name.length > 50){
+      throw `Error: Invalid ${varName} length`
+    }
+    for(let c of name){
+      if(!(this.isLetter(c) || this.isAccented(c) || c === "'" || c === "-" || c.charCodeAt(0)===32 || c===".")){
+        throw `Error: Invalid character in ${varName}`
+      }
+    }
+    if(!(this.isLetter(firstName[0]) || this.isAccented(firstName[0]))){
+      throw `Error: ${varName} must start with a letter or accented letter`
+    }
+    return name;
   }
 };
 
