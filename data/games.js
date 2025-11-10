@@ -19,6 +19,7 @@ const exportedMethods = {
 
   async getGamesByLocationId(locationId) {
     locationId = validation.checkId(locationId);
+    locationId = validation.locationExists(locationId);
     const gameCollection = await games();
     const gameList = await gameCollection.find({ locationId: locationId }).toArray();
     return gameList;
@@ -26,16 +27,19 @@ const exportedMethods = {
   
   async getGamesByUserId(userId) {
     userId = validation.checkId(userId);
+    userId = validation.userExists(userId);
     const gameCollection = await games();
     const gameList = await gameCollection.find({ userId: userId }).toArray();
     return gameList;
   },
 
   async addGame(userId, locationId, date, startTime, endTime, numOfPlayers) {
-    userId = validation.checkId(userId);
-    locationId = validation.checkId(locationId);
-
-    if (!date || typeof date !== 'string') throw 'Error: Date must be provided as a string';
+    userId = validation.checkId(userId, "User ID");
+    userId = validation.userExists(userId);
+    locationId = validation.checkId(locationId, "Location ID");
+    locationId= validation.locationExists(locationId);
+    date = validation.checkString(date);
+    //Remember to test all sorts of dates!
     const dateObj = new Date(date);
     if (isNaN(dateObj.getTime())) throw 'Error: Invalid date format';
     if (dateObj < new Date()) throw 'Error: Game date must be in the future';
