@@ -66,7 +66,7 @@ const exportedMethods = {
         throw `Error: Invalid character in ${varName}`
       }
     }
-    if(!(this.isLetter(firstName[0]) || this.isAccented(firstName[0]))){
+    if(!(this.isLetter(name[0]) || this.isAccented(name[0]))){
       throw `Error: ${varName} must start with a letter or accented letter`
     }
     return name;

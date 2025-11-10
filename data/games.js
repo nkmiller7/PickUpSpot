@@ -21,7 +21,7 @@ const exportedMethods = {
 
   async getGamesByLocationId(locationId) {
     locationId = validation.checkId(locationId, "Location ID");
-    locationId = validation.locationExists(locationId);
+    locationId = await validation.locationExists(locationId);
     const gameCollection = await games();
     const gameList = await gameCollection.find({ locationId: locationId }).toArray();
     return gameList;
@@ -29,7 +29,7 @@ const exportedMethods = {
   
   async getGamesByUserId(userId) {
     userId = validation.checkId(userId, "User ID");
-    userId = validation.userExists(userId);
+    userId = await validation.userExists(userId);
     const gameCollection = await games();
     const gameList = await gameCollection.find({ userId: userId }).toArray();
     return gameList;
@@ -38,9 +38,9 @@ const exportedMethods = {
   async addGame(userId, locationId, date, startTime, endTime, sport, numOfPlayers, skillLevel) {
     //validate userId and locationId
     userId = validation.checkId(userId, "User ID");
-    userId = validation.userExists(userId);
+    userId = await validation.userExists(userId);
     locationId = validation.checkId(locationId, "Location ID");
-    locationId= validation.locationExists(locationId);
+    locationId= await validation.locationExists(locationId);
     date = validation.checkString(date, "Date");
 
     //Validate dates- needs fixing!

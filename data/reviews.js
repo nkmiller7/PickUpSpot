@@ -19,7 +19,7 @@ const exportedMethods = {
 
   async getReviewsByLocationId(locationId) {
     locationId = validation.checkId(locationId, "Location ID");
-    locationId = validation.locationExists(locationId);
+    locationId = await validation.locationExists(locationId);
     const reviewCollection = await reviews();
     const review = await reviewCollection.find({ locationId: new ObjectId(locationId) }).toArray();
     if (!review) throw 'Error: Review not found for the given locationId';
@@ -28,7 +28,7 @@ const exportedMethods = {
 
   async getReviewsByUserId(userId) {
     userId = validation.checkId(userId, "User ID");
-    userId = validation.userExists(userId);
+    userId = await validation.userExists(userId);
     const reviewCollection = await reviews();
     const reviewList = await reviewCollection.find({ userId: userId }).toArray();
     return reviewList;
@@ -36,9 +36,9 @@ const exportedMethods = {
 
   async addReview(userId, locationId, rating, comment) {
     userId = validation.checkId(userId, "User Id");
-    userId = validation.userExists(userId)
+    userId = await validation.userExists(userId)
     locationId = validation.checkId(locationId);
-    locationId= validation.locationExists(locationId);
+    locationId= await validation.locationExists(locationId);
     rating = validation.checkNumber(rating, 'Rating');
     if (rating < 1 || rating > 5) throw 'Error: Rating must be between 1 and 5';
     if (rating.toString().includes(".") && rating.toString().split(".")[1].length > 1){

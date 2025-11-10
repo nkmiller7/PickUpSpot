@@ -7,7 +7,7 @@ const exportedMethods = {
 
     async getForumMessagesByLocationId(locationId, limit = 50) {
         locationId = validation.checkId(locationId, "Location ID");
-        locationId = validation.locationExists(locationId);
+        locationId = await validation.locationExists(locationId);
         if (typeof limit !== 'number' || limit < 1) throw 'Error: limit must be a positive number';
         const forumCollection = await forums();
         const messages = await forumCollection.find({ locationId: new ObjectId(locationId) }).sort({ createdAt: -1 }).limit(limit).toArray();
@@ -24,9 +24,9 @@ const exportedMethods = {
 
     async createMessage(locationId, userId, content) {
         locationId = validation.checkId(locationId, "Location ID");
-        locationId = validation.locationExists(locationId);
+        locationId = await validation.locationExists(locationId);
         userId = validation.checkId(userId, "User ID");
-        userId = validation.userExists(userId);
+        userId = await validation.userExists(userId);
         content = validation.checkString(content);
         if (content.trim().length < 5 || content.trim().length > 500) throw 'Error: Message content must be between 5 and 500 characters, inclusive';
         const newMessage = {
@@ -46,7 +46,7 @@ const exportedMethods = {
     async deleteMessage(messageId, userId) {
         messageId = validation.checkId(messageId, "Message ID");
         userId = validation.checkId(userId, "User ID");
-        userId= validation.userExists(userId);
+        userId= await validation.userExists(userId);
         const forumCollection = await forums();
         const message = await this.getMessageById(messageId);
         if (message.userId.toString() !== userId) throw 'Error: You can only delete your own messages';
