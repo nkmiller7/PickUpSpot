@@ -22,6 +22,13 @@ const exportedMethods = {
         const name = validation.checkString(locationData.name, 'Name');
         const location = validation.checkString(locationData.location, 'Location');
 
+        let hours;
+        if (parseInt(propId[propId.length - 1]) % 2 === 0) {
+            hours = "8:00 AM - 10:00 PM";
+        } else {
+            hours = "7:00 AM - 9:00 PM";
+        }
+
         // optional fields
         const phone = locationData.phone ? validation.checkString(locationData.phone, 'Phone') : null;
         const info = locationData.info ? validation.checkString(locationData.info, 'Info') : null;
@@ -36,6 +43,7 @@ const exportedMethods = {
         if (existingLocation) {
             const updateData = {
                 name: name,
+                hours: hours, 
                 location: location,
                 phone: phone || existingLocation.phone,
                 info: info || existingLocation.info,
@@ -90,6 +98,7 @@ const exportedMethods = {
             const newLocation = {
                 propId: propId,
                 name: name,
+                hours: hours, 
                 location: location,
                 phone: phone,
                 facilities: {

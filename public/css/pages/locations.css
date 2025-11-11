@@ -195,7 +195,7 @@
 
 .location-name {
     color: #333;
-    margin-bottom: 1rem;
+    margin-bottom: .25rem;
     font-size: 1.5rem;
 }
 
@@ -204,7 +204,7 @@
     margin-bottom: 1.5rem;
 }
 
-.location-address, .location-phone {
+.location-address, .location-phone, .location-hours {
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
