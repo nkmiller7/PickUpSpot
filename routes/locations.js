@@ -53,7 +53,8 @@ router.get('/', async (req, res) => {
         indoorOutdoor: indoorOutdoor || '',
         courtType: courtType || ''
       },
-      resultCount: locationList.length
+      resultCount: locationList.length,
+      user: req.session.user
     });
   } catch (e) {
     res.status(500).json({ error: e.toString() });
@@ -117,7 +118,7 @@ router.get('/:id', async (req, res) => {
       ratings_sum+=rating;
     }
     const averageRating = ratings_sum/ratings.length;
-    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, singleLocation: true});
+    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, singleLocation: true, user: req.session.user});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
