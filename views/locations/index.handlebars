@@ -47,9 +47,7 @@
             <p>Showing {{resultCount}} location(s)</p>
         </div>
     {{/if}}
-{{/if}}
-
-    <div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
+{{/if}}<div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
         {{#if locations.length}}
             {{#each locations}}
             <div class="location-card">
@@ -87,6 +85,8 @@
             </div>
         {{/if}}
     </div>
+
+    
 
 <script>
     //runs after page load
