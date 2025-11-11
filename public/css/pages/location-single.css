@@ -30,7 +30,8 @@
 }
 
 .location-address,
-.location-phone {
+.location-phone,
+.location-hours {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -40,7 +41,8 @@
 }
 
 .location-address i,
-.location-phone i {
+.location-phone i,
+.location-hours i {
     color: #2563eb;
     font-size: 1.2rem;
 }
