@@ -34,7 +34,11 @@ export const searchLocation = async (
                 } else if (sport === 'basketball') {
                     return location.facilities?.basketball;
                 }
-                return true;
+                // Pickleball just counts as any location that has tennis courts and court surface type is "hard"
+                else if (sport === 'pickleball') {
+                    return location.facilities?.tennis?.surfaceType?.toLowerCase() === 'hard';
+                }
+                return false;
             });
         }
 
