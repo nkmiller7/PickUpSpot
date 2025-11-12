@@ -30,7 +30,7 @@ const exportedMethods = {
     userId = validation.checkId(userId, "User ID");
     userId = await validation.userExists(userId);
     const reviewCollection = await reviews();
-    const reviewList = await reviewCollection.find({ userId: userId }).toArray();
+    const reviewList = await reviewCollection.find({ userId: new ObjectId(userId) }).toArray();
     return reviewList;
   },
 
