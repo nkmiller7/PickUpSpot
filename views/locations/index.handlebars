@@ -5,13 +5,13 @@
                 class="search-input">
             <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
         </div>
-        
+
         <div class="search-bar-filters">
             <select name="sport" class="search-bar-filter">
                 <option value="">Any Sport</option>
                 <option value="basketball">Basketball</option>
                 <option value="tennis">Tennis</option>
-                <option value="pickleball">Pickleball</option>                
+                <option value="pickleball">Pickleball</option>
             </select>
 
             <select name="accessible" class="search-bar-filter">
@@ -38,105 +38,123 @@
 </div>
 
 {{#if searchValues.searchTerm}}
-    <div class="search-results-info">
-        <p>Found {{resultCount}} location(s) {{#if searchValues.searchTerm}}for "{{searchValues.searchTerm}}"{{/if}}</p>
-    </div>
+<div class="search-results-info">
+    <p>Found {{resultCount}} location(s) {{#if searchValues.searchTerm}}for "{{searchValues.searchTerm}}"{{/if}}</p>
+</div>
 {{else}}
-    {{#if resultCount}}
-        <div class="search-results-info">
-            <p>Showing {{resultCount}} location(s)</p>
-        </div>
-    {{/if}}
+{{#if resultCount}}
+<div class="search-results-info">
+    <p>Showing {{resultCount}} location(s)</p>
+</div>
+{{/if}}
 {{/if}}
 
-    <div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
-        {{#if locations.length}}
-            {{#each locations}}
-            <div class="location-card">
-                <h2 class="location-name">{{name}}</h2>
-                <div class="location-info">
-                    <p class="location-hours"><i class="fas fa-clock"></i>{{hours}}</p>
-                    <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
-                    {{#if phone}}
-                    <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
-                    {{/if}}
-                    {{#if info}}
-                    <p class="location-details">{{info}}</p>
-                    {{/if}}
-                </div>
-                <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
-            </div>
-            {{/each}}
-        {{else}}
-            <div class="no-results">
-                <div class="no-results-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h3 class="no-results-title">No locations found</h3>
-                <p class="no-results-message">
-                    Try adjusting your search filters or search for something else.
-                </p>
-                <div class="no-results-suggestions">
-                    <p class="suggestions-title">Suggestions:</p>
-                    <ul>
-                        <li>Try searching for a different location name</li>
-                        <li>Clear some filters to broaden your search</li>
-                        <li>Check for typos in your search term</li>
-                    </ul>
-                </div>
-            </div>
-        {{/if}}
+<div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
+    {{#if locations.length}}
+    {{#each locations}}
+    <div class="location-card">
+        <h2 class="location-name">{{name}}
+            {{#if facilities.tennis.numCourts}}
+           <i class="ph ph-tennis-ball"></i>
+            {{/if}}
+            
+            {{#if facilities.basketball.numCourts}}
+            <i class="ph ph-basketball"></i>
+            {{/if}}
+        
+            {{#if facilities.tennis.numCourts}}
+                {{#if (eq facilities.tennis.surfaceType "Hard")}}
+            <i class="ph ph-ping-pong" title="Pickleball available (hard courts)"></i>
+                {{/if}}
+            {{/if}}
+        </h2>
+
+
+
+        <div class="location-info">
+
+            <p class="location-hours"><i class="fas fa-clock"></i>{{hours}}</p>
+            <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
+            {{#if phone}}
+            <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
+            {{/if}}
+            {{#if info}}
+            <p class="location-details">{{info}}</p>
+            {{/if}}
+        </div>
+        <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
     </div>
+    {{/each}}
+    {{else}}
+    <div class="no-results">
+        <div class="no-results-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <h3 class="no-results-title">No locations found</h3>
+        <p class="no-results-message">
+            Try adjusting your search filters or search for something else.
+        </p>
+        <div class="no-results-suggestions">
+            <p class="suggestions-title">Suggestions:</p>
+            <ul>
+                <li>Try searching for a different location name</li>
+                <li>Clear some filters to broaden your search</li>
+                <li>Check for typos in your search term</li>
+            </ul>
+        </div>
+    </div>
+    {{/if}}
+</div>
 
 <script>
     //runs after page load
     // preserves search values, disableds irrelevant filters
-document.addEventListener('DOMContentLoaded', function() {
-    const searchValues = {
-        sport: '{{searchValues.sport}}',
-        accessible: '{{searchValues.accessible}}',
-        courtType: '{{searchValues.courtType}}',
-        indoorOutdoor: '{{searchValues.indoorOutdoor}}'
-    };
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchValues = {
+            sport: '{{searchValues.sport}}',
+            accessible: '{{searchValues.accessible}}',
+            courtType: '{{searchValues.courtType}}',
+            indoorOutdoor: '{{searchValues.indoorOutdoor}}'
+        };
 
-    const sportSelect = document.querySelector('select[name="sport"]');
-    const accessibleSelect = document.querySelector('select[name="accessible"]');
-    const courtTypeSelect = document.querySelector('select[name="courtType"]');
-    const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
+        const sportSelect = document.querySelector('select[name="sport"]');
+        const accessibleSelect = document.querySelector('select[name="accessible"]');
+        const courtTypeSelect = document.querySelector('select[name="courtType"]');
+        const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
 
-    if (sportSelect && searchValues.sport) {
-        sportSelect.value = searchValues.sport;
-    }
-    if (accessibleSelect && searchValues.accessible) {
-        accessibleSelect.value = searchValues.accessible;
-    }
-    if (courtTypeSelect && searchValues.courtType) {
-        courtTypeSelect.value = searchValues.courtType;
-    }
-    if (indoorOutdoorSelect && searchValues.indoorOutdoor) {
-        indoorOutdoorSelect.value = searchValues.indoorOutdoor;
-    }
-
-    function toggleFilters() {
-        const selectedSport = sportSelect.value;
-        
-        if (selectedSport === 'basketball') {
-            courtTypeSelect.disabled = true;
-            indoorOutdoorSelect.disabled = true;
-            courtTypeSelect.style.opacity = '0.5';
-            indoorOutdoorSelect.style.opacity = '0.5';
-        } else {
-            courtTypeSelect.disabled = false;
-            indoorOutdoorSelect.disabled = false;
-            courtTypeSelect.style.opacity = '1';
-            indoorOutdoorSelect.style.opacity = '1';
+        if (sportSelect && searchValues.sport) {
+            sportSelect.value = searchValues.sport;
         }
-    }
+        if (accessibleSelect && searchValues.accessible) {
+            accessibleSelect.value = searchValues.accessible;
+        }
+        if (courtTypeSelect && searchValues.courtType) {
+            courtTypeSelect.value = searchValues.courtType;
+        }
+        if (indoorOutdoorSelect && searchValues.indoorOutdoor) {
+            indoorOutdoorSelect.value = searchValues.indoorOutdoor;
+        }
 
-    toggleFilters();
+        function toggleFilters() {
+            const selectedSport = sportSelect.value;
 
-    if (sportSelect) {
-        sportSelect.addEventListener('change', toggleFilters);
-    }
-});
+            if (selectedSport === 'basketball') {
+                courtTypeSelect.disabled = true;
+                indoorOutdoorSelect.disabled = true;
+                courtTypeSelect.style.opacity = '0.5';
+                indoorOutdoorSelect.style.opacity = '0.5';
+            } else {
+                courtTypeSelect.disabled = false;
+                indoorOutdoorSelect.disabled = false;
+                courtTypeSelect.style.opacity = '1';
+                indoorOutdoorSelect.style.opacity = '1';
+            }
+        }
+
+        toggleFilters();
+
+        if (sportSelect) {
+            sportSelect.addEventListener('change', toggleFilters);
+        }
+    });
 </script>
