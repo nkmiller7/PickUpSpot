@@ -71,10 +71,7 @@ router.post("/signup", async (req, res) => {
     const { firstName, lastName, email, password, isAnonymous } = req.body;
     const anonymousUser = isAnonymous === "on"; 
 
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const newUser = await userData.addUser(firstName, lastName, email, hashedPassword, anonymousUser);
+    const newUser = await userData.addUser(firstName, lastName, email, password, anonymousUser);
 
     req.session.user = {
       firstName: newUser.firstName,

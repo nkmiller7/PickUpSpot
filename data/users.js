@@ -1,6 +1,7 @@
 import { users } from "../config/mongoCollections.js";
 import validation from './validation.js';
 import { ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
 
 const exportedMethods = {
   async getAllUsers() {
@@ -23,6 +24,43 @@ const exportedMethods = {
     const user = await userCollection.findOne({ email: email});
     if (!user) throw 'Error: User not found';
     return user;
+  },
+
+  async updateUserAnonymous(email, isAnonymous) {
+    email = validation.checkEmail(email, "email");
+    if (typeof isAnonymous !== 'boolean') "Error: isAnonymous must be a boolean";
+    
+    const usersCollection = await users();
+    
+    const updateResult = await usersCollection.findOneAndUpdate(
+      { email: email },
+      { $set: { isAnonymous: isAnonymous } },
+      { returnDocument: "after" }
+    );
+
+    if (!updateResult) "Error: User not found";
+
+    return {
+      ...updateResult,
+      _id: updateResult._id.toString()
+    };
+  },
+
+  async updateUserFavorites(email, updatedFavorites) {
+    email = validation.checkEmail(email, "Email");
+    const userCollection = await users();
+    const updateResult = await userCollection.findOneAndUpdate(
+      {email: email}, 
+      { $set : {favorites: updatedFavorites}},
+      { returnDocument: "after" }
+    );
+
+    if (!updateResult) "Error: User not found";
+
+    return {
+      ...updateResult,
+      _id: updateResult._id.toString()
+    };
   },
 
   async addUser(firstName, lastName, email, password, isAnonymous = false) {
@@ -69,11 +107,14 @@ const exportedMethods = {
       throw new Error("An account with this email address already exists");
     }
     
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     let newUser = {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      password: password,
+      password: hashedPassword,
       isAnonymous: isAnonymous,
       favorites: [],
       parksAttended: [],

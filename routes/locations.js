@@ -43,6 +43,13 @@ router.get('/', async (req, res) => {
       locationList = await locationData.getAllLocations();
     }
 
+    let user = await userData.getUserByEmail(req.session.user.email); 
+  
+    locationList = locationList.map((location) => {
+      let isFavorite = user.favorites.includes(location._id.toString());
+      return { ...location, isFavorite }; 
+    });
+    
     res.render('locations/index', { 
       locations: locationList,
       isLocationsPage: true,

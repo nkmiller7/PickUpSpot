@@ -231,6 +231,25 @@
     background-color: #0056b3;
 }
 
+/* Heart favoriting */
+.favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.favorite-btn:hover i {
+  color: #ff4b4b;
+}
+
+.favorite-btn .favorited {
+  color: #ff4b4b;
+}
+
+
 /* Responsive design for smaller screens */
 @media (max-width: 1024px) {
     .locations-container {
