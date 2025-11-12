@@ -63,7 +63,7 @@ const exportedMethods = {
     };
   },
 
-  async addUser(firstName, lastName, email, password, isAnonymous = false) {
+  async addUser(firstName, lastName, email, password, isAnonymous = false, parksAttended=[]) {
     // Validate first name
     try {
       firstName = validation.checkString(firstName, 'First name');
@@ -110,6 +110,11 @@ const exportedMethods = {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+
+    //check parksAttended
+    if(!Array.isArray(parksAttended)){
+      parksAttended = []
+    }
     let newUser = {
       firstName: firstName,
       lastName: lastName,
