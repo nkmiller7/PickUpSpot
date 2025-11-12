@@ -1,36 +1,25 @@
-<div class="location-games-header">
-  <h1>{{location.name}}'s Games</h1>
+<div class="games-location-header">
+    <h1>{{location.name}}'s Games</h1>
 </div>
 
-
-<div class="games-container{{#unless games.length}} no-results-container{{/unless}}">
-    {{#if games.length}}
-        {{#each games}}
-        <div class="game-card">
-            <h2 class="game-sport">{{sport}}</h2>
-            <div class="location-info">
-                <p class="start-time">{{startTime}}</p>
-                <p class="end-time">{{endTime}}</p>
-            </div>
+{{#if games.length}}
+    <div class="games-location-container">
+        <div class="games-location-cards">
+            {{#each games}}
+                <div class="games-location-card">
+                    <h2 class="games-location-name">{{creatorFirstName}}
+                        {{creatorLastName}}'s Game</h2>
+                    <div class="games-location-info">
+                        <p>Starting Time: {{startTime}}</p>
+                        <p>Ending Time: {{endTime}}</p>
+                    </div>
+                </div>
+            {{/each}}
         </div>
-        {{/each}}
-    {{else}}
-        <div class="no-results">
-            <div class="no-results-icon">
-                <i class="fas fa-search"></i>
-            </div>
-            <h3 class="no-results-title">No locations found</h3>
-            <p class="no-results-message">
-                Try adjusting your search filters or search for something else.
-            </p>
-            <div class="no-results-suggestions">
-                <p class="suggestions-title">Suggestions:</p>
-                <ul>
-                    <li>Try searching for a different location name</li>
-                    <li>Clear some filters to broaden your search</li>
-                    <li>Check for typos in your search term</li>
-                </ul>
-            </div>
+        <div class="games-location-scheduler">
+            <h2>Schedule a New Game</h2>
         </div>
-    {{/if}}
-</div>
+    </div>
+{{else}}
+    <p>No results</p>
+{{/if}}

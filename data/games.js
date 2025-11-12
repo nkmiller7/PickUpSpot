@@ -23,7 +23,7 @@ const exportedMethods = {
     locationId = validation.checkId(locationId, "Location ID");
     locationId = await validation.locationExists(locationId);
     const gameCollection = await games();
-    const gameList = await gameCollection.find({ locationId: locationId }).toArray();
+    const gameList = await gameCollection.find({ locationId: new ObjectId(locationId) }).toArray();
     return gameList;
   },
 
@@ -31,7 +31,7 @@ const exportedMethods = {
     userId = validation.checkId(userId, "User ID");
     userId = await validation.userExists(userId);
     const gameCollection = await games();
-    const gameList = await gameCollection.find({ userId: userId }).toArray();
+    const gameList = await gameCollection.find({ userId: new ObjectId(userId) }).toArray();
     return gameList;
   },
 

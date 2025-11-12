@@ -52,6 +52,21 @@ function formatLocationData(locationData, type) {
     };
 }
 
+    // Convert 24-hour time string "HH:MM" to "h:MM AM/PM".
+    function formatTimeToAMPM(timeStr) {
+        if (!timeStr || typeof timeStr !== 'string') return timeStr;
+        if (/\b(am|pm)\b$/i.test(timeStr.trim())) return timeStr;
+        const parts = timeStr.split(':');
+        if (parts.length === 0) return timeStr;
+        let hour = parseInt(parts[0], 10);
+        const minute = parts[1] ? parts[1].padStart(2, '0') : '00';
+        if (isNaN(hour)) return timeStr;
+        const period = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12;
+        if (hour === 0) hour = 12;
+        return `${hour}:${minute} ${period}`;
+    }
+
 async function seedLocations() {
     console.log('\n=== SEEDING LOCATIONS ===');
     try {

@@ -44,7 +44,7 @@ router.get('/locations/:id', async (req, res) => {
      * game single location page.
      */
     for (let i = 0; i < gameList.length; ++i) {
-      const gameCreator = await userData.getUserById(gameList[i].userId);
+      const gameCreator = await userData.getUserById(gameList[i].userId.toString());
       gameList[i].creatorFirstName = "Anonymous";
       gameList[i].creatorLastName = "User";
       if (gameCreator.isAnonymous === false) {
