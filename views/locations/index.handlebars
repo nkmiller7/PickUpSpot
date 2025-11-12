@@ -5,13 +5,13 @@
                 class="search-input">
             <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
         </div>
-        
+
         <div class="search-bar-filters">
             <select name="sport" class="search-bar-filter">
                 <option value="">Any Sport</option>
                 <option value="basketball">Basketball</option>
                 <option value="tennis">Tennis</option>
-                <option value="pickleball">Pickleball</option>                
+                <option value="pickleball">Pickleball</option>
             </select>
 
             <select name="accessible" class="search-bar-filter">
@@ -38,20 +38,35 @@
 </div>
 
 {{#if searchValues.searchTerm}}
-    <div class="search-results-info">
-        <p>Found {{resultCount}} location(s) {{#if searchValues.searchTerm}}for "{{searchValues.searchTerm}}"{{/if}}</p>
-    </div>
+<div class="search-results-info">
+    <p>Found {{resultCount}} location(s) {{#if searchValues.searchTerm}}for "{{searchValues.searchTerm}}"{{/if}}</p>
+</div>
 {{else}}
     {{#if resultCount}}
         <div class="search-results-info">
             <p>Showing {{resultCount}} location(s)</p>
         </div>
     {{/if}}
-{{/if}}<div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
+{{/if}}
+
+
+    <div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
         {{#if locations.length}}
             {{#each locations}}
             <div class="location-card">
-                <h2 class="location-name">{{name}}</h2>
+                <h2 class="location-name">{{name}}
+                    {{#if facilities.tennis.numCourts}}
+                        <i class="ph ph-tennis-ball"></i>
+                    {{/if}}
+                    {{#if facilities.basketball.numCourts}}
+                        <i class="ph ph-basketball"></i>
+                    {{/if}}
+                    {{#if facilities.tennis.numCourts}}
+                        {{#if (eq facilities.tennis.surfaceType "Hard")}}
+                            <i class="ph ph-ping-pong" title="Pickleball available (hard courts)"></i>
+                        {{/if}}
+                    {{/if}}
+                </h2>
                 <button class="favorite-btn" data-id="{{_id}}">
                     {{#if isFavorite}}
                         <i class="fas fa-heart favorited"></i>
@@ -98,84 +113,84 @@
 <script>
     //runs after page load
     // preserves search values, disableds irrelevant filters
-document.addEventListener('DOMContentLoaded', function() {
-    const searchValues = {
-        sport: '{{searchValues.sport}}',
-        accessible: '{{searchValues.accessible}}',
-        courtType: '{{searchValues.courtType}}',
-        indoorOutdoor: '{{searchValues.indoorOutdoor}}'
-    };
 
-    const sportSelect = document.querySelector('select[name="sport"]');
-    const accessibleSelect = document.querySelector('select[name="accessible"]');
-    const courtTypeSelect = document.querySelector('select[name="courtType"]');
-    const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchValues = {
+            sport: '{{searchValues.sport}}',
+            accessible: '{{searchValues.accessible}}',
+            courtType: '{{searchValues.courtType}}',
+            indoorOutdoor: '{{searchValues.indoorOutdoor}}'
+        };
 
-    if (sportSelect && searchValues.sport) {
-        sportSelect.value = searchValues.sport;
-    }
-    if (accessibleSelect && searchValues.accessible) {
-        accessibleSelect.value = searchValues.accessible;
-    }
-    if (courtTypeSelect && searchValues.courtType) {
-        courtTypeSelect.value = searchValues.courtType;
-    }
-    if (indoorOutdoorSelect && searchValues.indoorOutdoor) {
-        indoorOutdoorSelect.value = searchValues.indoorOutdoor;
-    }
+        const sportSelect = document.querySelector('select[name="sport"]');
+        const accessibleSelect = document.querySelector('select[name="accessible"]');
+        const courtTypeSelect = document.querySelector('select[name="courtType"]');
+        const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
 
-    function toggleFilters() {
-        const selectedSport = sportSelect.value;
-        
-        if (selectedSport === 'basketball') {
-            courtTypeSelect.disabled = true;
-            indoorOutdoorSelect.disabled = true;
-            courtTypeSelect.style.opacity = '0.5';
-            indoorOutdoorSelect.style.opacity = '0.5';
-        } else {
-            courtTypeSelect.disabled = false;
-            indoorOutdoorSelect.disabled = false;
-            courtTypeSelect.style.opacity = '1';
-            indoorOutdoorSelect.style.opacity = '1';
+        if (sportSelect && searchValues.sport) {
+            sportSelect.value = searchValues.sport;
         }
-    }
-
-    toggleFilters();
-
-    if (sportSelect) {
-        sportSelect.addEventListener('change', toggleFilters);
-    }
-});
-
-document.querySelectorAll(".favorite-btn").forEach(btn => {
-    btn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const icon = btn.querySelector("i");
-    const locationId = btn.dataset.id;
-    const isFavorited = icon.classList.contains("favorited");
-
-    icon.classList.toggle("favorited");
-    icon.classList.toggle("fas");
-    icon.classList.toggle("far");
-
-    try {
-        const response = await fetch("/profile/update-favorites", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ locationId, action: isFavorited ? "remove" : "add" })
-        });
-
-        if (!response.ok) {
-            throw "Failed to update favorites";
+        if (accessibleSelect && searchValues.accessible) {
+            accessibleSelect.value = searchValues.accessible;
         }
-    } catch (error) {
-        console.error(error);
-        icon.classList.toggle("favorited");
-        icon.classList.toggle("fas");
-        icon.classList.toggle("far");
-    }
+        if (courtTypeSelect && searchValues.courtType) {
+            courtTypeSelect.value = searchValues.courtType;
+        }
+        if (indoorOutdoorSelect && searchValues.indoorOutdoor) {
+            indoorOutdoorSelect.value = searchValues.indoorOutdoor;
+        }
+
+        function toggleFilters() {
+            const selectedSport = sportSelect.value;
+            if (selectedSport === 'basketball') {
+                courtTypeSelect.disabled = true;
+                indoorOutdoorSelect.disabled = true;
+                courtTypeSelect.style.opacity = '0.5';
+                indoorOutdoorSelect.style.opacity = '0.5';
+            } else {
+                courtTypeSelect.disabled = false;
+                indoorOutdoorSelect.disabled = false;
+                courtTypeSelect.style.opacity = '1';
+                indoorOutdoorSelect.style.opacity = '1';
+            }
+        }
+
+        toggleFilters();
+
+        if (sportSelect) {
+            sportSelect.addEventListener('change', toggleFilters);
+        }
     });
-});
+
+    document.querySelectorAll(".favorite-btn").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const icon = btn.querySelector("i");
+            const locationId = btn.dataset.id;
+            const isFavorited = icon.classList.contains("favorited");
+
+            icon.classList.toggle("favorited");
+            icon.classList.toggle("fas");
+            icon.classList.toggle("far");
+
+            try {
+                const response = await fetch("/profile/update-favorites", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ locationId, action: isFavorited ? "remove" : "add" })
+                });
+
+                if (!response.ok) {
+                    throw "Failed to update favorites";
+                }
+            } catch (error) {
+                console.error(error);
+                icon.classList.toggle("favorited");
+                icon.classList.toggle("fas");
+                icon.classList.toggle("far");
+            }
+        });
+    });
 </script>

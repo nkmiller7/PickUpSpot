@@ -16,7 +16,14 @@ app.use(session({
   cookie: { maxAge: 360000 }
 }));
 
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs.engine({ 
+  defaultLayout: "main",
+  helpers: {
+    eq: function(a, b) {
+      return a === b;
+    }
+  }
+}));
 app.set("view engine", "handlebars");
 
 app.use("/about", (req, res, next) => {
