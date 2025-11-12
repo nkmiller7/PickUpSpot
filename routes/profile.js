@@ -58,5 +58,29 @@ router.post("/toggle-anonymous", async (req, res) => {
   }
 });
 
+router.post("/update-favorites", async (req, res) => {
+  try {
+    const user = await userData.getUserByEmail(req.session.user.email);
+    const { locationId, action } = req.body; 
+
+    if (!locationId || !["add", "remove"].includes(action)) {
+      return res.status(400).json({ error: 'Invalid request' });
+    }
+
+    let updatedFavs;
+    if (action === "add") {
+      updatedFavs = [...user.favorites, locationId];
+    } else {
+      updatedFavs = user.favorites.filter(id => id !== locationId);
+    }
+
+    await userData.updateUserFavorites(user.email, updatedFavs);
+    res.json({sucess: true}); 
+
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 
 export default router

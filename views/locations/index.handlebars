@@ -54,6 +54,13 @@
             {{#each locations}}
             <div class="location-card">
                 <h2 class="location-name">{{name}}</h2>
+                <button class="favorite-btn" data-id="{{_id}}">
+                    {{#if isFavorite}}
+                        <i class="fas fa-heart favorited"></i>
+                    {{else}}
+                        <i class="far fa-heart"></i>
+                    {{/if}}
+                </button>
                 <div class="location-info">
                     <p class="location-hours"><i class="fas fa-clock"></i>{{hours}}</p>
                     <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
@@ -138,5 +145,37 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sportSelect) {
         sportSelect.addEventListener('change', toggleFilters);
     }
+});
+
+document.querySelectorAll(".favorite-btn").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const icon = btn.querySelector("i");
+    const locationId = btn.dataset.id;
+    const isFavorited = icon.classList.contains("favorited");
+
+    icon.classList.toggle("favorited");
+    icon.classList.toggle("fas");
+    icon.classList.toggle("far");
+
+    try {
+        const response = await fetch("/profile/update-favorites", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ locationId, action: isFavorited ? "remove" : "add" })
+        });
+
+        if (!response.ok) {
+            throw "Failed to update favorites";
+        }
+    } catch (error) {
+        console.error(error);
+        icon.classList.toggle("favorited");
+        icon.classList.toggle("fas");
+        icon.classList.toggle("far");
+    }
+    });
 });
 </script>

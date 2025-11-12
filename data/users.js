@@ -46,6 +46,23 @@ const exportedMethods = {
     };
   },
 
+  async updateUserFavorites(email, updatedFavorites) {
+    email = validation.checkEmail(email, "Email");
+    const userCollection = await users();
+    const updateResult = await userCollection.findOneAndUpdate(
+      {email: email}, 
+      { $set : {favorites: updatedFavorites}},
+      { returnDocument: "after" }
+    );
+
+    if (!updateResult) "Error: User not found";
+
+    return {
+      ...updateResult,
+      _id: updateResult._id.toString()
+    };
+  },
+
   async addUser(firstName, lastName, email, password, isAnonymous = false) {
     // Validate first name
     try {
