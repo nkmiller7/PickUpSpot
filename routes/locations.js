@@ -135,6 +135,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/:id', async(req, res) => {
+  let errors = [];
   try{
     const locationId = validation.checkId(req.params.id, "Location ID");
     const userCollection = await users();

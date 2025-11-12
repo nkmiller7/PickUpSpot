@@ -165,6 +165,34 @@
     margin-bottom: 0.5rem;
 }
 
+.addComment-button {
+    display: block;
+    width: 30%;
+    background: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 18px;
+    padding: 0.8rem 1rem;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 12px rgba(0, 123, 255, 0.2);
+    box-sizing: border-box;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.addComment-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 123, 255, 0.5);
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+.addComment-button:active {
+    transform: translateY(-1px);
+}
 /* Review Section */
 .review-section {
     margin-bottom: 3rem;
