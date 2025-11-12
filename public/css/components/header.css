@@ -95,11 +95,12 @@
   background: none;
   border: none;
   font-size: 28px;
-  color: #333;
+  color: white; 
+  cursor: pointer;
 }
 
 .profile-icon:hover {
-  color: #ffffff; 
+  opacity: 0.8; 
 }
 
 .dropdown-menu {

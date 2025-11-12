@@ -1,0 +1,51 @@
+<div class="login-container">
+    <h1>
+        Join PickUpSpot
+    </h1>
+
+    {{#if error}}
+    <div class="error-message">
+        {{error}}
+    </div>
+    {{/if}}
+
+    <form action="/signup" method="POST" class="login-form">
+    <div>
+        <label>
+            First Name
+            <input type="text" name="firstName" placeholder="First Name" value="{{formData.firstName}}" autocomplete="given-name" required>
+        </label>
+    </div>
+    <div>
+        <label>
+            Last Name
+            <input type="text" name="lastName" placeholder="Last Name" value="{{formData.lastName}}" autocomplete="family-name" required>
+        </label>
+    </div>
+    <div>
+        <label>
+            Email
+            <input type="email" name="email" placeholder="Email" value="{{formData.email}}" autocomplete="email" required>
+        </label>
+    </div>
+    <div>
+        <label>
+            Password
+            <input type="password" name="password" placeholder="Password" autocomplete="new-password" required>
+        </label>
+    </div>
+    <div class="toggle-container">
+        <div class="toggle-label-text">Remain Anonymous?</div>
+        <label class="toggle-label">
+            <input type="checkbox" name="isAnonymous" class="toggle-input" {{#if formData.isAnonymous}}checked{{/if}}>
+            <span class="toggle-switch"></span>
+        </label>
+    </div>
+    <div>
+        <button type="submit">Sign Up</button>
+    </div>
+    <div>
+        <a href="/" class="signup-button">Back to Login</a>
+    </div>
+</form>
+</div>

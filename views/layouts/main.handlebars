@@ -17,12 +17,17 @@
     {{#if singleLocation}}
       <link rel="stylesheet" href="/public/css/pages/location-single.css">
     {{/if}}
+
+    {{#if isProfilePage}}
+      <link rel="stylesheet" href="/public/css/pages/profile.css">
+    {{/if}}
+
 </head>
 
 <body>
     <header class="header">
         <a href="/" class="logo">
-        <img src="/public/images/logo.svg" alt="PickUpSpot Logo" />
+        <img src="/public/images/white-logo.svg" alt="PickUpSpot Logo" />
         </a>
         <nav>
             <ul class="nav-menu">
@@ -44,11 +49,11 @@
                         <a href="/profile">View Profile</a>
                         <a href="/logout">Sign Out</a>
                     </div>
-                    </div>
+                </div>
             </div>
             {{else}}
-            <a href="/login" class="auth-button sign-in">Sign In</a>
-            <a href="/register" class="auth-button sign-up">Sign Up</a>
+            <a href="/" class="auth-button sign-in">Sign In</a>
+            <a href="/signup" class="auth-button sign-up">Sign Up</a>
             {{/if}}
         </div>
     </header>
