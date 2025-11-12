@@ -63,7 +63,7 @@ const exportedMethods = {
     };
   },
 
-  async addUser(firstName, lastName, email, password, isAnonymous = false) {
+  async addUser(firstName, lastName, email, password, isAnonymous = false, parksAttended=[]) {
     // Validate first name
     try {
       firstName = validation.checkString(firstName, 'First name');
@@ -110,6 +110,16 @@ const exportedMethods = {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+
+    //check parksAttended
+    if(!Array.isArray(parksAttended)){
+      parksAttended = []
+    }
+    for(let e of parksAttended){
+      e = validation.checkId(e, "Location ID");
+      e = validation.locationExists(e);
+    }
+    
     let newUser = {
       firstName: firstName,
       lastName: lastName,
@@ -117,7 +127,7 @@ const exportedMethods = {
       password: hashedPassword,
       isAnonymous: isAnonymous,
       favorites: [],
-      parksAttended: [],
+      parksAttended: parksAttended,
       createdAt: new Date()
     };
     const userCollection = await users();
