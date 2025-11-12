@@ -114,6 +114,7 @@ async function seedLocations() {
 async function seedUsers() {
     console.log('\n=== SEEDING USERS ===');
     try {
+        let locations = await locationMethods.getAllLocations();
         const userData = JSON.parse(
             await fs.readFile(
                 path.join(__dirname, 'Sample_Users.json'),
@@ -123,11 +124,12 @@ async function seedUsers() {
         console.log('Inserting users...');
         let successCount = 0;
         let errorCount = 0;
-        
+        let i = 0;
         for (const user of userData) {
             try {
-                await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous);
+                await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[i]._id.toString(), locations[i+1]._id.toString()]);
                 successCount++;
+                i= i+2;
             } catch (e) {
                 errorCount++;
                 console.error(`Error adding user ${user.firstName}: ${e}`);

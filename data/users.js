@@ -115,6 +115,11 @@ const exportedMethods = {
     if(!Array.isArray(parksAttended)){
       parksAttended = []
     }
+    for(let e of parksAttended){
+      e = validation.checkId(e, "Location ID");
+      e = validation.locationExists(e);
+    }
+    
     let newUser = {
       firstName: firstName,
       lastName: lastName,
@@ -122,7 +127,7 @@ const exportedMethods = {
       password: hashedPassword,
       isAnonymous: isAnonymous,
       favorites: [],
-      parksAttended: [],
+      parksAttended: parksAttended,
       createdAt: new Date()
     };
     const userCollection = await users();
