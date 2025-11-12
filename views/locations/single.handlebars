@@ -68,7 +68,20 @@
              </ul>
         </div>
         {{/if}}
-        
+        <div class = "add-comment-container">
+            <form action="/locations/{{locationId}}" method="POST" class="comment-form">
+                <div>
+                    <label>
+                        Add New Comment
+                        <input type="text" name="content" placeholder="Write your message here" 
+                        value="{{formData.content}}" autocomplete="start writing your thoughts..." required>
+                    </label>
+                </div>
+                <div>
+                    <button type="submit">Add Comment</button>
+                </div>
+            </form>        
+        </div>
     </div>
     <div class = "review-section">
         {{#if reviews}}

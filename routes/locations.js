@@ -3,7 +3,8 @@ import { locationData } from '../data/index.js';
 import { forumData } from '../data/index.js';
 import { userData } from '../data/index.js';
 import { reviewData } from '../data/index.js';
-import { searchLocation } from '../data/Query.js';  
+import { searchLocation } from '../data/Query.js'; 
+import { users } from "../config/mongoCollections.js"; 
 import validation from '../data/validation.js';
 
 const router = Router();
@@ -125,11 +126,35 @@ router.get('/:id', async (req, res) => {
       ratings_sum+=rating;
     }
     const averageRating = ratings_sum/ratings.length;
-    res.render('locations/single', { location: location, forum: forum, reviews: reviews, averageRating: averageRating, singleLocation: true, user: req.session.user});
+    res.render('locations/single', { location: location, forum: forum, 
+      reviews: reviews, averageRating: averageRating, singleLocation: true, 
+      user: req.session.user, locationId: id});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
 });
+
+router.post('/:id', async(req, res) => {
+  try{
+    const locationId = validation.checkId(req.params.id, "Location ID");
+    const userCollection = await users();
+    const user = await userCollection.findOne({email: req.session.user.email});
+    if(!user){
+      throw 'Error: User not found';
+    }
+    const userId = user._id.toString();
+    const content = req.body.content;
+    await forumData.createMessage(locationId, userId, content);
+    return res.redirect(`/locations/${locationId}`);
+  } catch(e){
+    return res.status(400).render("locations/single", {
+      error: e.message || "Comment could not be added. Please try again.",
+      formData: {
+        content: res.body.content || ""
+      }
+    });
+  }
+})
 
 export default router;
 
