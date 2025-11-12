@@ -26,7 +26,7 @@ const exportedMethods = {
     const gameList = await gameCollection.find({ locationId: locationId }).toArray();
     return gameList;
   },
-  
+
   async getGamesByUserId(userId) {
     userId = validation.checkId(userId, "User ID");
     userId = await validation.userExists(userId);
@@ -66,10 +66,9 @@ const exportedMethods = {
 
     //Validate Sport
     sport= validation.checkString(sport, "Sport");
-    if(sport.toLowerCase!== "basketball" && sport.toLowerCase !== "tennis"){
-      throw 'Error: Sport must be either basketball or tennis';
+    if(sport.toLowerCase() !== "basketball" && sport.toLowerCase() !== "tennis" && sport.toLowerCase() !== "pickelball"){
+      throw 'Error: Sport must be either basketball, tennis, or pickelball';
     }
-    locationCollection = await locations();
     const location = await locationData.getLocationById(locationId);
     if(sport==="tennis"){
       if(!location.facilities.tennis){

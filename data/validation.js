@@ -5,13 +5,13 @@ import { locations } from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js";
 
 const exportedMethods = {
-  checkId(id) {
-    if (!id) throw 'Error: You must provide an id to search for';
-    if (typeof id !== 'string') throw 'Error: id must be a string';
+  checkId(id, varName) {
+    if (!id) throw `Error: You must provide a ${varName} to search for`;
+    if (typeof id !== 'string') throw `Error: ${varName} must be a string`;
     id = id.trim();
     if (id.length === 0)
-      throw 'Error: id cannot be an empty string or just spaces';
-    if (!ObjectId.isValid(id)) throw 'Error: invalid object ID';
+      throw `Error: ${varName} cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `Error: invalid ${varName}`;
     return id;
   },
   checkString(strVal, varName) {
