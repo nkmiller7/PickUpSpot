@@ -1,0 +1,127 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="profile-avatar">
+      <span class="avatar-initials">{{user.firstName.[0]}}{{user.lastName.[0]}}</span>
+    </div>
+    <div class="profile-info">
+      <h1 class="profile-name">{{user.firstName}} {{user.lastName}}</h1>
+      <p class="profile-email">{{user.email}}</p>
+      <p class="profile-member-since">Member since {{user.createdAt}}</p>
+    </div>
+  </div>
+
+  <div class="profile-settings">
+    <div class="settings-card">
+      <h2>Account Settings</h2>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h3>Anonymous Mode</h3>
+          <p>Hide your name on reviews and show as "Anonymous User"</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="anonymousToggle" {{#if user.isAnonymous}}checked{{/if}}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-section">
+    <div class="section-header">
+      <h2>Favorite Locations</h2>
+      <span class="count-badge">{{favoriteLocations.length}}</span>
+    </div>
+    {{#if favoriteLocations.length}}
+      <div class="locations-grid">
+        {{#each favoriteLocations}}
+          <div class="location-card">
+            <h2 class="location-name">{{name}}</h2>
+            <div class="location-info">
+              <p class="location-hours"><i class="fas fa-clock"></i>{{hours}}</p>
+              <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
+              {{#if phone}}
+              <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
+              {{/if}}
+              {{#if info}}
+              <p class="location-details">{{info}}</p>
+              {{/if}}
+            </div>
+            <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="empty-state">
+        <p>No favorite locations yet</p>
+        <a href="/locations" class="browse-btn">Browse Locations</a>
+      </div>
+    {{/if}}
+  </div>
+
+  <div class="profile-section">
+    <div class="section-header">
+      <h2>My Reviews</h2>
+      <span class="count-badge">{{reviews.length}}</span>
+    </div>
+    {{#if reviews.length}}
+      <div class="reviews-list">
+        {{#each reviews}}
+          <div class="review-card">
+            <h3 class="review-location-name">{{this.location.name}}</h3>
+            <div class="review-rating">
+              <i class="fas fa-star"></i>
+              <span class="rating-number">{{this.rating}}/5</span>
+            </div>
+            <p class="review-comment">{{this.comment}}</p>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="empty-state">
+        <p>No reviews yet</p>
+        <a href="/locations" class="browse-btn">Browse Locations to Review</a>
+      </div>
+    {{/if}}
+  </div>
+</div>
+
+<script>
+  document.getElementById('anonymousToggle').addEventListener('change', async function(e) {
+    try {
+      const response = await fetch('/profile/toggle-anonymous', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ isAnonymous: e.target.checked })
+      });
+      
+      if (response.ok) {
+        const message = e.target.checked ? 'Anonymous mode enabled' : 'Anonymous mode disabled';
+        showNotification(message, 'success');
+      } else {
+        throw new Error('Failed to update setting');
+      }
+    } catch (error) {
+      showNotification('Failed to update setting', 'error');
+      e.target.checked = !e.target.checked;
+    }
+  });
+
+  // Notification function
+  function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('show');
+    }, 10);
+    
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+</script>

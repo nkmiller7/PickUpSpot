@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { gameData } from '../data/index.js';
+import { gameData, userData, locationData } from '../data/index.js';
 import validation from '../data/validation.js';
 
 const router = Router();
@@ -37,7 +37,23 @@ router.get('/locations/:id', async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
     const gameList = await gameData.getGamesByLocationId(id);
-    res.json(gameList);
+    const location = await locationData.getLocationById(id);
+
+    /* 
+     * Need to add additional fields to gameList for rendering 
+     * game single location page.
+     */
+    for (let i = 0; i < gameList.length; ++i) {
+      const gameCreator = await userData.getUserById(gameList[i].userId);
+      gameList[i].creatorFirstName = "Anonymous";
+      gameList[i].creatorLastName = "User";
+      if (gameCreator.isAnonymous === false) {
+        gameList[i].creatorFirstName = gameCreator.firstName;
+        gameList[i].creatorLastName = gameCreator.lastName;
+      }
+    }
+
+    res.render("games/index", { isGamesPage: true, games: gameList, location: location });
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }

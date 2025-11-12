@@ -3,6 +3,7 @@ import locationMethods from '../data/locations.js';
 import userMethods from '../data/users.js';
 import forumMethods from '../data/forums.js';
 import reviewMethods from '../data/reviews.js';
+import {gameData} from '../data/index.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -113,6 +114,7 @@ async function seedLocations() {
 async function seedUsers() {
     console.log('\n=== SEEDING USERS ===');
     try {
+        let locations = await locationMethods.getAllLocations();
         const userData = JSON.parse(
             await fs.readFile(
                 path.join(__dirname, 'Sample_Users.json'),
@@ -122,11 +124,12 @@ async function seedUsers() {
         console.log('Inserting users...');
         let successCount = 0;
         let errorCount = 0;
-        
+        let i = 0;
         for (const user of userData) {
             try {
-                await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous);
+                await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[i]._id.toString(), locations[i+1]._id.toString()]);
                 successCount++;
+                i= i+2;
             } catch (e) {
                 errorCount++;
                 console.error(`Error adding user ${user.firstName}: ${e}`);
@@ -247,6 +250,153 @@ async function seedForums() {
     }
 }
 
+async function seedGames() {
+    console.log('\n=== SEEDING GAMES ===');
+    try {
+        console.log('Inserting games...');
+        let successCount = 0;
+        let errorCount = 0;
+        
+        let users = await userMethods.getAllUsers();
+        let locations = await locationMethods.getAllLocations();
+        
+        if (!users || users.length === 0) {
+            throw 'Failed to get users! Cannot seed games.';
+        }
+        if (!locations || locations.length === 0) {
+            throw 'Failed to get locations! Cannot seed games.';
+        }
+        
+        // Filter locations to find ones with basketball and tennis facilities
+        const basketballLocations = locations.filter(loc => 
+            loc.basketball && loc.basketball.numCourts > 0
+        );
+        const tennisLocations = locations.filter(loc => 
+            loc.tennis && loc.tennis.numCourts > 0
+        );
+        
+        // Create array of future dates for games
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const nextWeek = new Date(today);
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        const twoWeeks = new Date(today);
+        twoWeeks.setDate(twoWeeks.getDate() + 14);
+        
+        const gameInfo = [
+            // Basketball games
+            {
+                "userId": users[0]._id.toString(),
+                "locationId": basketballLocations.length > 0 ? basketballLocations[0]._id.toString() : locations[0]._id.toString(),
+                "date": tomorrow.toISOString().split('T')[0],
+                "startTime": "15:00",
+                "endTime": "17:00",
+                "sport": "basketball",
+                "numOfPlayers": 10,
+                "skillLevel": "intermediate"
+            },
+            {
+                "userId": users[1]._id.toString(),
+                "locationId": basketballLocations.length > 0 ? basketballLocations[0]._id.toString() : locations[0]._id.toString(),
+                "date": nextWeek.toISOString().split('T')[0],
+                "startTime": "18:00",
+                "endTime": "20:00",
+                "sport": "basketball",
+                "numOfPlayers": 8,
+                "skillLevel": "advanced"
+            },
+            {
+                "userId": users[2]._id.toString(),
+                "locationId": basketballLocations.length > 1 ? basketballLocations[1]._id.toString() : locations[0]._id.toString(),
+                "date": tomorrow.toISOString().split('T')[0],
+                "startTime": "10:00",
+                "endTime": "12:00",
+                "sport": "basketball",
+                "numOfPlayers": 6,
+                "skillLevel": "beginner"
+            },
+            // Tennis games
+            {
+                "userId": users[3]._id.toString(),
+                "locationId": tennisLocations.length > 0 ? tennisLocations[0]._id.toString() : locations[0]._id.toString(),
+                "date": twoWeeks.toISOString().split('T')[0],
+                "startTime": "14:00",
+                "endTime": "16:00",
+                "sport": "tennis",
+                "numOfPlayers": 4,
+                "skillLevel": "intermediate"
+            },
+            {
+                "userId": users[4]._id.toString(),
+                "locationId": tennisLocations.length > 0 ? tennisLocations[0]._id.toString() : locations[0]._id.toString(),
+                "date": nextWeek.toISOString().split('T')[0],
+                "startTime": "09:00",
+                "endTime": "11:00",
+                "sport": "tennis",
+                "numOfPlayers": 2,
+                "skillLevel": "advanced"
+            },
+            {
+                "userId": users[5]._id.toString(),
+                "locationId": tennisLocations.length > 1 ? tennisLocations[1]._id.toString() : locations[0]._id.toString(),
+                "date": tomorrow.toISOString().split('T')[0],
+                "startTime": "16:00",
+                "endTime": "18:00",
+                "sport": "tennis",
+                "numOfPlayers": 4,
+                "skillLevel": "beginner"
+            },
+            // Additional mixed games
+            {
+                "userId": users[6]._id.toString(),
+                "locationId": basketballLocations.length > 0 ? basketballLocations[0]._id.toString() : locations[0]._id.toString(),
+                "date": twoWeeks.toISOString().split('T')[0],
+                "startTime": "12:00",
+                "endTime": "14:00",
+                "sport": "basketball",
+                "numOfPlayers": 12,
+                "skillLevel": "intermediate"
+            },
+            {
+                "userId": users[7]._id.toString(),
+                "locationId": tennisLocations.length > 0 ? tennisLocations[0]._id.toString() : locations[0]._id.toString(),
+                "date": nextWeek.toISOString().split('T')[0],
+                "startTime": "17:00",
+                "endTime": "19:00",
+                "sport": "tennis",
+                "numOfPlayers": 6,
+                "skillLevel": "beginner"
+            }
+        ];
+        
+        for (const game of gameInfo) {
+            try {
+                await gameData.addGame(
+                    game.userId,
+                    game.locationId,
+                    game.date,
+                    game.startTime,
+                    game.endTime,
+                    game.sport,
+                    game.numOfPlayers,
+                    game.skillLevel
+                );
+                successCount++;
+                console.log(`Successfully added ${game.sport} game at location ${game.locationId}`);
+            } catch (e) {
+                errorCount++;
+                console.error(`Error adding game: ${e}`);
+            }
+        }
+        console.log(`Game seeding completed. Successfully added ${successCount} games. Failed to add ${errorCount} games.`);
+        console.log('Games seeding completed!');
+    } catch (e) {
+        console.error('Error during game seeding:', e);
+        throw e;
+    }
+}
+
 async function main() {
     try {
         console.log('Starting database seeding...\n');
@@ -256,7 +406,8 @@ async function main() {
         await seedUsers();
         await seedReviews();
         await seedForums();
-        
+        await seedGames();
+
         console.log('\nAll seeding completed successfully!');
     } catch (e) {
         console.error('\nError during seeding:', e);

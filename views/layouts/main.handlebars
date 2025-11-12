@@ -12,21 +12,27 @@
     {{#if isLocationsPage}}
     <link rel="stylesheet" href="/public/css/pages/locations.css">
     {{/if }}
-
+    {{#if isGamesPage}}
+    <link rel="stylesheet" href="/public/css/pages/games.css">
+    {{/if}}
     {{#if singleLocation}}
       <link rel="stylesheet" href="/public/css/pages/location-single.css">
     {{/if}}
+
+    {{#if isProfilePage}}
+      <link rel="stylesheet" href="/public/css/pages/profile.css">
+    {{/if}}
+
 </head>
 
 <body>
     <header class="header">
-        <a href="/" class="logo">
+        <a href="/locations" class="logo">
         <img src="/public/images/white-logo.svg" alt="PickUpSpot Logo" />
         </a>
         <nav>
             <ul class="nav-menu">
                 <li><a href="/locations" class="nav-item">Parks</a></li>
-                <li><a href="/games" class="nav-item">Games</a></li>
                 <li><a href="/about" class="nav-item">About</a></li>
             </ul>
         </nav>

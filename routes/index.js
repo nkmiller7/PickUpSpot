@@ -4,6 +4,8 @@ import reviewRoutes from "./reviews.js";
 import forumRoutes from "./forums.js";
 import aboutRoutes from "./about.js";
 import authRoutes from "./auth.js"
+import gameRoutes from "./games.js";
+import profileRoutes from "./profile.js"; 
 
 const constructorMethod = (app) => {
   app.use("/users", userRoutes);
@@ -11,6 +13,8 @@ const constructorMethod = (app) => {
   app.use("/reviews", reviewRoutes);
   app.use("/forums", forumRoutes);
   app.use("/about", aboutRoutes);
+  app.use("/games", gameRoutes)
+  app.use("/profile", profileRoutes); 
   app.use("/", authRoutes);
   app.get("/", (req, res) => {
     return res.render("landing/index", { layout: "landing" });
