@@ -201,6 +201,10 @@ router
       }
       const userId = user._id.toString();
       const content = req.body.content;
+      content= content.checkString(content, "Comment Content");
+      if(content.length < 5 || content.length > 500){
+        throw 'Error: Message content must be between 5 and 500 characters, inclusive';
+      }
       await forumData.createMessage(locationId, userId, content);
     } catch(e){
       errors.push(e);

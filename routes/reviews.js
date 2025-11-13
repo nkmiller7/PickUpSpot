@@ -43,4 +43,10 @@ router.get('/locations/:id', async (req, res) => {
   }
 });
 
+router.post('/review/:id', async (req, res) => {
+  try {
+    const reviewData = req.body;
+  }
+})
+
 export default router;
