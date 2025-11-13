@@ -59,5 +59,19 @@ router.get('/locations/:id', async (req, res) => {
   }
 });
 
+router.post('/:id/drop', async (req, res) => {
+  try {
+    const gameId = validation.checkId(req.params.id, "id");
+    const user = await userData.getUserByEmail(req.session.user.email); 
+
+
+    const updatedGame = await gameData.removeRegisteredPlayerFromGame(gameId, user._id.toString()); 
+
+    res.status(200).json({ message: "Successfully dropped from game" });
+  } catch (e) {
+    res.status(404).json({ error: e.toString() });
+  }
+});
+
 export default router;
 

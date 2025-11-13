@@ -180,6 +180,146 @@
   font-weight: 600;
 }
 
+/* Scheduled Games Grid */
+.profile-container .games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .profile-container .games-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-container .game-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-container .game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.profile-container .game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.profile-container .game-location-name {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: 600;
+  flex: 1;
+}
+
+.profile-container .game-status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.profile-container .game-status-badge.status-scheduled {
+  background-color: #c6f6d5;
+  color: #22543d;
+}
+
+.profile-container .game-status-badge.status-cancelled {
+  background-color: #fed7d7;
+  color: #742a2a;
+}
+
+.profile-container .game-status-badge.status-completed {
+  background-color: #bee3f8;
+  color: #2c5282;
+}
+
+.profile-container .game-info {
+  margin-bottom: 15px;
+  flex: 1;
+}
+
+.profile-container .game-info-row {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.profile-container .game-info-row i {
+  margin-right: 10px;
+  color: #667eea;
+  width: 18px;
+  display: inline-block;
+  text-align: center;
+}
+
+.profile-container .game-sport {
+  font-weight: 500;
+}
+
+.profile-container .game-participants {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.profile-container .game-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.profile-container .game-btn {
+  flex: 1;
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: all 0.3s;
+  font-weight: 500;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.profile-container .view-location-btn {
+  background-color: #f7fafc;
+  color: #667eea;
+  border: 1px solid #667eea;
+}
+
+.profile-container .view-location-btn:hover {
+  background-color: #667eea;
+  color: white;
+}
+
+.profile-container .drop-game-btn {
+  background-color: #fc8181;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-container .drop-game-btn:hover {
+  background-color: #f56565;
+}
+
 /* Locations Grid */
 .profile-container .locations-grid {
   display: grid;
