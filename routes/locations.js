@@ -69,7 +69,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router
+  .route('/:id')
+  .get(async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
     const location = await locationData.getLocationById(id);
@@ -132,30 +134,98 @@ router.get('/:id', async (req, res) => {
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
-});
-
-router.post('/:id', async(req, res) => {
-  let errors = [];
-  try{
-    const locationId = validation.checkId(req.params.id, "Location ID");
-    const userCollection = await users();
-    const user = await userCollection.findOne({email: req.session.user.email});
-    if(!user){
-      throw 'Error: User not found';
-    }
-    const userId = user._id.toString();
-    const content = req.body.content;
-    await forumData.createMessage(locationId, userId, content);
-    return res.redirect(`/locations/${locationId}`);
-  } catch(e){
-    return res.status(400).render("locations/single", {
-      error: e.message || "Comment could not be added. Please try again.",
-      formData: {
-        content: res.body.content || ""
-      }
-    });
-  }
 })
-
+  .post(async(req, res) => {
+    const id = validation.checkId(req.params.id);
+    const location = await locationData.getLocationById(id);
+    const forumOld = await forumData.getForumMessagesByLocationId(id);
+    const forum = [];
+    for(let c of forumOld.reverse()){
+      let user = await userData.getUserById(c.userId.toString());
+      if(user.isAnonymous === false){
+      forum.push(
+          {
+            userName: user.firstName+" "+user.lastName,
+            content: c.content,
+            createdAt: c.createdAt
+          }
+        )
+      }else{
+        forum.push(
+          {
+            content: c.content,
+            createdAt: c.createdAt
+          }
+        )
+      }
+    }
+    const reviewsOld= await reviewData.getReviewsByLocationId(id);
+    const reviews = [];
+    const ratings = [];
+    for(let r of reviewsOld){
+      let user = await userData.getUserById(r.userId.toString());
+      if(user.isAnonymous === false){
+        reviews.push(
+          {
+            userName: user.firstName+" "+user.lastName,
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            updatedAt: r.updatedAt
+          }
+        )
+      }else{
+        reviews.push(
+          {
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            updatedAt: r.updatedAt
+          }
+        )
+      }
+      ratings.push(r.rating);
+    }
+    let ratings_sum = 0;
+    for(let rating of ratings){
+      ratings_sum+=rating;
+    }
+    const averageRating = ratings_sum/ratings.length;
+    let errors = [];
+    try{
+      const locationId = validation.checkId(req.params.id, "Location ID");
+      const userCollection = await users();
+      const user = await userCollection.findOne({email: req.session.user.email});
+      if(!user){
+        throw 'Error: User not found';
+      }
+      const userId = user._id.toString();
+      const content = req.body.content;
+      await forumData.createMessage(locationId, userId, content);
+    } catch(e){
+      errors.push(e);
+    }
+    if(errors.length > 0){
+      res.render('locations/single', {
+        errors: errors,
+        hasErrors: true,
+        content: req.body.content,
+        location: location, 
+        forum: forum, 
+        reviews: reviews, 
+        averageRating: averageRating, 
+        singleLocation: true, 
+        user: req.session.user, 
+        locationId: id
+      });
+      return;
+    }
+    try{
+      res.redirect(`/locations/${req.params.id}`);
+    }catch(e){
+      res.status(500).json({error: e});
+    }
+})
+  
 export default router;
 
