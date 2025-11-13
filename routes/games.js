@@ -53,7 +53,7 @@ router.get('/locations/:id', async (req, res) => {
       }
     }
 
-    res.render("games/index", { isGamesPage: true, games: gameList, location: location });
+    res.render("games/index", { isGamesPage: true, games: gameList, location: location, user: req.session.user });
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
