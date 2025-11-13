@@ -63,7 +63,7 @@ const exportedMethods = {
     };
   },
 
-  async addUser(firstName, lastName, email, password, isAnonymous = false, parksAttended=[]) {
+  async addUser(firstName, lastName, email, password, isAnonymous = false, parksAttended = []) {
     // Validate first name
     try {
       firstName = validation.checkString(firstName, 'First name');
@@ -117,7 +117,7 @@ const exportedMethods = {
     }
     for(let e of parksAttended){
       e = validation.checkId(e, "Location ID");
-      e = validation.locationExists(e);
+      e = await validation.locationExists(e);
     }
     
     let newUser = {

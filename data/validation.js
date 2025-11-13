@@ -39,14 +39,14 @@ const exportedMethods = {
   },
   async locationExists(locationId){
     const locationCollection = await locations();
-    if(!(await locationCollection.find({ _id: new ObjectId(locationId)}))){
+    if(!(await locationCollection.findOne({ _id: new ObjectId(locationId)}))){
       throw `Error: Location with ID ${locationId} does not exist`;
     }
     return locationId;
   },
   async userExists(userId){
     const userCollection = await users();
-    if(!(await userCollection.find({ _id: new ObjectId(userId)}))){
+    if(!(await userCollection.findOne({ _id: new ObjectId(userId)}))){
        throw `Error: Location with ID ${userId} does not exist`;
     }
     return userId;
