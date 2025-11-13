@@ -113,6 +113,11 @@
              </ul>
         </div>
         {{/if}}
+        {{#if hasVisited}}
+        <div class = "add-review-link">
+            <a href = "/reviews/review/{{locationId}}">Leave a Review</a>
+        </div>
+        {{/if}}
     </div>
     <div class="actions">
         <a href="/games/locations/{{location._id}}" class="primary-btn">Find Availability</a>

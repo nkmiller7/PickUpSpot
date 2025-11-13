@@ -128,9 +128,15 @@ router
       ratings_sum+=rating;
     }
     const averageRating = ratings_sum/ratings.length;
+    const userCollection = await users();
+    const user = await userCollection.findOne({email: req.session.user.email});
+    if(!user){
+      throw 'Error: User not found';
+    }
+    const hasVisited = (user.parksAttended.includes(id));
     res.render('locations/single', { location: location, forum: forum, 
       reviews: reviews, averageRating: averageRating, singleLocation: true, 
-      user: req.session.user, locationId: id});
+      user: req.session.user, locationId: id, hasVisited: hasVisited});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
@@ -225,7 +231,7 @@ router
       return;
     }
     try{
-      res.redirect(`/locations/${req.params.id}`);
+      res.redirect(`locations/${req.params.id}`);
     }catch(e){
       res.status(500).json({error: e});
     }

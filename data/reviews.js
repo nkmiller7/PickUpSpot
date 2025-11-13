@@ -1,6 +1,7 @@
 import { reviews } from "../config/mongoCollections.js";
 import validation from './validation.js';
 import { ObjectId } from 'mongodb';
+import { users } from "../config/mongoCollections.js"; 
 
 const exportedMethods = {
   async getAllReviews() {
@@ -36,9 +37,14 @@ const exportedMethods = {
 
   async addReview(userId, locationId, rating, comment) {
     userId = validation.checkId(userId, "User Id");
-    userId = await validation.userExists(userId)
+    userId = await validation.userExists(userId);
+    const userCollection = await users();
+    const user = await userCollection.findOne({_id: new ObjectId(userId)});
     locationId = validation.checkId(locationId);
     locationId= await validation.locationExists(locationId);
+    if(!user.parksAttended.includes(locationId)){
+      throw "Error: User must have visited the park to leave a review";
+    }
     rating = validation.checkNumber(rating, 'Rating');
     if (rating < 1 || rating > 5) throw 'Error: Rating must be between 1 and 5';
     if (rating.toString().includes(".") && rating.toString().split(".")[1].length > 1){

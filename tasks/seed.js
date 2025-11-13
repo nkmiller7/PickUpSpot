@@ -169,13 +169,13 @@ async function seedReviews() {
             },
             {
                 "userId": users[9]._id.toString(),
-                "locationId": locations[0]._id.toString(),
+                "locationId": locations[18]._id.toString(),
                 "rating": 3,
                 "comment": "This park is just ok."
             },
             {
                 "userId": users[7]._id.toString(),
-                "locationId": locations[0]._id.toString(),
+                "locationId": locations[14]._id.toString(),
                 "rating": 1,
                 "comment": "This park is falling apart! It's sad to see :("
             },
