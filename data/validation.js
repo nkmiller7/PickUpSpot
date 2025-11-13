@@ -2,7 +2,7 @@ import {ObjectId} from 'mongodb';
 import pkg from 'validator';
 const { isEmail } = pkg;
 import { locations } from "../config/mongoCollections.js";
-import { users } from "../config/mongoCollections.js";
+import { users, games } from "../config/mongoCollections.js";
 
 const exportedMethods = {
   checkId(id, varName) {
@@ -50,6 +50,13 @@ const exportedMethods = {
        throw `Error: Location with ID ${userId} does not exist`;
     }
     return userId;
+  },
+  async gameExists(gameId) {
+    const gameCollection = await games();
+    if(!(await gameCollection.find({ _id: new ObjectId(gameId)}))){
+       throw `Error: Game with ID ${gameId} does not exist`;
+    }
+    return gameId;
   },
   isLetter(c){
     return ((c.charCodeAt(0) >= 65 && c.charCodeAt(0) <= 90) || (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122));

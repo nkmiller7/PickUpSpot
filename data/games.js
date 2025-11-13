@@ -120,6 +120,39 @@ const exportedMethods = {
     const newId = insertInfo.insertedId.toString();
     const game = await this.getGameById(newId);
     return game;
+  },
+
+  async addUserToGame(gameId, userId) {
+    // Validation
+    gameId = validation.checkId(gameId, "Game ID");
+    userId = validation.checkId(userId, "User ID");
+    userId = await validation.userExists(userId);
+    gameId = await validation.gameExists(gameId);
+
+    let gameToJoin = await this.getGameById(gameId);
+
+    // Check if user is already registered
+    for (let registeredUserId of gameToJoin.registeredPlayers) {
+      if (registeredUserId.toString() === userId) {
+        throw 'Error: User is already registered for this game';
+      }
+    }
+
+    // Check if there is space available
+    if (gameToJoin.registeredPlayers.length >= gameToJoin.desiredParticipants) {
+      throw 'Error: Game is already full';
+    }
+
+    // STILL NEED TO CHECK IF GAME DATE HAS PASSED AS WELL AS ENSURE USER IS NOT REGISTERED FOR ANOTHER GAME AT THE SAME TIME (NEED TO FIND OUT HOW WE PLAN TO STORE TIME) 
+    gameToJoin.registeredPlayers.push(new ObjectId(userId));
+    gameToJoin.updatedAt = new Date();
+    const gameCollection = await games();
+    const updatedGame = await gameCollection.findOneAndReplace(
+      { _id: new ObjectId(gameId) },
+      gameToJoin,
+      { returnDocument: 'after' }
+    );
+    return updatedGame;
   }
 };
 

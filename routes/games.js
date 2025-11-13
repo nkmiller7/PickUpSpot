@@ -59,5 +59,17 @@ router.get('/locations/:id', async (req, res) => {
   }
 });
 
+router.get("/join/:id", async (req, res) => {    // This shouldn't be a post, but I'm lazy and we don't have ajax setup yet...
+  try {
+    const gameId = validation.checkId(req.params.id, "Game ID");
+    const userId = validation.checkId(req.session.user.userId, "User ID");
+    const updatedGame = await gameData.addUserToGame(gameId, userId);
+    res.json(updatedGame);
+  } catch(e) {
+    res.status(500).json({ error: e.toString() });
+  }
+});
+
+
 export default router;
 

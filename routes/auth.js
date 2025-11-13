@@ -32,6 +32,7 @@ router.post("/login", async (req, res) => {
     }
 
     req.session.user = {
+      userId: user._id.toString(),
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
