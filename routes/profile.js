@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { locationData, userData, reviewData } from "../data/index.js";
+import { locationData, userData, reviewData, gameData } from "../data/index.js";
 import validation from "../data/validation.js";
 
 
@@ -9,12 +9,18 @@ router.get("/", async (req, res) => {
   try {
     const user = await userData.getUserByEmail(req.session.user.email);
     const usersReviews = await reviewData.getReviewsByUserId(user._id.toString()); 
-    
+    const userOwnedGames = await gameData.getGamesByUserId(user._id.toString()); 
+    const allGames = await gameData.getAllGames();
+
+    const userParticipantGames = allGames.filter((game) =>
+      game.registeredPlayers.some((id) => id.toString() === user._id.toString())
+    );
+
     const favoritesWithLocations = await Promise.all(
-        user.favorites.map(async (favorite) => {
-            const location = await locationData.getLocationById(favorite);
-            return location;
-        })
+      user.favorites.map(async (favorite) => {
+          const location = await locationData.getLocationById(favorite);
+          return location;
+      })
     );
 
     const reviewsWithLocations = await Promise.all(
@@ -24,7 +30,31 @@ router.get("/", async (req, res) => {
       })
     );
 
-    res.render("profile/index", {user: user, reviews: reviewsWithLocations, favoriteLocations: favoritesWithLocations, isProfilePage: true});
+    const userOwnedGamesWithLocations = await Promise.all(
+      userOwnedGames.map(async (game) => {
+        const location = await locationData.getLocationById(game.locationId.toString()); 
+        return { ...game, location, isOwner: true}; 
+      })
+    );
+
+    const userParticipantGamesWithLocations = await Promise.all(
+      userParticipantGames.map(async (game) => {
+        const location = await locationData.getLocationById(game.locationId.toString());
+        return { ...game, location };
+      })
+    );
+
+    const combinedGames = [
+      ...userOwnedGamesWithLocations,
+      ...userParticipantGamesWithLocations,
+    ];
+    
+    const userGamesWithLocations = combinedGames.filter(
+      (game, index, self) =>
+        index === self.findIndex((g) => g._id.toString() === game._id.toString())
+    );
+
+    res.render("profile/index", {user: user, reviews: reviewsWithLocations, favoriteLocations: favoritesWithLocations, scheduledGames: userGamesWithLocations, isProfilePage: true});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }

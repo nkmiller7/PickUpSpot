@@ -68,7 +68,29 @@
              </ul>
         </div>
         {{/if}}
-        
+        <div class = "add-comment-container">
+            <form action="/locations/{{locationId}}" method="POST" class="comment-form">
+                <div>
+                    <label>
+                        Add New Comment
+                        <input type="text" name="content" placeholder="Write your message here" 
+                        value="{{formData.content}}" autocomplete="start writing your thoughts..." required>
+                    </label>
+                </div>
+                <div>
+                    <button type="submit" class="addComment-button">Add Comment</button>
+                </div>
+            </form> 
+            {{#if hasErrors}}  
+            <ul class = "error-list">
+                {{#each errors}}
+                <li>
+                    {{this}}
+                </li>
+                {{/each}}
+            </ul>
+            {{/if}}   
+        </div>
     </div>
     <div class = "review-section">
         {{#if reviews}}
@@ -89,6 +111,11 @@
                 </li>
              {{/each}}
              </ul>
+        </div>
+        {{/if}}
+        {{#if hasVisited}}
+        <div class = "add-review-link">
+            <a href = "/reviews/review/{{locationId}}">Leave a Review</a>
         </div>
         {{/if}}
     </div>

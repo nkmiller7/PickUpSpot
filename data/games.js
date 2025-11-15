@@ -49,6 +49,28 @@ const exportedMethods = {
     return gameList;
   },
 
+  async removeRegisteredPlayerFromGame(gameId, userId) {
+    gameId = validation.checkId(gameId, "Game ID");
+    userId = validation.checkId(userId, "User ID");
+
+    const gameCollection = await games();
+    const game = await gameCollection.findOne({ _id : new ObjectId(gameId)});
+
+    if (!game) throw `Error: Game with ID ${gameId} not found`;
+
+    const updatedPlayers = game.registeredPlayers.filter((playerId) => playerId.toString() !== userId);
+
+    if (updatedPlayers.length === game.registeredPlayers.length) throw "Error: User with ID not found in registered players"; 
+  
+    const updateInfo = await gameCollection.updateOne(
+      { _id: new ObjectId(gameId) },
+      { $set: { registeredPlayers: updatedPlayers } }
+    );
+    
+    const updatedGame = await gameCollection.findOne({ _id: new ObjectId(gameId) });
+    return updatedGame;
+  },
+
   async addGame(
     userId,
     locationId,
@@ -138,6 +160,7 @@ const exportedMethods = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
       date: dateObj,
+      sport: sport,
       startTime: startTime,
       endTime: endTime,
       desiredParticipants: numOfPlayers,
