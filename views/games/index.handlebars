@@ -13,7 +13,13 @@
                         <p>Date: {{date}}</p>
                         <p>Starting Time: {{startTime}}</p>
                         <p>Ending Time: {{endTime}}</p>
-                        <a href="/games/join/{{_id}}" class="primary-btn">Tag Along</a>
+                        {{#if isCreator}}
+                            <a class="primary-btn">View Details</a>
+                        {{else if hasJoined}}
+                            <a class="primary-btn">Leave Game</a>
+                        {{else}}
+                            <a href="/games/join/{{_id}}" class="primary-btn">Tag Along</a>
+                        {{/if}}
                     </div>
                 </div>
             {{/each}}

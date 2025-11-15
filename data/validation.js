@@ -77,13 +77,6 @@ const exportedMethods = {
       throw "Error: time stamps must be of type string";
     }
 
-    console.log(dateA);
-    console.log(startTimeStampA);
-    console.log(endTimeStampB);
-    console.log(dateB);
-    console.log(startTimeStampB);
-    console.log(endTimeStampB);
-
     const startDateA = new Date(dateA);
     startDateA.setHours(startTimeStampA.split(":")[0]);
     startDateA.setMinutes(startTimeStampA.split(":")[1]);
@@ -99,12 +92,7 @@ const exportedMethods = {
     const endDateB = new Date(dateB);
     endDateB.setHours(endTimeStampB.split(":")[0]);
     endDateB.setMinutes(endTimeStampB.split(":")[1]);
-
-    console.log(startDateA);
-    console.log(endDateA);
-    console.log(startDateB);
-    console.log(endDateB);
-
+    
     return (
       (startDateA >= startDateB && startDateA <= endDateB) ||
       (endDateA >= startDateB && endDateA <= endDateB)
