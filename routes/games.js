@@ -82,7 +82,7 @@ router.get("/locations/:id", async (req, res) => {
 });
 
 router.get("/join/:id", async (req, res) => {
-  // This shouldn't be a post, but I'm lazy and we don't have ajax setup yet...
+  // This shouldn't be a get, but I'm lazy and we don't have ajax setup yet...
   try {
     const gameId = validation.checkId(req.params.id, "Game ID");
     const userId = validation.checkId(req.session.user.userId, "User ID");
@@ -93,14 +93,14 @@ router.get("/join/:id", async (req, res) => {
   }
 });
 
-router.post('/:id/drop', async (req, res) => {
+router.get("/drop/:id", async (req, res) => {
+  // This shouldn't be a get, but I'm lazy and we don't have ajax setup yet...
   try {
     const gameId = validation.checkId(req.params.id, "id");
-    const user = await userData.getUserByEmail(req.session.user.email); 
-
-
-    const updatedGame = await gameData.removeRegisteredPlayerFromGame(gameId, user._id.toString()); 
-
+    const updatedGame = await gameData.removeRegisteredPlayerFromGame(
+      gameId,
+      req.session.user.userId
+    );
     res.status(200).json({ message: "Successfully dropped from game" });
   } catch (e) {
     res.status(404).json({ error: e.toString() });
