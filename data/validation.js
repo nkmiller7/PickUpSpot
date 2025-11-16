@@ -22,7 +22,6 @@ const exportedMethods = {
       throw `Error: ${varName} cannot be an empty string or string with just spaces`;
     return strVal;
   },
-
   checkNumber(numVal, varName) {
     if (numVal === undefined || numVal === null)
       throw `Error: You must supply a ${varName}.`;
@@ -39,17 +38,56 @@ const exportedMethods = {
       throw `Error: ${varName} must be a valid email address.`;
     return emailVal;
   },
+  checkSport(sportVal, varName) {
+    sportVal = this.checkString(sportVal, varName).toLowerCase();
+    if (
+      !(
+        sportVal === "basketball" ||
+        sportVal === "tennis" ||
+        sportVal === "pickleball"
+      )
+    )
+      throw `Error: ${varName} must be a valid sport.`;
+    return sportVal;
+  },
+  checkDate(dateVal, varName) {
+    if (!(dateVal instanceof Date))
+      throw `Error: ${varName} must be a valid date.`;
+    const now = new Date();
+    if (dateVal < now) throw `Error: ${varName} cannot be a past date.`;
+    return dateVal;
+  },
+  checkTime(timeVal, varName) {
+    timeVal = checkString(timeVal, varName);
+    if (!/^([01][0-9]|2[0-3]):([0-5][0-9])$/.test(timeVal))
+      throw `Error: ${varName} must be a valid 24 hour time stamp.`;
+    return timeVal;
+  },
+  checkSkillLevel(skillLevelVal, varName) {
+    skillLevelVal = checkString(skillLevelVal, varName).toLowerCase();
+    if (
+      !(
+        skillLevelVal === "beginner" ||
+        skillLevelVal === "intermediate" ||
+        skillLevelVal === "advanced"
+      )
+    )
+      throw `Error: ${varName} must be a valid skill level.`;
+    return skillLevelVal;
+  },
   async locationExists(locationId) {
     const locationCollection = await locations();
-    if(!(await locationCollection.findOne({ _id: new ObjectId(locationId)}))){
+    if (
+      !(await locationCollection.findOne({ _id: new ObjectId(locationId) }))
+    ) {
       throw `Error: Location with ID ${locationId} does not exist`;
     }
     return locationId;
   },
   async userExists(userId) {
     const userCollection = await users();
-    if(!(await userCollection.findOne({ _id: new ObjectId(userId)}))){
-       throw `Error: Location with ID ${userId} does not exist`;
+    if (!(await userCollection.findOne({ _id: new ObjectId(userId) }))) {
+      throw `Error: Location with ID ${userId} does not exist`;
     }
     return userId;
   },
@@ -92,7 +130,7 @@ const exportedMethods = {
     const endDateB = new Date(dateB);
     endDateB.setHours(endTimeStampB.split(":")[0]);
     endDateB.setMinutes(endTimeStampB.split(":")[1]);
-    
+
     return (
       (startDateA >= startDateB && startDateA <= endDateB) ||
       (endDateA >= startDateB && endDateA <= endDateB)

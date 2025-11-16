@@ -88,20 +88,12 @@ const exportedMethods = {
     locationId = await validation.locationExists(locationId);
     date = validation.checkString(date, "Date");
 
-    //Validate dates- needs fixing!
-    const dateObj = new Date(date);
-    if (isNaN(dateObj.getTime())) throw "Error: Invalid date format";
-    if (dateObj < new Date()) throw "Error: Game date must be in the future";
+    //Validate date
+    const dateObj = validation.checkDate(date, "Game Date");
 
-    // Validate start and end times (HH:MM format)- needs fixing!
-    startTime = validation.checkString(startTime, "Start Time");
-    endTime = validation.checkString(endTime, "End Time");
-
-    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    if (!timeRegex.test(startTime))
-      throw "Error: Start time must be in HH:MM format";
-    if (!timeRegex.test(endTime))
-      throw "Error: End time must be in HH:MM format";
+    // Validate start and end times
+    startTime = validation.checkTime(startTime, "Start Time");
+    endTime = validation.checkTime(endTime, "End Time");
 
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
@@ -114,14 +106,8 @@ const exportedMethods = {
       throw "Error: Game duration cannot exceed 3 hours";
 
     //Validate Sport
-    sport = validation.checkString(sport, "Sport");
-    if (
-      sport.toLowerCase() !== "basketball" &&
-      sport.toLowerCase() !== "tennis" &&
-      sport.toLowerCase() !== "pickelball"
-    ) {
-      throw "Error: Sport must be either basketball, tennis, or pickelball";
-    }
+    sport = validation.checkSport(sport, "Sport");
+
     const location = await locationData.getLocationById(locationId);
     if (sport === "tennis") {
       if (!location.facilities.tennis) {
@@ -148,14 +134,8 @@ const exportedMethods = {
         throw "Error: Too many players for basketball";
       }
     }
-    skillLevel = validation.checkString(skillLevel, "Skill Level");
-    if (
-      skillLevel.toLowerCase() !== "beginner" &&
-      skillLevel.toLowerCase() !== "intermediate" &&
-      skillLevel.toLowerCase() !== "advanced"
-    ) {
-      throw "Error: Skill leve must be either beginner, intermediate, or advanced";
-    }
+    skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");
+
     const newGame = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
@@ -164,6 +144,7 @@ const exportedMethods = {
       startTime: startTime,
       endTime: endTime,
       desiredParticipants: numOfPlayers,
+      skillLevel: skillLevel,
       registeredPlayers: [new ObjectId(userId)],
       status: "scheduled",
       createdAt: new Date(),

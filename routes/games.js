@@ -92,21 +92,45 @@ router.post("/join", async (req, res) => {
   }
 });
 
-// router.post("/create/:id", async (req, res) => {
-//   try {
-
-//   } catch(e) {
-//     res.status(500).json({ error: e.toString() });
-//   }
-// })
+router.post("/create", async (req, res) => {
+  try {
+    const locationId = validation.checkId(req.body.locationId, "Location ID");
+    const userId = validation.checkId(req.session.user.userId, "User ID");
+    const gameDate = validation.checkDate(req.body.date, "Game Date");
+    const sport = validation.checkSport(req.body.sport, "Sport");
+    const startTime = validation.checkTime(req.body.startTime, "Start Time");
+    const endTime = validation.checkTime(req.body.endTime, "End Time");
+    const desiredParticipants = validation.checkNumber(
+      req.body.desiredParticipants,
+      "Desired Participants"
+    );
+    const skillLevel = validation.checkSkillLevel(
+      req.body.skillLevel,
+      "Skill Level"
+    );
+    const createdGame = await gameData.addGame(
+      userId,
+      locationId,
+      gameDate,
+      startTime,
+      endTime,
+      sport,
+      desiredParticipants,
+      skillLevel
+    );
+    res.json(createdGame);
+  } catch (e) {
+    res.status(500).json({ error: e.toString() });
+  }
+});
 
 router.post("/leave", async (req, res) => {
   try {
-    const gameId = validation.checkId(req.body.gameId, "id");
+    const gameId = validation.checkId(req.body.gameId, "Game ID");
     const userId = validation.checkId(req.session.user.userId, "User ID");
     const updatedGame = await gameData.removeRegisteredPlayerFromGame(
       gameId,
-      req.session.user.userId
+      userId
     );
     res.status(200).json({ message: "Successfully dropped from game" });
   } catch (e) {
