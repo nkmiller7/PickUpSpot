@@ -16,9 +16,9 @@
                         {{#if isCreator}}
                             <a class="primary-btn">View Details</a>
                         {{else if hasJoined}}
-                            <a href="/games/drop/{{_id}}" class="primary-btn">Leave Game</a>
+                            <a id="LeaveGame" href="placeholder" class="primary-btn" data-game-id="{{_id}}">Leave Game</a>
                         {{else}}
-                            <a href="/games/join/{{_id}}" class="primary-btn">Tag Along</a>
+                            <a id="JoinGame" href="placeholder" class="primary-btn" data-game-id="{{_id}}">Tag Along</a>
                         {{/if}}
                     </div>
                 </div>
@@ -31,3 +31,54 @@
 {{else}}
     <p>No results</p>
 {{/if}}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const leaveGameATag = document.getElementById("LeaveGame");
+        if (leaveGameATag) {
+            leaveGameATag.addEventListener("click", function(e) {
+                e.preventDefault();
+                const leaveGameUrl = leaveGameATag.href;
+                const reqBody = {
+                    gameId: leaveGameATag.dataset.gameId,
+                };
+
+                fetch("/games/leave", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(reqBody),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("HIT");
+                    window.location.reload();
+                });
+            });
+        }
+
+        const joinGameATag = document.getElementById("JoinGame");
+        if (joinGameATag) {
+            joinGameATag.addEventListener("click", function(e) {
+                e.preventDefault();
+                const joinGameUrl = joinGameATag.href;
+                const reqBody = {
+                    gameId: joinGameATag.dataset.gameId,
+                };
+
+                fetch("/games/join", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(reqBody),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.reload();
+                });
+            });
+        }
+    });
+</script>

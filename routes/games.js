@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { gameData, userData, locationData } from "../data/index.js";
 import validation from "../data/validation.js";
-import { ObjectId } from "mongodb";
 
 const router = Router();
 
@@ -37,6 +36,7 @@ router.get("/users/:id", async (req, res) => {
 router.get("/locations/:id", async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
+    const userId = validation.checkId(req.session.user.userId, "User ID");
     let gameList = await gameData.getGamesByLocationId(id);
     const location = await locationData.getLocationById(id);
 
@@ -61,11 +61,11 @@ router.get("/locations/:id", async (req, res) => {
           .map((Obj) => {
             return Obj.toString();
           })
-          .includes(req.session.user.userId)
+          .includes(userId)
       ) {
         gameList[i].hasJoined = true;
       }
-      if (gameList[i].userId.toString() === req.session.user.userId) {
+      if (gameList[i].userId.toString() === userId) {
         gameList[i].isCreator = true;
       }
     }
@@ -81,10 +81,9 @@ router.get("/locations/:id", async (req, res) => {
   }
 });
 
-router.get("/join/:id", async (req, res) => {
-  // This shouldn't be a get, but I'm lazy and we don't have ajax setup yet...
+router.post("/join", async (req, res) => {
   try {
-    const gameId = validation.checkId(req.params.id, "Game ID");
+    const gameId = validation.checkId(req.body.gameId, "Game ID");
     const userId = validation.checkId(req.session.user.userId, "User ID");
     const updatedGame = await gameData.addUserToGame(gameId, userId);
     res.json(updatedGame);
@@ -93,10 +92,18 @@ router.get("/join/:id", async (req, res) => {
   }
 });
 
-router.get("/drop/:id", async (req, res) => {
-  // This shouldn't be a get, but I'm lazy and we don't have ajax setup yet...
+// router.post("/create/:id", async (req, res) => {
+//   try {
+
+//   } catch(e) {
+//     res.status(500).json({ error: e.toString() });
+//   }
+// })
+
+router.post("/leave", async (req, res) => {
   try {
-    const gameId = validation.checkId(req.params.id, "id");
+    const gameId = validation.checkId(req.body.gameId, "id");
+    const userId = validation.checkId(req.session.user.userId, "User ID");
     const updatedGame = await gameData.removeRegisteredPlayerFromGame(
       gameId,
       req.session.user.userId
