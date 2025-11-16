@@ -50,10 +50,18 @@
                     },
                     body: JSON.stringify(reqBody),
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+
+                    throw new Error("Failed to leave the game.");
+                })
                 .then(data => {
-                    console.log("HIT");
                     window.location.reload();
+                })
+                .catch(error => {
+                    showNotification(error, "error");
                 });
             });
         }
@@ -74,11 +82,34 @@
                     },
                     body: JSON.stringify(reqBody),
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+
+                    throw new Error("Failed to join game due to scheduling conflict.");
+                })
                 .then(data => {
                     window.location.reload();
+                })
+                .catch(error => {
+                    showNotification(error, "error");
                 });
             });
         }
     });
+
+    function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+        notification.classList.add("show");
+        }, 10);
+        setTimeout(() => {
+        notification.classList.remove("show");
+        setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
 </script>
