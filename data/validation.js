@@ -51,20 +51,21 @@ const exportedMethods = {
     return sportVal;
   },
   checkDate(dateVal, varName) {
-    if (!(dateVal instanceof Date))
+    dateVal = this.checkString(dateVal, varName);
+    if (!(new Date(dateVal) instanceof Date))
       throw `Error: ${varName} must be a valid date.`;
     const now = new Date();
-    if (dateVal < now) throw `Error: ${varName} cannot be a past date.`;
+    if (new Date(dateVal) < now) throw `Error: ${varName} cannot be a past date.`;
     return dateVal;
   },
   checkTime(timeVal, varName) {
-    timeVal = checkString(timeVal, varName);
+    timeVal = this.checkString(timeVal, varName);
     if (!/^([01][0-9]|2[0-3]):([0-5][0-9])$/.test(timeVal))
       throw `Error: ${varName} must be a valid 24 hour time stamp.`;
     return timeVal;
   },
   checkSkillLevel(skillLevelVal, varName) {
-    skillLevelVal = checkString(skillLevelVal, varName).toLowerCase();
+    skillLevelVal = this.checkString(skillLevelVal, varName).toLowerCase();
     if (
       !(
         skillLevelVal === "beginner" ||
