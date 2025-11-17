@@ -67,6 +67,44 @@ const exportedMethods = {
     const newId = insertInfo.insertedId.toString();
     const review = await this.getReviewById(newId);
     return review;
+  },
+  async updateReview(userId, locationId, rating, comment){
+    userId = validation.checkId(userId, "User Id");
+    userId = await validation.userExists(userId);
+    const userCollection = await users();
+    const user = await userCollection.findOne({_id: new ObjectId(userId)});
+    locationId = validation.checkId(locationId);
+    locationId= await validation.locationExists(locationId);
+    rating = validation.checkNumber(rating, 'Rating');
+    if (rating < 1 || rating > 5) throw 'Error: Rating must be between 1 and 5';
+    if (rating.toString().includes(".") && rating.toString().split(".")[1].length > 1){
+      throw "Error: At most one decimal place is allowed for Ratings";
+    }
+    comment = validation.checkString(comment, 'Comment');
+    if (comment.length < 5 || comment.length > 250) throw 'Error: Comment must be between 5 and 250 characters, inclusive';
+    const reviewCollection= await reviews();
+    const userIdData= new ObjectId(userId);
+    const locationIdData= new ObjectId(locationId);
+    const oldReview= await reviewCollection.findOne({$and: [{userId: userIdData}, {locationId: locationIdData}]}).toArray();
+    if(oldReview.length===0){
+      throw [404, `Could not update the review with User ID ${userId} and Location ID ${locationId}`];
+    }
+     let updatedReviewInfo = {
+      userId: userIdData,
+      locationId: locationIdData,
+      rating: rating,
+      comment: comment,
+      createdAt: oldReview[0].createdAt,
+      updatedAt: new Date()
+    };
+    const updateInfo = await reviewCollection.findOneAndReplace(
+      {$and: [{userId: userIdData}, {locationId: locationIdData}]},
+      updatedReviewData,
+      {returnDocument: 'after'}
+    );
+    if (updateInfo.lastErrorObject.n === 0)
+      throw [404, `Could not update the review with User ID ${userId} and Location ID ${locationId}`];
+    return updateInfo.value;
   }
 };
 
