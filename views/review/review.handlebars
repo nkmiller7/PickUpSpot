@@ -7,19 +7,32 @@
         {{#if alreadyReviewed}}
             <input type="hidden" name="_method" value="PUT">
         {{/if}}
-    <label>
-        Please leave a rating from 1-5, with at most one decimal place:
-        <input type = "text" name="rating" placeholder="Rating" value="{{rating}}" class="full-width-input">
-    </label>
-    <br/>
-    <label for = "review-comment">
-        Please write a comment for your review:
-    </label>
-    <br/>
-    <textarea id="review-comment" name="comment" rows="4" placeholder="Review Comment"
-        class="full-width-input">{{comment}}</textarea>
-    <br/>
-    <button type = "submit">Create New Review</button>
+        <div class="form-row">
+            <label for="rating" class="form-label">Rating (1-5)</label>
+            Please leave a rating from 1-5, with at most one decimal place:
+            <input id= "rating" type = "text" name="rating" placeholder="Rating" value="{{rating}}" class="full-width-input">
+            </label>
+        </div>
+        <br/>
+        <div class="form-row">
+            <label for = "review-comment">
+            Please write a comment for your review:
+            </label>
+            <br/>
+            <textarea id="review-comment" name="comment" rows="4" placeholder="Review Comment"
+                class="full-width-input">{{comment}}</textarea>
+            <br/>
+        </div>
+    
+        <div class="form-actions">
+            <button type = "submit" class="addComment-button">
+                {{#if alreadyReviewed}}
+                    Update Review
+                {{else}}
+                    Create New Review
+                {{/if}}
+            </button>
+        </div>
     </form>
     {{#if hasErrors}}
     <ul class = "error-list">

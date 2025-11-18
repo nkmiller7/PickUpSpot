@@ -35,7 +35,7 @@ router
     }else{
       alreadyReviewed= true;
     }
-    res.render('review/review', {locationId: locationId, alreadyReviewed: alreadyReviewed});
+    res.render('review/review', {locationId: locationId, alreadyReviewed: alreadyReviewed, isReview: true});
   }catch(e){
     res.status(500).json({ error: e.toString() });
   }
@@ -81,7 +81,8 @@ router
         errors: errors,
         hasErrors: true,
         rating: formData.rating,
-        comment: formData.comment
+        comment: formData.comment,
+        isReview: true
       });
       return;
     }
@@ -146,7 +147,8 @@ router
         hasErrors: true,
         rating: formData.rating,
         alreadyReviewed: true,
-        comment: formData.comment
+        comment: formData.comment,
+        isReview: true
       });
       return;
     }

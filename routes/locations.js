@@ -198,6 +198,7 @@ router
     }
     const averageRating = ratings_sum/ratings.length;
     let errors = [];
+    let hasVisited= false;
     try{
       const locationId = validation.checkId(req.params.id, "Location ID");
       const userCollection = await users();
@@ -206,8 +207,9 @@ router
         throw 'Error: User not found';
       }
       const userId = user._id.toString();
-      const content = req.body.content;
-      content= content.checkString(content, "Comment Content");
+      hasVisited=user.parksAttended.includes(id);
+      let content = req.body.content;
+      content= validation.checkString(content, "Comment Content");
       if(content.length < 5 || content.length > 500){
         throw 'Error: Message content must be between 5 and 500 characters, inclusive';
       }
@@ -226,12 +228,13 @@ router
         averageRating: averageRating, 
         singleLocation: true, 
         user: req.session.user, 
-        locationId: id
+        locationId: id,
+        hasVisited: hasVisited
       });
       return;
     }
     try{
-      res.redirect(`locations/${req.params.id}`);
+      res.redirect(`/locations/${req.params.id}`);
     }catch(e){
       res.status(500).json({error: e});
     }
