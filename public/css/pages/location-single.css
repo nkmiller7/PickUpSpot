@@ -193,6 +193,51 @@
 .addComment-button:active {
     transform: translateY(-1px);
 }
+.comment-form{
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+.comment-form > div {
+    flex: 1 1 auto;
+    min-width: 160px;
+}
+.comment-form .comment-input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.comment-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e6eef8;
+    border-radius: 18px;
+    font-size: 1rem;
+    color: #0f172a;
+    background: #ffffff;
+    box-shadow: 0 3px 12px rgba(2, 6, 23, 0.04);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+    box-sizing: border-box;
+}
+.comment-input::placeholder {
+    color: #94a3b8;
+    font-style: italic;
+}
+.comment-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12);
+    transform: translateY(-1px);
+}
+.comment-form .addComment-button {
+    width: auto;
+    padding: 0.7rem 1.25rem;
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    border-radius: 12px;
+}
 /* Review Section */
 .review-section {
     margin-bottom: 3rem;
@@ -238,7 +283,39 @@
     display: block;
     margin-bottom: 0.5rem;
 }
+.leave-review-btn {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.98rem;
+    border-radius: 10px;
+    margin-top: 0.25rem;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+}
 
+.leave-review-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35);
+}
+.add-review-link {
+    margin-top: 1rem;
+}
+.leave-review-btn {
+    margin-top: 1rem;
+}
+@media (max-width: 480px) {
+    .comment-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .comment-form .addComment-button {
+        width: 100%;
+    }
+
+    .leave-review-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
 /* Actions */
 .actions {
     display: flex;
