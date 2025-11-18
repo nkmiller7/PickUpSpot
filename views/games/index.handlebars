@@ -60,11 +60,8 @@
                 </form>
             </div>
 
-            <div class="scheduling-grid">
-                <div class="grid-item" data-row="0" data-col="0"></div>
-                <div class="grid-item" data-row="0" data-col="1"></div>
-                <div class="grid-item" data-row="1" data-col="0"></div>
-                <div class="grid-item" data-row="1" data-col="1"></div>
+            <div id="scheduling-grid" class="scheduling-grid">
+
             </div>
         </div>
     </div>
@@ -143,7 +140,16 @@
             })
         }
 
-
+        const schedulingGrid = document.getElementById("scheduling-grid");
+        if (schedulingGrid) {
+            let schedulingTimeBlocks = {{{location.schedulingTimeBlocks}}};
+            for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
+                const cell = document.createElement("div");
+                cell.textContent = schedulingTimeBlocks[i];
+                cell.className = "grid-item";
+                schedulingGrid.appendChild(cell);
+            }
+        }
     });
 
     function showNotification(message, type) {

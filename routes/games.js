@@ -70,6 +70,28 @@ router.get("/locations/:id", async (req, res) => {
       }
     }
 
+    /*
+     * Scheduling grid needs the times of the park's operation.
+     */
+    let openingTime = new Date(
+      `January 1, 2000 ${location.hours.split("-")[0].trim()}`
+    );
+    let closingTime = new Date(
+      `January 1, 2000 ${location.hours.split("-")[1].trim()}`
+    );
+    let schedulingTimeBlocks = [];
+    while (openingTime < closingTime) {
+      schedulingTimeBlocks.push(
+        openingTime.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        })
+      );
+      openingTime.setMinutes(openingTime.getMinutes() + 15);
+    }
+    location.schedulingTimeBlocks = JSON.stringify(schedulingTimeBlocks);
+
     res.render("games/index", {
       isGamesPage: true,
       games: gameList,
