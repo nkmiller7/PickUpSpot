@@ -4,7 +4,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    res.render('about/index');
+    return res.render('about/index', { user: req.session.user });
   } catch (e) {
     res.status(500).json({ error: e.toString() });
   }
