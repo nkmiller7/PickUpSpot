@@ -179,11 +179,15 @@
       }
 
       try {
-        const response = await fetch(`/games/${gameId}/drop`, {
+        const reqBody = {
+          gameId: gameId,
+        };
+        const response = await fetch(`/games/leave`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
-          }
+          },
+          body: JSON.stringify(reqBody)
         });
         
         if (response.ok) {
