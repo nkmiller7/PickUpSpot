@@ -85,9 +85,9 @@ const exportedMethods = {
     const reviewCollection= await reviews();
     const userIdData= new ObjectId(userId);
     const locationIdData= new ObjectId(locationId);
-    const oldReview= await reviewCollection.findOne({$and: [{userId: userIdData}, {locationId: locationIdData}]}).toArray();
+    const oldReview= await reviewCollection.find({$and: [{userId: userIdData}, {locationId: locationIdData}]}).toArray();
     if(oldReview.length===0){
-      throw [404, `Could not update the review with User ID ${userId} and Location ID ${locationId}`];
+      throw `Could not update the review with User ID ${userId} and Location ID ${locationId}`;
     }
      let updatedReviewInfo = {
       userId: userIdData,
@@ -99,11 +99,11 @@ const exportedMethods = {
     };
     const updateInfo = await reviewCollection.findOneAndReplace(
       {$and: [{userId: userIdData}, {locationId: locationIdData}]},
-      updatedReviewData,
+      updatedReviewInfo,
       {returnDocument: 'after'}
     );
-    if (updateInfo.lastErrorObject.n === 0)
-      throw [404, `Could not update the review with User ID ${userId} and Location ID ${locationId}`];
+    if (!updateInfo)
+      throw `Could not update the review with User ID ${userId} and Location ID ${locationId}`;
     return updateInfo.value;
   }
 };

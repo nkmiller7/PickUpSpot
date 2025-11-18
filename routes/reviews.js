@@ -29,7 +29,7 @@ router
     }
     const userId = user._id.toString();
     const reviewCollection= await reviews();
-    const oldReview= await reviewCollection.findOne({$and: [{userId: new ObjectId(userId)}, {locationId: new ObjectId(locationId)}]}).toArray();
+    const oldReview= await reviewCollection.find({$and: [{userId: new ObjectId(userId)}, {locationId: new ObjectId(locationId)}]}).toArray();
     if(oldReview.length === 0){
       alreadyReviewed= false;
     }else{
@@ -90,7 +90,7 @@ router
       const newReview= await reviewData.addReview(userId, locationId, rating, comment);
       res.redirect(`/locations/${locationId}`);
     }catch(e){
-      res.status(500).json({error: e});
+      res.status(500).json({error: e.toString()});
     }
   })
   .put(async (req, res) => {
@@ -131,9 +131,10 @@ router
     try{
       const userIdData= new ObjectId(userId);
       const locationIdData= new ObjectId(locationId);
-      const oldReview= await reviewCollection.findOne({$and: [{userId: userIdData}, {locationId: locationIdData}]}).toArray();
+      const reviewCollection= await reviews();
+      const oldReview= await reviewCollection.find({$and: [{userId: userIdData}, {locationId: locationIdData}]}).toArray();
       if(oldReview.length===0){
-        throw [404, `Error: Could not update the review with User ID ${userId} and Location ID ${locationId}`];
+        throw `Error: Could not update the review with User ID ${userId} and Location ID ${locationId}`;
       }
     }catch(e){
       errors.push(e);
@@ -144,6 +145,7 @@ router
         errors: errors,
         hasErrors: true,
         rating: formData.rating,
+        alreadyReviewed: true,
         comment: formData.comment
       });
       return;
@@ -153,7 +155,7 @@ router
       const updatedReview= await reviewData.updateReview(userId, locationId, rating, comment);
       res.redirect(`/locations/${locationId}`);
     }catch(e){
-      res.status(500).json({error: e});
+      res.status(500).json({error: e.toString()});
     }
   });
 
