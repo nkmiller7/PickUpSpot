@@ -7,18 +7,33 @@
         <div class="games-location-cards">
             {{#each games}}
                 <div class="games-location-card">
-                    <h2 class="games-location-name">{{creatorFirstName}}
-                        {{creatorLastName}}'s Game</h2>
-                    <div class="games-location-info">
-                        <p>Date: {{date}}</p>
-                        <p>Starting Time: {{startTime}}</p>
-                        <p>Ending Time: {{endTime}}</p>
+                    <div class="game-header">
+                        <h3 class="game-location-name">{{creatorFirstName}} {{creatorLastName}}'s Game</h3>
+                        <span class="game-status-badge status-{{status}}">{{status}}</span>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-info-row">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="game-date">{{date}}</span>
+                        </div>
+                        <div class="game-info-row">
+                            <i class="fas fa-clock"></i>
+                            <span class="game-time">{{startTime}} - {{endTime}}</span>
+                        </div>
+                        <div class="game-info-row">
+                            <i class="fas fa-users"></i>
+                            <span class="game-participants">{{registeredPlayers.length}}/{{desiredParticipants}} players</span>
+                        </div>
+                    </div>
+                    <div class="game-actions">
                         {{#if isCreator}}
-                            <a class="primary-btn">View Details</a>
+                            <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
                         {{else if hasJoined}}
-                            <a id="leave-game" href="placeholder" class="primary-btn" data-game-id="{{_id}}">Leave Game</a>
+                            <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
+                            <a id="leave-game" href="placeholder" class="game-btn drop-game-btn" data-game-id="{{_id}}">Leave Game</a>
                         {{else}}
-                            <a id="join-game" href="placeholder" class="primary-btn" data-game-id="{{_id}}">Tag Along</a>
+                            <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
+                            <a id="join-game" href="placeholder" class="game-btn view-location-btn" data-game-id="{{_id}}">Tag Along</a>
                         {{/if}}
                     </div>
                 </div>
