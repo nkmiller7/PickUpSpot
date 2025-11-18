@@ -104,6 +104,10 @@ router.post("/create", async (req, res) => {
       req.body.desiredParticipants,
       "Desired Participants"
     );
+    const courtNumber = validation.checkNumber(
+      req.body.courtNumber,
+      "Court Number"
+    );
     const skillLevel = validation.checkSkillLevel(
       req.body.skillLevel,
       "Skill Level"

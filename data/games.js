@@ -79,21 +79,21 @@ const exportedMethods = {
     endTime,
     sport,
     numOfPlayers,
+    courtNumber,
     skillLevel
   ) {
-    //validate userId and locationId
     userId = validation.checkId(userId, "User ID");
     userId = await validation.userExists(userId);
+
     locationId = validation.checkId(locationId, "Location ID");
     locationId = await validation.locationExists(locationId);
-    date = validation.checkString(date, "Date");
 
-    //Validate date
-    const dateObj = validation.checkDate(date, "Game Date");
-
-    // Validate start and end times
+    date = validation.checkDate(date, "Game Date");
     startTime = validation.checkTime(startTime, "Start Time");
     endTime = validation.checkTime(endTime, "End Time");
+    sport = validation.checkSport(sport, "Sport");
+    courtNumber = validation.checkNumber(courtNumber, "Court Number");
+    skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");
 
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
@@ -105,18 +105,21 @@ const exportedMethods = {
     if (endMinutes - startMinutes > 180)
       throw "Error: Game duration cannot exceed 3 hours";
 
-    //Validate Sport
-    sport = validation.checkSport(sport, "Sport");
-
     const location = await locationData.getLocationById(locationId);
-    if (sport === "tennis") {
+    if (sport === "tennis" || sport === "pickleball") {
       if (!location.facilities.tennis) {
         throw "Error: No tennis courts at this location.";
+      }
+      if (courtNumber > location.facilities.tennis.numCourts) {
+        throw "Error: Court number doesn't exist.";
       }
     }
     if (sport === "basketball") {
       if (!location.facilities.basketball) {
         throw "Error: No basketball courts at this location.";
+      }
+      if (courtNumber > location.facilities.basketball.numCourts) {
+        throw "Error: Court number doesn't exist.";
       }
     }
 
@@ -125,25 +128,25 @@ const exportedMethods = {
       throw "Error: Must have at least one player";
     }
     if (sport === "tennis") {
-      if (numOfPlayers > 8 * location.facilities.tennis.numCourts) {
+      if (numOfPlayers > 8) {
         throw "Error: Too many players for tennis";
       }
     }
     if (sport === "basketball") {
-      if (numOfPlayers > 20 * location.facilities.basketball.numCourts) {
+      if (numOfPlayers > 20) {
         throw "Error: Too many players for basketball";
       }
     }
-    skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");
-
+    
     const newGame = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
-      date: dateObj,
+      date: new Date(date),
       sport: sport,
       startTime: startTime,
       endTime: endTime,
       desiredParticipants: numOfPlayers,
+      courtNumber: courtNumber,
       skillLevel: skillLevel,
       registeredPlayers: [new ObjectId(userId)],
       status: "scheduled",
