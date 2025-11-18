@@ -3,6 +3,7 @@ import { reviewData } from '../data/index.js';
 import validation from '../data/validation.js';
 import { users } from "../config/mongoCollections.js"; 
 import { reviews } from  "../config/mongoCollections.js"; 
+import { ObjectId } from "mongodb";
 
 const router = Router();
 
@@ -19,10 +20,24 @@ router
 .route('/review/:id')
 .get(async (req, res) => {
   try{
+    let alreadyReviewed;
     const locationId= req.params.id;
-    res.render('review/review', {locationId: locationId});
+    const userCollection = await users();
+    const user = await userCollection.findOne({email: req.session.user.email});
+    if(!user){
+      throw 'Error: User not found';
+    }
+    const userId = user._id.toString();
+    const reviewCollection= await reviews();
+    const oldReview= await reviewCollection.findOne({$and: [{userId: new ObjectId(userId)}, {locationId: new ObjectId(locationId)}]}).toArray();
+    if(oldReview.length === 0){
+      alreadyReviewed= false;
+    }else{
+      alreadyReviewed= true;
+    }
+    res.render('review/review', {locationId: locationId, alreadyReviewed: alreadyReviewed});
   }catch(e){
-
+    res.status(500).json({ error: e.toString() });
   }
 })
 .post(async (req, res) => {

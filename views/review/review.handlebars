@@ -1,6 +1,13 @@
 <article class = "new-review">
     <h1>Write a Review</h1>
-    <form action = "/reviews/review/{{locationId}}" method = "POST" class="new-review-form">
+    <form 
+        action = "/reviews/review/{{locationId}}" 
+        {{#if alreadyReviewed}}
+            method = "POST"
+        {{else}}
+            method = "PUT"
+        {{/if}}
+        class="new-review-form">
     <label>
         Please leave a rating from 1-5, with at most one decimal place:
         <input type = "text" name="rating" placeholder="Rating" value="{{rating}}" class="full-width-input">
