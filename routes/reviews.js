@@ -2,6 +2,7 @@ import {Router} from 'express';
 import { reviewData } from '../data/index.js';
 import validation from '../data/validation.js';
 import { users } from "../config/mongoCollections.js"; 
+import { reviews } from  "../config/mongoCollections.js"; 
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router
   }
 })
 .post(async (req, res) => {
-  const formData = req.body;
+    const formData = req.body;
     let errors = [];
     let locationId;
     let userId;
@@ -45,7 +46,7 @@ router
       errors.push(e);
     }
     try{
-      locationId = validation.checkId(req.params.id);
+      locationId = validation.checkId(req.params.id, "Location ID");
     }catch(e){
        errors.push(e);
     }
@@ -72,6 +73,69 @@ router
     try{
       const {rating, comment} = formData;
       const newReview= await reviewData.addReview(userId, locationId, rating, comment);
+      res.redirect(`/locations/${locationId}`);
+    }catch(e){
+      res.status(500).json({error: e});
+    }
+  })
+  .put(async (req, res) => {
+    const formData = req.body;
+    let errors = [];
+    let locationId;
+    let userId;
+    try{
+      formData.rating = validation.checkNumber(formData.rating, 'Rating');
+      if (formData.rating < 1 || formData.rating > 5) throw 'Error: Rating must be between 1 and 5';
+      if (formData.rating.toString().includes(".") && formData.rating.toString().split(".")[1].length > 1){
+        throw "Error: At most one decimal place is allowed for Ratings";
+      }
+    }catch(e){
+      errors.push(e);
+    }
+    try{
+      formData.comment = validation.checkString(formData.comment, 'Comment');
+      if (formData.comment.length < 5 || formData.comment.length > 250) throw 'Error: Comment must be between 5 and 250 characters, inclusive';
+    }catch(e){
+      errors.push(e);
+    }
+    try{
+      locationId = validation.checkId(req.params.id, "Location ID");
+    }catch(e){
+       errors.push(e);
+    }
+    try{
+      const userCollection = await users();
+      const user = await userCollection.findOne({email: req.session.user.email});
+      if(!user){
+        throw 'Error: User not found';
+      }
+      userId = user._id.toString();
+    }catch(e){
+      errors.push(e);
+    }
+    try{
+      const userIdData= new ObjectId(userId);
+      const locationIdData= new ObjectId(locationId);
+      const oldReview= await reviewCollection.findOne({$and: [{userId: userIdData}, {locationId: locationIdData}]}).toArray();
+      if(oldReview.length===0){
+        throw [404, `Error: Could not update the review with User ID ${userId} and Location ID ${locationId}`];
+      }
+    }catch(e){
+      errors.push(e);
+    }
+    if (errors.length > 0){
+      res.render(`review/review`, {
+        locationId: locationId,
+        errors: errors,
+        hasErrors: true,
+        rating: formData.rating,
+        comment: formData.comment
+      });
+      return;
+    }
+    try{
+      const {rating, comment} = formData;
+      const updatedReview= await reviewData.updateReview(userId, locationId, rating, comment);
       res.redirect(`/locations/${locationId}`);
     }catch(e){
       res.status(500).json({error: e});
