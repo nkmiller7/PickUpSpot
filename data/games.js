@@ -1,8 +1,8 @@
 import { games } from "../config/mongoCollections.js";
-import validation from './validation.js';
-import { ObjectId } from 'mongodb';
+import validation from "./validation.js";
+import { ObjectId } from "mongodb";
 import { locations } from "../config/mongoCollections.js";
-import { locationData } from '../data/index.js';
+import { locationData } from "../data/index.js";
 
 const exportedMethods = {
   async getAllGames() {
@@ -15,7 +15,7 @@ const exportedMethods = {
     id = validation.checkId(id, "Game ID");
     const gameCollection = await games();
     const game = await gameCollection.findOne({ _id: new ObjectId(id) });
-    if (!game) throw 'Error: Game not found';
+    if (!game) throw "Error: Game not found";
     return game;
   },
 
@@ -23,7 +23,9 @@ const exportedMethods = {
     locationId = validation.checkId(locationId, "Location ID");
     locationId = await validation.locationExists(locationId);
     const gameCollection = await games();
-    const gameList = await gameCollection.find({ locationId: locationId }).toArray();
+    const gameList = await gameCollection
+      .find({ locationId: new ObjectId(locationId) })
+      .toArray();
     return gameList;
   },
 
@@ -31,7 +33,19 @@ const exportedMethods = {
     userId = validation.checkId(userId, "User ID");
     userId = await validation.userExists(userId);
     const gameCollection = await games();
-    const gameList = await gameCollection.find({ userId: new ObjectId(userId) }).toArray();
+    const gameList = await gameCollection
+      .find({ userId: new ObjectId(userId) })
+      .toArray();
+    return gameList;
+  },
+
+  async getGamesByUserIdParticipant(userId) {
+    userId = validation.checkId(userId, "User ID");
+    userId = await validation.userExists(userId);
+    const gameCollection = await games();
+    const gameList = await gameCollection
+      .find({ registeredPlayers: new ObjectId(userId) })
+      .toArray();
     return gameList;
   },
 
@@ -57,93 +71,147 @@ const exportedMethods = {
     return updatedGame;
   },
 
-  async addGame(userId, locationId, date, startTime, endTime, sport, numOfPlayers, skillLevel) {
-    //validate userId and locationId
+  async addGame(
+    userId,
+    locationId,
+    date,
+    startTime,
+    endTime,
+    sport,
+    numOfPlayers,
+    courtNumber,
+    skillLevel
+  ) {
     userId = validation.checkId(userId, "User ID");
     userId = await validation.userExists(userId);
+
     locationId = validation.checkId(locationId, "Location ID");
-    locationId= await validation.locationExists(locationId);
-    date = validation.checkString(date, "Date");
+    locationId = await validation.locationExists(locationId);
 
-    //Validate dates- needs fixing!
-    const dateObj = new Date(date);
-    if (isNaN(dateObj.getTime())) throw 'Error: Invalid date format';
-    if (dateObj < new Date()) throw 'Error: Game date must be in the future';
+    date = validation.checkDate(date, "Game Date");
+    startTime = validation.checkTime(startTime, "Start Time");
+    endTime = validation.checkTime(endTime, "End Time");
+    sport = validation.checkSport(sport, "Sport");
+    courtNumber = validation.checkNumber(courtNumber, "Court Number");
+    skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");
 
-    // Validate start and end times (HH:MM format)- needs fixing!
-    startTime= validation.checkString(startTime, "Start Time");
-    endTime = validation.checkString(endTime, "End Time");
-    
-    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    if (!timeRegex.test(startTime)) throw 'Error: Start time must be in HH:MM format';
-    if (!timeRegex.test(endTime)) throw 'Error: End time must be in HH:MM format';
-
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const [endHour, endMinute] = endTime.split(':').map(Number);
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
     const startMinutes = startHour * 60 + startMinute;
     const endMinutes = endHour * 60 + endMinute;
 
-    if (endMinutes <= startMinutes) throw 'Error: End time must be after start time';
-    if (endMinutes - startMinutes > 180) throw 'Error: Game duration cannot exceed 3 hours';
+    if (endMinutes <= startMinutes)
+      throw "Error: End time must be after start time";
+    if (endMinutes - startMinutes > 180)
+      throw "Error: Game duration cannot exceed 3 hours";
 
-    //Validate Sport
-    sport= validation.checkString(sport, "Sport");
-    if(sport.toLowerCase() !== "basketball" && sport.toLowerCase() !== "tennis" && sport.toLowerCase() !== "pickelball"){
-      throw 'Error: Sport must be either basketball, tennis, or pickelball';
-    }
     const location = await locationData.getLocationById(locationId);
-    if(sport==="tennis"){
-      if(!location.facilities.tennis){
-        throw 'Error: No tennis courts at this location.'
+    if (sport === "tennis" || sport === "pickleball") {
+      if (!location.facilities.tennis) {
+        throw "Error: No tennis courts at this location.";
+      }
+      if (courtNumber > location.facilities.tennis.numCourts) {
+        throw "Error: Court number doesn't exist.";
       }
     }
-    if(sport==="basketball"){
-      if(!location.facilities.basketball){
-        throw 'Error: No basketball courts at this location.'
+    if (sport === "basketball") {
+      if (!location.facilities.basketball) {
+        throw "Error: No basketball courts at this location.";
+      }
+      if (courtNumber > location.facilities.basketball.numCourts) {
+        throw "Error: Court number doesn't exist.";
       }
     }
-
 
     numOfPlayers = validation.checkNumber(numOfPlayers, "Number of Players");
-    if(numOfPlayers < 1){
+    if (numOfPlayers < 1) {
       throw "Error: Must have at least one player";
     }
-    if(sport==="tennis"){
-      if(numOfPlayers > 8 * location.facilities.tennis.numCourts){
+    if (sport === "tennis") {
+      if (numOfPlayers > 8) {
         throw "Error: Too many players for tennis";
       }
     }
-    if(sport==="basketball"){
-      if(numOfPlayers > 20 * location.facilities.basketball.numCourts){
+    if (sport === "basketball") {
+      if (numOfPlayers > 20) {
         throw "Error: Too many players for basketball";
       }
     }
-    skillLevel= validation.checkString(skillLevel, "Skill Level");
-    if(skillLevel.toLowerCase() !== "beginner" && skillLevel.toLowerCase() !== "intermediate" && skillLevel.toLowerCase() !== "advanced"){
-      throw "Error: Skill leve must be either beginner, intermediate, or advanced"
-    }
+    
     const newGame = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
-      date: dateObj,
+      date: new Date(date),
       sport: sport,
       startTime: startTime,
       endTime: endTime,
       desiredParticipants: numOfPlayers,
-      registeredPlayers: [new ObjectId(userId)], 
+      courtNumber: courtNumber,
+      skillLevel: skillLevel,
+      registeredPlayers: [new ObjectId(userId)],
       status: "scheduled",
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     const gameCollection = await games();
     const insertInfo = await gameCollection.insertOne(newGame);
-    if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add game';
- 
+    if (!insertInfo.acknowledged || !insertInfo.insertedId)
+      throw "Error: Could not add game";
+
     const newId = insertInfo.insertedId.toString();
     const game = await this.getGameById(newId);
     return game;
-  }
+  },
+
+  async addUserToGame(gameId, userId) {
+    // Validation
+    gameId = validation.checkId(gameId, "Game ID");
+    userId = validation.checkId(userId, "User ID");
+    userId = await validation.userExists(userId);
+    gameId = await validation.gameExists(gameId);
+
+    let gameToJoin = await this.getGameById(gameId);
+
+    // Check if user is already registered
+    for (let registeredUserId of gameToJoin.registeredPlayers) {
+      if (registeredUserId.toString() === userId) {
+        throw "Error: User is already registered for this game";
+      }
+    }
+
+    // Check if there is space available
+    if (gameToJoin.registeredPlayers.length >= gameToJoin.desiredParticipants) {
+      throw "Error: Game is already full";
+    }
+
+    // Ensure game date is valid (assuming 24 hour time so need to convert db to 24 hour time everywhere)
+    let currentlyJoinedGames = await this.getGamesByUserIdParticipant(userId);
+    for (let i = 0; i < currentlyJoinedGames.length; ++i) {
+      if (
+        validation.timeConflictExist(
+          gameToJoin.date,
+          gameToJoin.startTime,
+          gameToJoin.endTime,
+          currentlyJoinedGames[i].date,
+          currentlyJoinedGames[i].startTime,
+          currentlyJoinedGames[i].endTime
+        )
+      ) {
+        throw "Error: User has a scheduled conflict";
+      }
+    }
+
+    gameToJoin.registeredPlayers.push(new ObjectId(userId));
+    gameToJoin.updatedAt = new Date();
+    const gameCollection = await games();
+    const updatedGame = await gameCollection.findOneAndReplace(
+      { _id: new ObjectId(gameId) },
+      gameToJoin,
+      { returnDocument: "after" }
+    );
+    return updatedGame;
+  },
 };
 
 export default exportedMethods;

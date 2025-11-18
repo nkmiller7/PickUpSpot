@@ -1,36 +1,147 @@
-<div class="location-games-header">
-  <h1>{{location.name}}'s Games</h1>
+<div class="games-location-header">
+    <h1>{{location.name}}'s Games</h1>
 </div>
 
+{{#if games.length}}
+    <div class="games-location-container">
+        <div class="games-location-cards">
+            {{#each games}}
+                <div class="games-location-card">
+                    <h2 class="games-location-name">{{creatorFirstName}}
+                        {{creatorLastName}}'s Game</h2>
+                    <div class="games-location-info">
+                        <p>Date: {{date}}</p>
+                        <p>Starting Time: {{startTime}}</p>
+                        <p>Ending Time: {{endTime}}</p>
+                        {{#if isCreator}}
+                            <a class="primary-btn">View Details</a>
+                        {{else if hasJoined}}
+                            <a id="leave-game" href="placeholder" class="primary-btn" data-game-id="{{_id}}">Leave Game</a>
+                        {{else}}
+                            <a id="join-game" href="placeholder" class="primary-btn" data-game-id="{{_id}}">Tag Along</a>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="games-location-scheduler">
+            <div class="scheduling-filters">
+                <form>
+                    <select name="sport" class="scheduling-filter">
+                        {{#if location.facilities.basketball.numCourts}}
+                        <option value="basketball">Basketball</option>
+                        {{/if}}
+                        {{#if location.facilities.tennis.numCourts}}
+                        <option value="tennis">Tennis</option>
+                        <option value="pickleball">Pickleball</option>
+                        {{/if}}
+                    </select>
 
-<div class="games-container{{#unless games.length}} no-results-container{{/unless}}">
-    {{#if games.length}}
-        {{#each games}}
-        <div class="game-card">
-            <h2 class="game-sport">{{sport}}</h2>
-            <div class="location-info">
-                <p class="start-time">{{startTime}}</p>
-                <p class="end-time">{{endTime}}</p>
+                    <select name="court" class="scheduling-filter">
+
+                    </select>
+
+                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+            <div class="scheduling-grid">
+                <div class="grid-item" data-row="0" data-col="0"></div>
+                <div class="grid-item" data-row="0" data-col="1"></div>
+                <div class="grid-item" data-row="1" data-col="0"></div>
+                <div class="grid-item" data-row="1" data-col="1"></div>
             </div>
         </div>
-        {{/each}}
-    {{else}}
-        <div class="no-results">
-            <div class="no-results-icon">
-                <i class="fas fa-search"></i>
-            </div>
-            <h3 class="no-results-title">No locations found</h3>
-            <p class="no-results-message">
-                Try adjusting your search filters or search for something else.
-            </p>
-            <div class="no-results-suggestions">
-                <p class="suggestions-title">Suggestions:</p>
-                <ul>
-                    <li>Try searching for a different location name</li>
-                    <li>Clear some filters to broaden your search</li>
-                    <li>Check for typos in your search term</li>
-                </ul>
-            </div>
-        </div>
-    {{/if}}
-</div>
+    </div>
+{{else}}
+    <p>No results</p>
+{{/if}}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const leaveGameATag = document.getElementById("leave-game");
+        if (leaveGameATag) {
+            leaveGameATag.addEventListener("click", async function(e) {
+                e.preventDefault();
+                const leaveGameUrl = leaveGameATag.href;
+                const reqBody = {
+                    gameId: leaveGameATag.dataset.gameId,
+                };
+
+                const response = await fetch("/games/leave", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(reqBody),
+                });
+                if (!response.ok) {
+                    const data = await response.json();
+                    showNotification("Failed to leave the game.", "error");
+                } else {
+                    window.location.reload();
+                }
+            });
+        }
+
+        const joinGameATag = document.getElementById("join-game");
+        if (joinGameATag) {
+            joinGameATag.addEventListener("click", async function(e) {
+                e.preventDefault();
+                const joinGameUrl = joinGameATag.href;
+                const reqBody = {
+                    gameId: joinGameATag.dataset.gameId,
+                };
+
+                const response = await fetch("/games/join", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(reqBody),
+                })
+                if (!response.ok) {
+                    showNotification("Failed to join game due to scheduling conflict.", "error");
+                } else {
+                    window.location.reload();
+                }
+            });
+        }
+
+        const sportFilter = document.querySelector('select[name="sport"]');
+        if (sportFilter) {
+            sportFilter.addEventListener("change", function(e) {
+                const courtFilter = document.querySelector('select[name="court"]');
+                courtFilter.innerHTML = "";
+                let numCourts = 0;
+                if (e.target.value === "basketball") {
+                    numCourts = {{location.facilities.basketball.numCourts}};
+                } else {
+                    numCourts = {{location.facilities.tennis.numCourts}};
+                }
+                for (let i = 0; i < numCourts; ++i) {
+                    const opt = document.createElement("option");
+                    opt.textContent = `Court ${i+1}`;
+                    opt.value = `Court ${i+1}`;
+                    courtFilter.appendChild(opt);
+                }
+            })
+        }
+
+
+    });
+
+    function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+        notification.classList.add("show");
+        }, 10);
+        setTimeout(() => {
+        notification.classList.remove("show");
+        setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+</script>
