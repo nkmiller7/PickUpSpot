@@ -70,16 +70,12 @@
         {{/if}}
         <div class = "add-comment-container">
             <form action="/locations/{{locationId}}" method="POST" class="comment-form">
-                <div>
-                    <label>
-                        Add New Comment
-                        <input type="text" name="content" placeholder="Write your message here" 
-                        value="{{formData.content}}" autocomplete="start writing your thoughts..." required>
-                    </label>
-                </div>
-                <div>
-                    <button type="submit" class="addComment-button">Add Comment</button>
-                </div>
+                <label>
+                    <input type="text" name="content" placeholder="Write your message here" 
+                    value="{{formData.content}}" autocomplete="start writing your thoughts..." required
+                    class= "comment-input">
+                </label>
+                <button type="submit" class="addComment-button">Add Comment</button>
             </form> 
             {{#if hasErrors}}  
             <ul class = "error-list">
@@ -115,7 +111,7 @@
         {{/if}}
         {{#if hasVisited}}
         <div class = "add-review-link">
-            <a href = "/reviews/review/{{locationId}}">Leave a Review</a>
+            <a href = "/reviews/review/{{locationId}}" class="addComment-button leave-review-btn">Leave a Review</a>
         </div>
         {{/if}}
     </div>
