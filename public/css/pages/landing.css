@@ -195,6 +195,63 @@ h3 {
     padding: 0;
 }
 
+/* Age Checkbox */
+
+.ageCheckbox-container {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+.ageCheckbox-label-text {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+}
+.ageCheckbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    color: #333;
+    font-size: 15px; 
+}
+.ageCheckbox-label-text {
+    margin: 0;
+    padding: 0;
+    color: #444;
+    font-size: 15px;
+    font-weight: 600; 
+    line-height: 1.2;
+    max-width: 320px;
+}
+
+.login-form .ageCheckbox-label {
+    display: inline-flex !important;
+}
+.login-form .age-input {
+    width: 18px !important;
+    height: 18px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+.age-input {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+    accent-color: #007bff; 
+    border-radius: 3px;
+}
+.age-input:focus {
+    outline: 3px solid rgba(0, 123, 255, 0.15);
+    outline-offset: 2px;
+}
+
+
+/* Toggle Switch */
 .toggle-switch {
     position: relative;
     width: 60px;
@@ -234,6 +291,8 @@ h3 {
 .toggle-label:hover .toggle-switch {
     box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
+
+/* Login Button */
 
 .login-form button {
     width: 100%;

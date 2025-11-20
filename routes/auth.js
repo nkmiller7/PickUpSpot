@@ -69,8 +69,12 @@ router.get("/logout", (req, res) => {
 
 router.post("/signup", async (req, res) => {
   try {
-    const { firstName, lastName, email, password, isAnonymous } = req.body;
+    const { firstName, lastName, email, password, isAnonymous,isOfAge } = req.body;
     const anonymousUser = isAnonymous === "on"; 
+
+    if(!isOfAge){
+      throw new Error("You must confirm that you are at least 18 years old to sign up.");
+    }
 
     const newUser = await userData.addUser(firstName, lastName, email, password, anonymousUser);
 
