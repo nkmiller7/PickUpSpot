@@ -143,11 +143,30 @@
         const schedulingGrid = document.getElementById("scheduling-grid");
         if (schedulingGrid) {
             let schedulingTimeBlocks = {{{location.schedulingTimeBlocks}}};
+            let schedulingDateBlocks = {{{location.schedulingDateBlocks}}};
+
+            const topLeftCell = document.createElement("div");
+            topLeftCell.className = "grid-corner";
+            schedulingGrid.appendChild(topLeftCell);
+            
+            for (let i = 0; i < schedulingDateBlocks.length; ++i) {
+                const label = document.createElement("div");
+                label.className = "grid-col-label";
+                label.textContent = schedulingDateBlocks[i];
+                schedulingGrid.appendChild(label);
+            }
+
             for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
-                const cell = document.createElement("div");
-                cell.textContent = schedulingTimeBlocks[i];
-                cell.className = "grid-item";
-                schedulingGrid.appendChild(cell);
+                const label = document.createElement("div");
+                label.className = "grid-row-label";
+                label.textContent = schedulingTimeBlocks[i];
+                schedulingGrid.appendChild(label);
+
+                for (let j = 0; j < schedulingDateBlocks.length; ++j) {
+                    const cell = document.createElement("div");
+                    cell.className = "grid-item";
+                    schedulingGrid.appendChild(cell);
+                }
             }
         }
     });

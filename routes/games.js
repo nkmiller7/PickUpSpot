@@ -88,9 +88,25 @@ router.get("/locations/:id", async (req, res) => {
           hour12: true,
         })
       );
-      openingTime.setMinutes(openingTime.getMinutes() + 15);
+      openingTime.setMinutes(openingTime.getMinutes() + 60);
     }
     location.schedulingTimeBlocks = JSON.stringify(schedulingTimeBlocks);
+
+    /*
+     * Scheduling grid also needs the following 7 days (starting from tomorrow's date).
+     */
+    let schedulingDateBlocks = [];
+    for (let i = 1; i <= 7; ++i) {
+      const date = new Date();
+      date.setDate(date.getDate() + i);
+      const formatter = new Intl.DateTimeFormat("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+      });
+      schedulingDateBlocks.push(formatter.format(date));
+    }
+    location.schedulingDateBlocks = JSON.stringify(schedulingDateBlocks);
 
     res.render("games/index", {
       isGamesPage: true,

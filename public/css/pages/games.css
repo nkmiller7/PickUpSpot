@@ -212,10 +212,29 @@
 
 .scheduling-grid {
   display: grid;
-  grid-template-columns: repeat(2, 100px);
-  grid-template-rows: repeat(2, 100px);
+  grid-template-columns: repeat(8, 100px);
+  grid-auto-rows: 30px;
   border: 1px solid #ccc;
   width: fit-content;
+}
+
+.grid-corner {
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.grid-col-label {
+  font-weight: bold;
+  text-align: center;
+  padding: 4px;
+  border-bottom: 1px solid #ccc;
+}
+
+.grid-row-label {
+  text-align: center;
+  font-weight: bold;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #eee;
 }
 
 .grid-item {
