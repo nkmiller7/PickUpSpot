@@ -283,7 +283,7 @@ async function seedGames() {
         nextWeek.setDate(nextWeek.getDate() + 7);
         const twoWeeks = new Date(today);
         twoWeeks.setDate(twoWeeks.getDate() + 14);
-        
+
         const gameInfo = [
             // Basketball games
             {
@@ -293,7 +293,8 @@ async function seedGames() {
                 "startTime": "15:00",
                 "endTime": "17:00",
                 "sport": "basketball",
-                "numOfPlayers": 10,
+                "desiredParticipants": 10,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.basketball.numCourts),
                 "skillLevel": "intermediate"
             },
             {
@@ -303,7 +304,8 @@ async function seedGames() {
                 "startTime": "18:00",
                 "endTime": "20:00",
                 "sport": "basketball",
-                "numOfPlayers": 8,
+                "desiredParticipants": 8,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.basketball.numCourts),
                 "skillLevel": "advanced"
             },
             {
@@ -313,7 +315,8 @@ async function seedGames() {
                 "startTime": "10:00",
                 "endTime": "12:00",
                 "sport": "basketball",
-                "numOfPlayers": 6,
+                "desiredParticipants": 6,
+                "courtNumber": Math.ceil(Math.random() * locations[1].facilities.basketball.numCourts),
                 "skillLevel": "beginner"
             },
             // Tennis games
@@ -324,7 +327,8 @@ async function seedGames() {
                 "startTime": "14:00",
                 "endTime": "16:00",
                 "sport": "tennis",
-                "numOfPlayers": 4,
+                "desiredParticipants": 4,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.tennis.numCourts),
                 "skillLevel": "intermediate"
             },
             {
@@ -334,7 +338,8 @@ async function seedGames() {
                 "startTime": "09:00",
                 "endTime": "11:00",
                 "sport": "tennis",
-                "numOfPlayers": 2,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.tennis.numCourts),
+                "desiredParticipants": 2,
                 "skillLevel": "advanced"
             },
             {
@@ -344,7 +349,8 @@ async function seedGames() {
                 "startTime": "16:00",
                 "endTime": "18:00",
                 "sport": "tennis",
-                "numOfPlayers": 4,
+                "desiredParticipants": 4,
+                "courtNumber": Math.ceil(Math.random() * locations[1].facilities.tennis.numCourts),
                 "skillLevel": "beginner"
             },
             // Additional mixed games
@@ -355,7 +361,8 @@ async function seedGames() {
                 "startTime": "12:00",
                 "endTime": "14:00",
                 "sport": "basketball",
-                "numOfPlayers": 12,
+                "desiredParticipants": 12,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.basketball.numCourts),
                 "skillLevel": "intermediate"
             },
             {
@@ -365,7 +372,8 @@ async function seedGames() {
                 "startTime": "17:00",
                 "endTime": "19:00",
                 "sport": "tennis",
-                "numOfPlayers": 6,
+                "desiredParticipants": 6,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.tennis.numCourts),
                 "skillLevel": "beginner"
             }
         ];
@@ -379,7 +387,8 @@ async function seedGames() {
                     game.startTime,
                     game.endTime,
                     game.sport,
-                    game.numOfPlayers,
+                    game.desiredParticipants,
+                    game.courtNumber,
                     game.skillLevel
                 );
                 successCount++;
