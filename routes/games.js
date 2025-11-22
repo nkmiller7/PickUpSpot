@@ -136,8 +136,8 @@ router.post("/create", async (req, res) => {
     const userId = validation.checkId(req.session.user.userId, "User ID");
     const gameDate = validation.checkDate(req.body.date, "Game Date");
     const sport = validation.checkSport(req.body.sport, "Sport");
-    const startTime = validation.checkTime(req.body.startTime, "Start Time");
-    const endTime = validation.checkTime(req.body.endTime, "End Time");
+    const startTime = validation.checkTime(req.body.startTime, "Start Time", true);
+    const endTime = validation.checkTime(req.body.endTime, "End Time", true);
     const desiredParticipants = validation.checkNumber(
       req.body.desiredParticipants,
       "Desired Participants"

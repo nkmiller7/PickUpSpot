@@ -70,6 +70,54 @@
 {{/if}}
 
 <script>
+    function buildSchedulingGrid() {
+        const schedulingGrid = document.getElementById("scheduling-grid");
+        const courtFilter = document.querySelector('select[name="court"]');
+        const sportFilter = document.querySelector('select[name="sport"]');
+
+        if (schedulingGrid && courtFilter && sportFilter) {
+            schedulingGrid.innerHTML = "";
+            
+            let games = {{{json games}}};
+            let scheduledGames = games.filter((game) => {
+                return game.sport === sportFilter.value && game.courtNumber === parseInt(courtFilter.value.split(" ")[1]);
+            });
+
+            let schedulingTimeBlocks = {{{location.schedulingTimeBlocks}}};
+            let schedulingDateBlocks = {{{location.schedulingDateBlocks}}};
+            const topLeftCell = document.createElement("div");
+            topLeftCell.className = "grid-corner";
+            schedulingGrid.appendChild(topLeftCell);
+
+            for (let i = 0; i < schedulingDateBlocks.length; ++i) {
+                const label = document.createElement("div");
+                label.className = "grid-col-label";
+                label.textContent = schedulingDateBlocks[i];
+                schedulingGrid.appendChild(label);
+            }
+
+            const formatter = new Intl.DateTimeFormat("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
+            for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
+                const label = document.createElement("div");
+                label.className = "grid-row-label";
+                label.textContent = schedulingTimeBlocks[i];
+                schedulingGrid.appendChild(label);
+
+                for (let j = 0; j < schedulingDateBlocks.length; ++j) {
+                    const cell = document.createElement("div");
+                    cell.className = (scheduledGames.find((game) => {
+                        return game.startTime === schedulingTimeBlocks[i] && formatter.format(new Date(game.date)) === schedulingDateBlocks[j];
+                    }) !== undefined) ? "grid-taken-item" : "grid-available-item";
+                    schedulingGrid.appendChild(cell);
+                }
+            }
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         const leaveGameATag = document.getElementById("leave-game");
         if (leaveGameATag) {
@@ -137,38 +185,18 @@
                     opt.value = `Court ${i+1}`;
                     courtFilter.appendChild(opt);
                 }
+                buildSchedulingGrid();
             })
         }
 
-        const schedulingGrid = document.getElementById("scheduling-grid");
-        if (schedulingGrid) {
-            let schedulingTimeBlocks = {{{location.schedulingTimeBlocks}}};
-            let schedulingDateBlocks = {{{location.schedulingDateBlocks}}};
-
-            const topLeftCell = document.createElement("div");
-            topLeftCell.className = "grid-corner";
-            schedulingGrid.appendChild(topLeftCell);
-            
-            for (let i = 0; i < schedulingDateBlocks.length; ++i) {
-                const label = document.createElement("div");
-                label.className = "grid-col-label";
-                label.textContent = schedulingDateBlocks[i];
-                schedulingGrid.appendChild(label);
-            }
-
-            for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
-                const label = document.createElement("div");
-                label.className = "grid-row-label";
-                label.textContent = schedulingTimeBlocks[i];
-                schedulingGrid.appendChild(label);
-
-                for (let j = 0; j < schedulingDateBlocks.length; ++j) {
-                    const cell = document.createElement("div");
-                    cell.className = "grid-item";
-                    schedulingGrid.appendChild(cell);
-                }
-            }
+        const courtFilter = document.querySelector('select[name="court"]');
+        if (courtFilter) {
+            courtFilter.addEventListener("change", function(e) {
+                buildSchedulingGrid();
+            })
         }
+
+        buildSchedulingGrid();
     });
 
     function showNotification(message, type) {

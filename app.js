@@ -21,7 +21,10 @@ app.engine("handlebars", exphbs.engine({
   helpers: {
     eq: function(a, b) {
       return a === b;
-    }
+    },
+    json: function(a) {
+        return JSON.stringify(a);
+    },
   }
 }));
 app.set("view engine", "handlebars");

@@ -237,8 +237,8 @@
   border-bottom: 1px solid #eee;
 }
 
-.grid-item {
-  background-color: lightblue;
+.grid-taken-item {
+  background-color: rgb(199, 114, 114);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -246,8 +246,13 @@
   border: 1px solid #999;
 }
 
-.grid-item:hover {
-  background-color: lightcoral;
+.grid-available-item {
+  background-color: rgb(152, 227, 152);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #999;
 }
 
 .notification {

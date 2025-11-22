@@ -89,8 +89,8 @@ const exportedMethods = {
     locationId = await validation.locationExists(locationId);
 
     date = validation.checkDate(date, "Game Date");
-    startTime = validation.checkTime(startTime, "Start Time");
-    endTime = validation.checkTime(endTime, "End Time");
+    startTime = validation.checkTime(startTime, "Start Time", true);
+    endTime = validation.checkTime(endTime, "End Time", true);
     sport = validation.checkSport(sport, "Sport");
     courtNumber = validation.checkNumber(courtNumber, "Court Number");
     skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");

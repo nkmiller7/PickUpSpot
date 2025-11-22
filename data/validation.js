@@ -58,10 +58,15 @@ const exportedMethods = {
     if (new Date(dateVal) < now) throw `Error: ${varName} cannot be a past date.`;
     return dateVal;
   },
-  checkTime(timeVal, varName) {
+  checkTime(timeVal, varName, ampm) {
     timeVal = this.checkString(timeVal, varName);
-    if (!/^([01][0-9]|2[0-3]):([0-5][0-9])$/.test(timeVal))
-      throw `Error: ${varName} must be a valid 24 hour time stamp.`;
+    if (ampm) {
+      if (!/^([1-9]|0[1-9]|1[0-2]):[0-5][0-9] ([AaPp][Mm])$/.test(timeVal))
+        throw `Error: ${varName} must be a valid AM/PM time stamp.`;
+    } else {
+      if (!/^([01][0-9]|2[0-3]):([0-5][0-9])$/.test(timeVal))
+        throw `Error: ${varName} must be a valid 24 hour time stamp.`;
+    }
     return timeVal;
   },
   checkSkillLevel(skillLevelVal, varName) {
