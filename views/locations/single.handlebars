@@ -63,9 +63,31 @@
                     {{/unless}}
                     Comment: {{content}}<br>
                     Posted: {{createdAt}}
+                    {{#if byUser}}
+                    <form
+                        action="/locations/{{../locationId}}"
+                        method="POST"
+                        class="delete-comment"
+                    >
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="messageId" value="{{messageId}}">
+                    <button type="submit" class="delete-comment-button">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    </form>
+                    {{/if}}
                 </li>
             {{/each}}
-             </ul>
+            </ul>
+            {{#if hasErrors}}  
+            <ul class = "error-list">
+                {{#each errors}}
+                <li>
+                    {{this}}
+                </li>
+                {{/each}}
+            </ul>
+            {{/if}}  
         </div>
         {{/if}}
         <div class = "add-comment-container">
@@ -111,7 +133,13 @@
         {{/if}}
         {{#if hasVisited}}
         <div class = "add-review-link">
-            <a href = "/reviews/review/{{locationId}}" class="addComment-button leave-review-btn">Leave a Review</a>
+            <a href = "/reviews/review/{{locationId}}" class="addComment-button leave-review-btn">
+            {{#if alreadyReviewed}}
+            Update Review
+            {{else}}
+            Leave a Review
+            {{/if}}
+            </a>
         </div>
         {{/if}}
     </div>
