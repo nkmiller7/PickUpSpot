@@ -80,11 +80,19 @@
             
             let games = {{{json games}}};
             let scheduledGames = games.filter((game) => {
-                return game.sport === sportFilter.value && game.courtNumber === parseInt(courtFilter.value.split(" ")[1]);
+                return  game.sport === sportFilter.value && 
+                        game.courtNumber === parseInt(courtFilter.value.split(" ")[1]);
             });
 
             let schedulingTimeBlocks = {{{location.schedulingTimeBlocks}}};
+            for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
+                schedulingTimeBlocks[i] = new Date(schedulingTimeBlocks[i]);
+            }
             let schedulingDateBlocks = {{{location.schedulingDateBlocks}}};
+            for (let i = 0; i < schedulingDateBlocks.length; ++i) {
+                schedulingDateBlocks[i] = new Date(schedulingDateBlocks[i]);
+            }
+
             const topLeftCell = document.createElement("div");
             topLeftCell.className = "grid-corner";
             schedulingGrid.appendChild(topLeftCell);
@@ -92,7 +100,13 @@
             for (let i = 0; i < schedulingDateBlocks.length; ++i) {
                 const label = document.createElement("div");
                 label.className = "grid-col-label";
-                label.textContent = schedulingDateBlocks[i];
+                label.textContent = schedulingDateBlocks[i].toLocaleDateString("en-US", 
+                                                                              {
+                                                                                timeZone: "America/New_York", 
+                                                                                year: "numeric", 
+                                                                                month: "2-digit", 
+                                                                                day: "2-digit"
+                                                                              });
                 schedulingGrid.appendChild(label);
             }
 
@@ -104,14 +118,21 @@
             for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
                 const label = document.createElement("div");
                 label.className = "grid-row-label";
-                label.textContent = schedulingTimeBlocks[i];
+                label.textContent = schedulingTimeBlocks[i].toLocaleTimeString("en-US", 
+                                                                              {
+                                                                                timeZone: "America/New_York", 
+                                                                                hour: "2-digit", 
+                                                                                minute: "2-digit",
+                                                                                hour12: true
+                                                                              });
                 schedulingGrid.appendChild(label);
 
                 for (let j = 0; j < schedulingDateBlocks.length; ++j) {
                     const cell = document.createElement("div");
-                    cell.className = (scheduledGames.find((game) => {
+                    /*cell.className = (scheduledGames.find((game) => {
                         return game.startTime === schedulingTimeBlocks[i] && formatter.format(new Date(game.date)) === schedulingDateBlocks[j];
-                    }) !== undefined) ? "grid-taken-item" : "grid-available-item";
+                    }) !== undefined) ? "grid-taken-item" : "grid-available-item";*/
+                    cell.className = "grid-available-item";
                     schedulingGrid.appendChild(cell);
                 }
             }

@@ -74,21 +74,23 @@ router.get("/locations/:id", async (req, res) => {
      * Scheduling grid needs the times of the park's operation.
      */
     let openingTime = new Date(
-      `January 1, 2000 ${location.hours.split("-")[0].trim()}`
+      2000,
+      1,
+      1,
+      location.openingTime.split(":")[0],
+      location.openingTime.split(":")[1]
     );
     let closingTime = new Date(
-      `January 1, 2000 ${location.hours.split("-")[1].trim()}`
+      2000,
+      1,
+      1,
+      location.closingTime.split(":")[0],
+      location.closingTime.split(":")[1]
     );
     let schedulingTimeBlocks = [];
     while (openingTime < closingTime) {
-      schedulingTimeBlocks.push(
-        openingTime.toLocaleTimeString("en-US", {
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        })
-      );
-      openingTime.setMinutes(openingTime.getMinutes() + 60);
+      schedulingTimeBlocks.push(openingTime);
+      openingTime = new Date(openingTime.getTime() + 60 * 60000);
     }
     location.schedulingTimeBlocks = JSON.stringify(schedulingTimeBlocks);
 
@@ -98,13 +100,9 @@ router.get("/locations/:id", async (req, res) => {
     let schedulingDateBlocks = [];
     for (let i = 1; i <= 7; ++i) {
       const date = new Date();
+      date.setHours(0, 0, 0, 0);
       date.setDate(date.getDate() + i);
-      const formatter = new Intl.DateTimeFormat("en-US", {
-        month: "2-digit",
-        day: "2-digit",
-        year: "numeric",
-      });
-      schedulingDateBlocks.push(formatter.format(date));
+      schedulingDateBlocks.push(date);
     }
     location.schedulingDateBlocks = JSON.stringify(schedulingDateBlocks);
 
@@ -135,7 +133,10 @@ router.post("/create", async (req, res) => {
     const locationId = validation.checkId(req.body.locationId, "Location ID");
     const userId = validation.checkId(req.session.user.userId, "User ID");
     const sport = validation.checkSport(req.body.sport, "Sport");
-    const startTime = validation.checkISO8601String(req.body.startTime, "Start Time");
+    const startTime = validation.checkISO8601String(
+      req.body.startTime,
+      "Start Time"
+    );
     const endTime = validation.checkISO8601String(req.body.endTime, "End Time");
     const desiredParticipants = validation.checkNumber(
       req.body.desiredParticipants,
