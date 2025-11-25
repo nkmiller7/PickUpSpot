@@ -190,7 +190,15 @@
 .delete-comment-button i {
     pointer-events: none; 
 }
-
+.add-comment-label {
+    font-size: 1.3rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+}
 .addComment-button {
     display: block;
     width: 30%;

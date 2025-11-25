@@ -89,22 +89,24 @@ router
     const forum = [];
     for(let c of forumOld.reverse()){
       let user = await userData.getUserById(c.userId.toString());
+      let createdAtList= c.createdAt.toString().split(":");
+      let createdAtString= createdAtList[0] + ":"+ createdAtList[1];
       if(user.isAnonymous === false){
-      forum.push(
-          {
-            messageId: c._id,
-            userName: user.firstName+" "+user.lastName,
-            content: c.content,
-            createdAt: c.createdAt,
-            byUser: userId === c.userId.toString()
-          }
-        )
+        forum.push(
+            {
+              messageId: c._id,
+              userName: user.firstName+" "+user.lastName,
+              content: c.content,
+              createdAt: createdAtString,
+              byUser: userId === c.userId.toString()
+            }
+          )
       }else{
         forum.push(
           {
             messageId: c._id,
             content: c.content,
-            createdAt: c.createdAt,
+            createdAt: createdAtString,
             byUser: userId === c.userId.toString()
           }
         )
@@ -115,6 +117,8 @@ router
     const ratings = [];
     for(let r of reviewsOld){
       let user = await userData.getUserById(r.userId.toString());
+      let createdAtList= r.updatedAt.toString().split(":");
+      let createdAtString= createdAtList[0] + ":"+ createdAtList[1];
       if(user.isAnonymous === false){
         reviewList.push(
           {
@@ -122,7 +126,7 @@ router
             rating: r.rating,
             comment: r.comment,
             createdAt: r.createdAt,
-            updatedAt: r.updatedAt
+            updatedAt: createdAtString
           }
         )
       }else{
@@ -131,7 +135,7 @@ router
             rating: r.rating,
             comment: r.comment,
             createdAt: r.createdAt,
-            updatedAt: r.updatedAt
+            updatedAt: createdAtString
           }
         )
       }
@@ -175,13 +179,15 @@ router
     const forum = [];
     for(let c of forumOld.reverse()){
       let user = await userData.getUserById(c.userId.toString());
+      let createdAtList= c.createdAt.toString().split(":");
+      let createdAtString= createdAtList[0] + ":"+ createdAtList[1];
       if(user.isAnonymous === false){
       forum.push(
           {
             messageId: c._id,
             userName: user.firstName+" "+user.lastName,
             content: c.content,
-            createdAt: c.createdAt,
+            createdAt: createdAtString,
             byUser: userId === c.userId.toString()
           }
         )
@@ -190,7 +196,7 @@ router
           {
             messageId: c._id,
             content: c.content,
-            createdAt: c.createdAt,
+            createdAt: createdAtString,
             byUser: userId === c.userId.toString()
           }
         )
@@ -201,6 +207,8 @@ router
     const ratings = [];
     for(let r of reviewsOld){
       let user = await userData.getUserById(r.userId.toString());
+      let createdAtList= r.updatedAt.toString().split(":");
+      let createdAtString= createdAtList[0] + ":" + createdAtList[1];
       if(user.isAnonymous === false){
         reviewList.push(
           {
@@ -208,7 +216,7 @@ router
             rating: r.rating,
             comment: r.comment,
             createdAt: r.createdAt,
-            updatedAt: r.updatedAt
+            updatedAt: createdAtString,
           }
         )
       }else{
@@ -217,7 +225,7 @@ router
             rating: r.rating,
             comment: r.comment,
             createdAt: r.createdAt,
-            updatedAt: r.updatedAt
+            updatedAt: createdAtString
           }
         )
       }
@@ -246,6 +254,16 @@ router
       content= validation.checkString(content, "Comment Content");
       if(content.length < 5 || content.length > 500){
         throw 'Error: Message content must be between 5 and 500 characters, inclusive';
+      }
+      let exists_letters= false;
+      for(let c of content){
+          if(validation.isLetter(c)){
+              exists_letters=true;
+              break;
+          }
+      }
+      if(exists_letters===false){
+          throw 'Error: Comment content must contain letters'
       }
       await forumData.createMessage(locationId, userId, content);
     } catch(e){
@@ -286,6 +304,8 @@ router
     const forumOld = await forumData.getForumMessagesByLocationId(id);
     const forum = [];
     for(let c of forumOld.reverse()){
+      let createdAtList= c.createdAt.toString().split(":");
+      let createdAtString= createdAtList[0] + ":"+ createdAtList[1];
       let user = await userData.getUserById(c.userId.toString());
       if(user.isAnonymous === false){
       forum.push(
@@ -293,7 +313,7 @@ router
             messageId: c._id,
             userName: user.firstName+" "+user.lastName,
             content: c.content,
-            createdAt: c.createdAt,
+            createdAt: createdAtString,
             byUser: userId === c.userId.toString()
           }
         )
@@ -302,7 +322,7 @@ router
           {
             messageId: c._id,
             content: c.content,
-            createdAt: c.createdAt,
+            createdAt: createdAtString,
             byUser: userId === c.userId.toString()
           }
         )
@@ -312,6 +332,8 @@ router
     const reviewList = [];
     const ratings = [];
     for(let r of reviewsOld){
+      let createdAtList= r.updatedAt.toString().split(":");
+      let createdAtString= createdAtList[0] + ":"+ createdAtList[1];
       let user = await userData.getUserById(r.userId.toString());
       if(user.isAnonymous === false){
         reviewList.push(
@@ -320,7 +342,7 @@ router
             rating: r.rating,
             comment: r.comment,
             createdAt: r.createdAt,
-            updatedAt: r.updatedAt
+            updatedAt: createdAtString
           }
         )
       }else{
@@ -329,7 +351,7 @@ router
             rating: r.rating,
             comment: r.comment,
             createdAt: r.createdAt,
-            updatedAt: r.updatedAt
+            updatedAt: createdAtString
           }
         )
       }

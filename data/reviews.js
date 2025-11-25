@@ -52,6 +52,16 @@ const exportedMethods = {
     }
     comment = validation.checkString(comment, 'Comment');
     if (comment.length < 5 || comment.length > 250) throw 'Error: Comment must be between 5 and 250 characters, inclusive';
+    let exists_letters= false;
+    for(let c of comment){
+      if(validation.isLetter(c)){
+        exists_letters=true;
+        break;
+      }
+    }
+    if(exists_letters===false){
+      throw 'Error: Review comment must contain letters'
+    }
     const newReview = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
