@@ -84,6 +84,10 @@
                         game.courtNumber === parseInt(courtFilter.value.split(" ")[1]);
             });
 
+            for (let i = 0; i < scheduledGames.length; ++i) {
+                scheduledGames[i].startTime = new Date(scheduledGames[i].startTime);
+                scheduledGames[i].endTime = new Date(scheduledGames[i].endTime);
+            }
             let schedulingTimeBlocks = {{{location.schedulingTimeBlocks}}};
             for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
                 schedulingTimeBlocks[i] = new Date(schedulingTimeBlocks[i]);
@@ -110,11 +114,6 @@
                 schedulingGrid.appendChild(label);
             }
 
-            const formatter = new Intl.DateTimeFormat("en-US", {
-                month: "2-digit",
-                day: "2-digit",
-                year: "numeric",
-            });
             for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
                 const label = document.createElement("div");
                 label.className = "grid-row-label";
@@ -129,10 +128,21 @@
 
                 for (let j = 0; j < schedulingDateBlocks.length; ++j) {
                     const cell = document.createElement("div");
-                    /*cell.className = (scheduledGames.find((game) => {
-                        return game.startTime === schedulingTimeBlocks[i] && formatter.format(new Date(game.date)) === schedulingDateBlocks[j];
-                    }) !== undefined) ? "grid-taken-item" : "grid-available-item";*/
-                    cell.className = "grid-available-item";
+                    const cellDateTime = new Date(
+                        schedulingDateBlocks[j].getFullYear(),
+                        schedulingDateBlocks[j].getMonth(),
+                        schedulingDateBlocks[j].getDate(),
+                        schedulingTimeBlocks[i].getHours(),
+                        schedulingTimeBlocks[i].getMinutes(),
+                        0,
+                        0
+                    );
+
+                    const scheduledGame = scheduledGames.find((game) => {
+                        return game.startTime <= cellDateTime && cellDateTime < game.endTime;
+                    });
+
+                    cell.className = scheduledGame === undefined ? "grid-available-item" : "grid-taken-item";
                     schedulingGrid.appendChild(cell);
                 }
             }
