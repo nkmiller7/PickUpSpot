@@ -78,25 +78,15 @@
                     {{/if}}
                 </li>
             {{/each}}
-            </ul>
-            {{#if hasErrors}}  
-            <ul class = "error-list">
-                {{#each errors}}
-                <li>
-                    {{this}}
-                </li>
-                {{/each}}
-            </ul>
-            {{/if}}  
+            </ul> 
         </div>
         {{/if}}
         <div class = "add-comment-container">
             <form action="/locations/{{locationId}}" method="POST" class="comment-form">
-                <label>
-                    <input type="text" name="content" placeholder="Write your message here" 
-                    value="{{formData.content}}" autocomplete="start writing your thoughts..." required
-                    class= "comment-input">
-                </label>
+                <label for = "comment" class="add-comment-label">Add a Comment</label>
+                <input id="comment" type="text" name="content" placeholder="Write your message here" 
+                value="{{formData.content}}" required
+                class= "comment-input">
                 <button type="submit" class="addComment-button">Add Comment</button>
             </form> 
             {{#if hasErrors}}  

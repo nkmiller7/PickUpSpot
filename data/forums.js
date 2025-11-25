@@ -29,6 +29,16 @@ const exportedMethods = {
         userId = await validation.userExists(userId);
         content = validation.checkString(content);
         if (content.trim().length < 5 || content.trim().length > 500) throw 'Error: Message content must be between 5 and 500 characters, inclusive';
+        let exists_letters= false;
+        for(let c of content){
+            if(validation.isLetter(c)){
+                exists_letters=true;
+                break;
+            }
+        }
+        if(exists_letters===false){
+            throw 'Error: Comment content must contain letters'
+        }
         const newMessage = {
             locationId: new ObjectId(locationId),
             userId: new ObjectId(userId),

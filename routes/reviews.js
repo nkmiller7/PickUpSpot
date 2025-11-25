@@ -57,6 +57,16 @@ router
     try{
       formData.comment = validation.checkString(formData.comment, 'Comment');
       if (formData.comment.length < 5 || formData.comment.length > 250) throw 'Error: Comment must be between 5 and 250 characters, inclusive';
+      let exists_letters= false;
+      for(let c of formData.comment){
+          if(validation.isLetter(c)){
+              exists_letters=true;
+              break;
+          }
+      }
+      if(exists_letters===false){
+          throw 'Error: Review comment must contain letters'
+      }
     }catch(e){
       errors.push(e);
     }
