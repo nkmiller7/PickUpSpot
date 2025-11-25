@@ -70,6 +70,8 @@
 {{/if}}
 
 <script>
+    let selectedTimes = [];
+
     function buildSchedulingGrid() {
         const schedulingGrid = document.getElementById("scheduling-grid");
         const courtFilter = document.querySelector('select[name="court"]');
@@ -143,6 +145,78 @@
                     });
 
                     cell.className = scheduledGame === undefined ? "grid-available-item" : "grid-taken-item";
+                    cell.id = `${i}-${j}`;
+                    cell.addEventListener("click", function() {
+                        const timeBlockIndex = cell.id.split("-")[0];
+                        const dateBlockIndex = cell.id.split("-")[1];
+                        const selectedDateTime = new Date(
+                            schedulingDateBlocks[dateBlockIndex].getFullYear(),
+                            schedulingDateBlocks[dateBlockIndex].getMonth(),
+                            schedulingDateBlocks[dateBlockIndex].getDate(),
+                            schedulingTimeBlocks[timeBlockIndex].getHours(),
+                            schedulingTimeBlocks[timeBlockIndex].getMinutes(),
+                            0,
+                            0
+                        );
+
+                        if (cell.className === "grid-taken-item") {
+                            showNotification("This time slot is already taken.", "error");
+                            return;
+                        } else if (cell.className === "grid-selected-item") {
+                            if (selectedTimes[0].getTime() === selectedDateTime.getTime()) {
+                                cell.className = "grid-available-item";
+                                selectedTimes.shift();
+                                return;
+                            } else if (selectedTimes[selectedTimes.length - 1].getTime() === selectedDateTime.getTime()) {
+                                cell.className = "grid-available-item";
+                                selectedTimes.pop();
+                                return;
+                            } 
+                            for (let i = 1; i < selectedTimes.length - 1; ++i) {
+                                if (selectedTimes[i].getTime() === selectedDateTime.getTime()) {
+                                    for (let j = i; j < selectedTimes.length; ++j) {
+                                        const time = selectedTimes[j];
+                                        const timeBlockIdx = schedulingTimeBlocks.findIndex((block) => {
+                                            return  block.getHours() === time.getHours() &&
+                                                    block.getMinutes() === time.getMinutes();
+                                        });
+                                        const dateBlockIdx = dateBlockIndex;
+                                        const cellToUpdate = document.getElementById(`${timeBlockIdx}-${dateBlockIdx}`);
+                                        cellToUpdate.classList.replace("grid-selected-item", "grid-available-item");
+                                    }
+                                    selectedTimes.splice(i, selectedTimes.length - i);
+                                    break;
+                                }
+                            }
+                        } else {
+                            if (selectedTimes.length >= 3) {
+                                showNotification("You cannot schedule a game for more than 3 hours.", "error");
+                                return;
+                            }
+
+                            if (selectedTimes.length > 0) {
+                                if (selectedDateTime > selectedTimes[selectedTimes.length - 1]) {
+                                    const diffInHours = (selectedDateTime - selectedTimes[selectedTimes.length - 1]) / (1000 * 60 * 60);
+                                    if (diffInHours !== 1) {
+                                        showNotification("Please select contiguous time slots only.", "error");
+                                        return;
+                                    }
+                                    selectedTimes.push(selectedDateTime);
+                                } else {
+                                    const diffInHours = (selectedTimes[0] - selectedDateTime) / (1000 * 60 * 60);
+                                    if (diffInHours !== 1) {
+                                        showNotification("Please select contiguous time slots only.", "error");
+                                        return;
+                                    }
+                                    selectedTimes.unshift(selectedDateTime);
+                                }
+                            } else {
+                                selectedTimes.push(selectedDateTime);
+                            }
+                            cell.className = "grid-selected-item";
+                        }
+                    });
+
                     schedulingGrid.appendChild(cell);
                 }
             }

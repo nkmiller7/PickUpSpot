@@ -245,6 +245,9 @@
   cursor: pointer;
   border: 1px solid #999;
 }
+.grid-taken-item:hover {
+    background-color: rgb(220, 90, 90);
+}
 
 .grid-available-item {
   background-color: rgb(152, 227, 152);
@@ -253,6 +256,21 @@
   align-items: center;
   cursor: pointer;
   border: 1px solid #999;
+}
+.grid-available-item:hover {
+    background-color: rgb(120, 200, 120);
+}
+
+.grid-selected-item {
+    background-color: rgb(100, 149, 237);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid #333;
+}
+.grid-selected-item:hover {
+    background-color: rgb(70, 130, 180);
 }
 
 .notification {
