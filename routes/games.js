@@ -134,10 +134,9 @@ router.post("/create", async (req, res) => {
   try {
     const locationId = validation.checkId(req.body.locationId, "Location ID");
     const userId = validation.checkId(req.session.user.userId, "User ID");
-    const gameDate = validation.checkDate(req.body.date, "Game Date");
     const sport = validation.checkSport(req.body.sport, "Sport");
-    const startTime = validation.checkTime(req.body.startTime, "Start Time", true);
-    const endTime = validation.checkTime(req.body.endTime, "End Time", true);
+    const startTime = validation.checkISO8601String(req.body.startTime, "Start Time");
+    const endTime = validation.checkISO8601String(req.body.endTime, "End Time");
     const desiredParticipants = validation.checkNumber(
       req.body.desiredParticipants,
       "Desired Participants"
@@ -153,11 +152,11 @@ router.post("/create", async (req, res) => {
     const createdGame = await gameData.addGame(
       userId,
       locationId,
-      gameDate,
       startTime,
       endTime,
       sport,
       desiredParticipants,
+      courtNumber,
       skillLevel
     );
     res.json(createdGame);

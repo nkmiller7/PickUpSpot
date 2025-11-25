@@ -74,7 +74,6 @@ const exportedMethods = {
   async addGame(
     userId,
     locationId,
-    date,
     startTime,
     endTime,
     sport,
@@ -84,25 +83,21 @@ const exportedMethods = {
   ) {
     userId = validation.checkId(userId, "User ID");
     userId = await validation.userExists(userId);
-
     locationId = validation.checkId(locationId, "Location ID");
     locationId = await validation.locationExists(locationId);
+    
+    startTime = validation.checkISO8601String(startTime, "Start Time");
+    endTime = validation.checkISO8601String(endTime, "End Time");
+    startTime = new Date(startTime)
+    endTime = new Date(endTime)
 
-    date = validation.checkDate(date, "Game Date");
-    startTime = validation.checkTime(startTime, "Start Time", true);
-    endTime = validation.checkTime(endTime, "End Time", true);
     sport = validation.checkSport(sport, "Sport");
     courtNumber = validation.checkNumber(courtNumber, "Court Number");
     skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");
 
-    const [startHour, startMinute] = startTime.split(":").map(Number);
-    const [endHour, endMinute] = endTime.split(":").map(Number);
-    const startMinutes = startHour * 60 + startMinute;
-    const endMinutes = endHour * 60 + endMinute;
-
-    if (endMinutes <= startMinutes)
+    if (endTime <= startTime)
       throw "Error: End time must be after start time";
-    if (endMinutes - startMinutes > 180)
+    if (((endTime - startTime) / (1000 * 60)) > 180)
       throw "Error: Game duration cannot exceed 3 hours";
 
     const location = await locationData.getLocationById(locationId);
@@ -141,7 +136,6 @@ const exportedMethods = {
     const newGame = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
-      date: new Date(date),
       sport: sport,
       startTime: startTime,
       endTime: endTime,

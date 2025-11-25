@@ -50,24 +50,12 @@ const exportedMethods = {
       throw `Error: ${varName} must be a valid sport.`;
     return sportVal;
   },
-  checkDate(dateVal, varName) {
-    dateVal = this.checkString(dateVal, varName);
-    if (!(new Date(dateVal) instanceof Date))
-      throw `Error: ${varName} must be a valid date.`;
-    const now = new Date();
-    if (new Date(dateVal) < now) throw `Error: ${varName} cannot be a past date.`;
-    return dateVal;
-  },
-  checkTime(timeVal, varName, ampm) {
-    timeVal = this.checkString(timeVal, varName);
-    if (ampm) {
-      if (!/^([1-9]|0[1-9]|1[0-2]):[0-5][0-9] ([AaPp][Mm])$/.test(timeVal))
-        throw `Error: ${varName} must be a valid AM/PM time stamp.`;
-    } else {
-      if (!/^([01][0-9]|2[0-3]):([0-5][0-9])$/.test(timeVal))
-        throw `Error: ${varName} must be a valid 24 hour time stamp.`;
-    }
-    return timeVal;
+  checkISO8601String(dateTimeVal, varName) {
+    dateTimeVal = this.checkString(dateTimeVal, varName);
+    const date = new Date(dateTimeVal);
+    if (isNaN(date.getTime()))
+      throw `Error: ${varName} must be a valid ISO 8601 date string.`;
+    return dateTimeVal;
   },
   checkSkillLevel(skillLevelVal, varName) {
     skillLevelVal = this.checkString(skillLevelVal, varName).toLowerCase();
