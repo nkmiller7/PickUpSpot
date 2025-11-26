@@ -41,7 +41,7 @@
         </div>
         <div class="games-location-scheduler">
             <div class="scheduling-filters">
-                <form>
+                <form method="POST" action="/games/create" id="scheduling-form">
                     <select name="sport" class="scheduling-filter">
                         {{#if location.facilities.basketball.numCourts}}
                         <option value="basketball">Basketball</option>
@@ -53,10 +53,11 @@
                     </select>
 
                     <select name="court" class="scheduling-filter">
-
                     </select>
 
-                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                    <input type="number" name="desiredParticipants" class="scheduling-filter">
+
+                    <input type="submit" value="Submit">
                 </form>
             </div>
 
@@ -299,6 +300,42 @@
             courtFilter.addEventListener("change", function(e) {
                 buildSchedulingGrid();
             })
+        }
+
+        const schedulingForm = document.getElementById("scheduling-form");
+        if (schedulingForm) {
+            schedulingForm.addEventListener("submit", async function(e) {
+                e.preventDefault();
+                if (selectedTimes.length === 0) {
+                    showNotification("Please select at least one time slot to create a game.", "error");
+                    return;
+                }
+
+                const endTime = selectedTimes[selectedTimes.length - 1];
+                endTime.setHours(endTime.getHours() + 1);
+                const createGameBody = {
+                    locationId: "{{location._id}}",
+                    userId: "{{user.userId}}",
+                    startTime: selectedTimes[0].toISOString(),
+                    endTime: endTime.toISOString(),
+                    desiredParticipants: parseInt(schedulingForm.desiredParticipants.value),
+                    sport: sportFilter.value,
+                    courtNumber: parseInt(courtFilter.value.split(" ")[1]),
+                    skillLevel: "beginner",
+                }
+                const response = await fetch("/games/create", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(createGameBody),
+                });
+                if (!response.ok) {
+                    showNotification("Failed to create game.", "error");
+                } else {
+                    window.location.reload();
+                }
+            });
         }
 
         buildSchedulingGrid();

@@ -185,26 +185,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
 }
 
-.search-button {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: none;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.search-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.scheduling:focus {
+.scheduling-filter:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 2px 12px rgba(0, 123, 255, 0.3);
