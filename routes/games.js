@@ -68,6 +68,19 @@ router.get("/locations/:id", async (req, res) => {
       if (gameList[i].userId.toString() === userId) {
         gameList[i].isCreator = true;
       }
+      gameList[i].date = gameList[i].startTime.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      gameList[i].startTimeFmt = gameList[i].startTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      gameList[i].endTimeFmt = gameList[i].endTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     }
 
     /*
