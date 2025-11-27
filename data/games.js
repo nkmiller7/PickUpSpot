@@ -184,10 +184,8 @@ const exportedMethods = {
     for (let i = 0; i < currentlyJoinedGames.length; ++i) {
       if (
         validation.timeConflictExist(
-          gameToJoin.date,
           gameToJoin.startTime,
           gameToJoin.endTime,
-          currentlyJoinedGames[i].date,
           currentlyJoinedGames[i].startTime,
           currentlyJoinedGames[i].endTime
         )

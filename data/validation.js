@@ -93,41 +93,24 @@ const exportedMethods = {
     return gameId;
   },
   timeConflictExist(
-    dateA,
-    startTimeStampA,
-    endTimeStampA,
-    dateB,
-    startTimeStampB,
-    endTimeStampB
+    startTimeAndDateA,
+    endTimeAndDateA,
+    startTimeAndDateB,
+    endTimeAndDateB
   ) {
     if (
-      typeof startTimeStampA !== "string" ||
-      typeof endTimeStampA !== "string" ||
-      typeof startTimeStampB !== "string" ||
-      typeof endTimeStampB !== "string"
+      startTimeAndDateB instanceof Date === false ||
+      endTimeAndDateB instanceof Date === false ||
+      startTimeAndDateA instanceof Date === false ||
+      endTimeAndDateA instanceof Date === false
     ) {
-      throw "Error: time stamps must be of type string";
+      throw "Error: date inputs must be of type Date";
     }
 
-    const startDateA = new Date(dateA);
-    startDateA.setHours(startTimeStampA.split(":")[0]);
-    startDateA.setMinutes(startTimeStampA.split(":")[1]);
-
-    const endDateA = new Date(dateA);
-    endDateA.setHours(endTimeStampA.split(":")[0]);
-    endDateA.setMinutes(endTimeStampA.split(":")[1]);
-
-    const startDateB = new Date(dateB);
-    startDateB.setHours(startTimeStampB.split(":")[0]);
-    startDateB.setMinutes(startTimeStampB.split(":")[1]);
-
-    const endDateB = new Date(dateB);
-    endDateB.setHours(endTimeStampB.split(":")[0]);
-    endDateB.setMinutes(endTimeStampB.split(":")[1]);
-
     return (
-      (startDateA >= startDateB && startDateA <= endDateB) ||
-      (endDateA >= startDateB && endDateA <= endDateB)
+      (startTimeAndDateA === startTimeAndDateB && endTimeAndDateA === endTimeAndDateB) ||
+      (startTimeAndDateA >= startTimeAndDateB && startTimeAndDateA < endTimeAndDateB) ||
+      (endTimeAndDateA >= startTimeAndDateB && endTimeAndDateA < endTimeAndDateB)
     );
   },
   isLetter(c) {

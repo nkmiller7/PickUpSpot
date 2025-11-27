@@ -30,10 +30,10 @@
                             <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
                         {{else if hasJoined}}
                             <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
-                            <a id="leave-game" href="placeholder" class="game-btn drop-game-btn" data-game-id="{{_id}}">Leave Game</a>
+                            <a href="placeholder" class="leave-game game-btn drop-game-btn" data-game-id="{{_id}}">Leave Game</a>
                         {{else}}
                             <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
-                            <a id="join-game" href="placeholder" class="game-btn view-location-btn" data-game-id="{{_id}}">Tag Along</a>
+                            <a href="placeholder" class="join-game game-btn view-location-btn" data-game-id="{{_id}}">Tag Along</a>
                         {{/if}}
                     </div>
                 </div>
@@ -236,15 +236,12 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        const leaveGameATag = document.getElementById("leave-game");
-        if (leaveGameATag) {
-            leaveGameATag.addEventListener("click", async function(e) {
+        const leaveGameATags = document.getElementsByClassName("leave-game");
+        for (let i = 0; i < leaveGameATags.length; ++i) {
+            leaveGameATags[i].addEventListener("click", async function(e) {
                 e.preventDefault();
-                const leaveGameUrl = leaveGameATag.href;
-                const reqBody = {
-                    gameId: leaveGameATag.dataset.gameId,
-                };
-
+                const leaveGameUrl = leaveGameATags[i].href;
+                const reqBody = { gameId: leaveGameATags[i].dataset.gameId };
                 const response = await fetch("/games/leave", {
                     method: "POST",
                     headers: {
@@ -261,22 +258,19 @@
             });
         }
 
-        const joinGameATag = document.getElementById("join-game");
-        if (joinGameATag) {
-            joinGameATag.addEventListener("click", async function(e) {
+        const joinGameATags = document.getElementsByClassName("join-game");
+        for (let i = 0; i < joinGameATags.length; ++i) {
+            joinGameATags[i].addEventListener("click", async function(e) {
                 e.preventDefault();
-                const joinGameUrl = joinGameATag.href;
-                const reqBody = {
-                    gameId: joinGameATag.dataset.gameId,
-                };
-
+                const joinGameUrl = joinGameATags[i].href;
+                const reqBody = { gameId: joinGameATags[i].dataset.gameId };
                 const response = await fetch("/games/join", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(reqBody),
-                })
+                });
                 if (!response.ok) {
                     showNotification("Failed to join game due to scheduling conflict.", "error");
                 } else {
