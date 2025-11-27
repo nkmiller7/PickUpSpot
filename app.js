@@ -2,12 +2,24 @@ import express from "express";
 import configRoutesFunction from "./routes/index.js";
 import exphbs from "express-handlebars";
 import session from "express-session";
+const rewriteUnsupportedBrowserMethods = (req, res, next) => {
+  // If the user posts to the server with a property called _method, rewrite the request's method
+  // To be that method; so if they post _method=PUT you can now allow browsers to POST to a route that gets
+  // rewritten in this middleware to a PUT route
+  if (req.body && req.body._method) {
+    req.method = req.body._method;
+    delete req.body._method;
+  }
 
+  // let the next middleware run:
+  next();
+};
 const app = express();
 
 app.use("/public", express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(rewriteUnsupportedBrowserMethods);
 app.use(session({
   name: "PickUpSpotSession",
   secret: "960ad0d5e52653b8ba4ea4d5a96b59af1ea965f848eb380287f56f94a1a729bd",

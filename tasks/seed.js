@@ -127,7 +127,11 @@ async function seedUsers() {
         let i = 0;
         for (const user of userData) {
             try {
-                await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[i]._id.toString(), locations[i+1]._id.toString()]);
+                if(user.firstName === "Jared"){
+                    await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[0]._id.toString(), locations[i]._id.toString(), locations[i+1]._id.toString()]);
+                }else{
+                    await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[i]._id.toString(), locations[i+1]._id.toString()]);
+                }
                 successCount++;
                 i= i+2;
             } catch (e) {

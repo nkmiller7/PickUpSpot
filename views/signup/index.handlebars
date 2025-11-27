@@ -41,6 +41,12 @@
             <span class="toggle-switch"></span>
         </label>
     </div>
+    <div class="ageCheckbox-container">
+        <label class="ageCheckbox-label">
+            <input type="checkbox" name="isOfAge" class="age-input" {{#if formData.isOfAge}}checked{{/if}} required>
+            <span class="ageCheckbox-label-text">I confirm that I am at least 18 years old.</span>
+        </label>
+    </div>
     <div>
         <button type="submit">Sign Up</button>
     </div>

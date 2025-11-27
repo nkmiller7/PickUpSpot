@@ -63,23 +63,31 @@
                     {{/unless}}
                     Comment: {{content}}<br>
                     Posted: {{createdAt}}
+                    {{#if byUser}}
+                    <form
+                        action="/locations/{{../locationId}}"
+                        method="POST"
+                        class="delete-comment"
+                    >
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="messageId" value="{{messageId}}">
+                    <button type="submit" class="delete-comment-button">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    </form>
+                    {{/if}}
                 </li>
             {{/each}}
-             </ul>
+            </ul> 
         </div>
         {{/if}}
         <div class = "add-comment-container">
             <form action="/locations/{{locationId}}" method="POST" class="comment-form">
-                <div>
-                    <label>
-                        Add New Comment
-                        <input type="text" name="content" placeholder="Write your message here" 
-                        value="{{formData.content}}" autocomplete="start writing your thoughts..." required>
-                    </label>
-                </div>
-                <div>
-                    <button type="submit" class="addComment-button">Add Comment</button>
-                </div>
+                <label for = "comment" class="add-comment-label">Add a Comment</label>
+                <input id="comment" type="text" name="content" placeholder="Write your message here" 
+                value="{{formData.content}}" required
+                class= "comment-input">
+                <button type="submit" class="addComment-button">Add Comment</button>
             </form> 
             {{#if hasErrors}}  
             <ul class = "error-list">
@@ -115,7 +123,13 @@
         {{/if}}
         {{#if hasVisited}}
         <div class = "add-review-link">
-            <a href = "/reviews/review/{{locationId}}">Leave a Review</a>
+            <a href = "/reviews/review/{{locationId}}" class="addComment-button leave-review-btn">
+            {{#if alreadyReviewed}}
+            Update Review
+            {{else}}
+            Leave a Review
+            {{/if}}
+            </a>
         </div>
         {{/if}}
     </div>
