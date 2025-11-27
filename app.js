@@ -33,6 +33,16 @@ app.engine("handlebars", exphbs.engine({
   helpers: {
     eq: function(a, b) {
       return a === b;
+    },
+    json: function(a) {
+        return JSON.stringify(a);
+    },
+    range: function(start, end) {
+        let array = [];
+        for (let i = start; i <= end; i++) {
+            array.push(i);
+        }
+        return array;
     }
   }
 }));

@@ -287,89 +287,89 @@ async function seedGames() {
         nextWeek.setDate(nextWeek.getDate() + 7);
         const twoWeeks = new Date(today);
         twoWeeks.setDate(twoWeeks.getDate() + 14);
-        
+
         const gameInfo = [
             // Basketball games
             {
                 "userId": users[0]._id.toString(),
                 "locationId": basketballLocations.length > 0 ? basketballLocations[0]._id.toString() : locations[0]._id.toString(),
-                "date": tomorrow.toISOString().split('T')[0],
-                "startTime": "15:00",
-                "endTime": "17:00",
+                "startTime": new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 16, 0).toISOString(),
+                "endTime": new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 18, 0).toISOString(),
                 "sport": "basketball",
-                "numOfPlayers": 10,
+                "desiredParticipants": 10,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.basketball.numCourts),
                 "skillLevel": "intermediate"
             },
             {
                 "userId": users[1]._id.toString(),
                 "locationId": basketballLocations.length > 0 ? basketballLocations[0]._id.toString() : locations[0]._id.toString(),
-                "date": nextWeek.toISOString().split('T')[0],
-                "startTime": "18:00",
-                "endTime": "20:00",
+                "startTime": new Date(nextWeek.getFullYear(), nextWeek.getMonth(), nextWeek.getDate(), 17, 0).toISOString(),
+                "endTime": new Date(nextWeek.getFullYear(), nextWeek.getMonth(), nextWeek.getDate(), 19, 0).toISOString(),
                 "sport": "basketball",
-                "numOfPlayers": 8,
+                "desiredParticipants": 8,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.basketball.numCourts),
                 "skillLevel": "advanced"
             },
             {
                 "userId": users[2]._id.toString(),
                 "locationId": basketballLocations.length > 1 ? basketballLocations[1]._id.toString() : locations[0]._id.toString(),
-                "date": tomorrow.toISOString().split('T')[0],
-                "startTime": "10:00",
-                "endTime": "12:00",
+                "startTime": new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 10, 0).toISOString(),
+                "endTime": new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 12, 0).toISOString(),
                 "sport": "basketball",
-                "numOfPlayers": 6,
+                "desiredParticipants": 6,
+                "courtNumber": Math.ceil(Math.random() * locations[1].facilities.basketball.numCourts),
                 "skillLevel": "beginner"
             },
             // Tennis games
             {
                 "userId": users[3]._id.toString(),
                 "locationId": tennisLocations.length > 0 ? tennisLocations[0]._id.toString() : locations[0]._id.toString(),
-                "date": twoWeeks.toISOString().split('T')[0],
-                "startTime": "14:00",
-                "endTime": "16:00",
+                "startTime": new Date(twoWeeks.getFullYear(), twoWeeks.getMonth(), twoWeeks.getDate(), 14, 0).toISOString(),
+                "endTime": new Date(twoWeeks.getFullYear(), twoWeeks.getMonth(), twoWeeks.getDate(), 16, 0).toISOString(),
                 "sport": "tennis",
-                "numOfPlayers": 4,
+                "desiredParticipants": 4,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.tennis.numCourts),
                 "skillLevel": "intermediate"
             },
             {
                 "userId": users[4]._id.toString(),
                 "locationId": tennisLocations.length > 0 ? tennisLocations[0]._id.toString() : locations[0]._id.toString(),
-                "date": nextWeek.toISOString().split('T')[0],
-                "startTime": "09:00",
-                "endTime": "11:00",
+                "startTime": new Date(nextWeek.getFullYear(), nextWeek.getMonth(), nextWeek.getDate(), 9, 0).toISOString(),
+                "endTime": new Date(nextWeek.getFullYear(), nextWeek.getMonth(), nextWeek.getDate(), 11, 0).toISOString(),
                 "sport": "tennis",
-                "numOfPlayers": 2,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.tennis.numCourts),
+                "desiredParticipants": 2,
                 "skillLevel": "advanced"
             },
             {
                 "userId": users[5]._id.toString(),
                 "locationId": tennisLocations.length > 1 ? tennisLocations[1]._id.toString() : locations[0]._id.toString(),
-                "date": tomorrow.toISOString().split('T')[0],
-                "startTime": "16:00",
-                "endTime": "18:00",
+                "startTime": new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 16, 0).toISOString(),
+                "endTime": new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 18, 0).toISOString(),
                 "sport": "tennis",
-                "numOfPlayers": 4,
+                "desiredParticipants": 4,
+                "courtNumber": Math.ceil(Math.random() * locations[1].facilities.tennis.numCourts),
                 "skillLevel": "beginner"
             },
             // Additional mixed games
             {
                 "userId": users[6]._id.toString(),
                 "locationId": basketballLocations.length > 0 ? basketballLocations[0]._id.toString() : locations[0]._id.toString(),
-                "date": twoWeeks.toISOString().split('T')[0],
-                "startTime": "12:00",
-                "endTime": "14:00",
+                "startTime": new Date(twoWeeks.getFullYear(), twoWeeks.getMonth(), twoWeeks.getDate(), 12, 0).toISOString(),
+                "endTime": new Date(twoWeeks.getFullYear(), twoWeeks.getMonth(), twoWeeks.getDate(), 14, 0).toISOString(),
                 "sport": "basketball",
-                "numOfPlayers": 12,
+                "desiredParticipants": 12,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.basketball.numCourts),
                 "skillLevel": "intermediate"
             },
             {
                 "userId": users[7]._id.toString(),
                 "locationId": tennisLocations.length > 0 ? tennisLocations[0]._id.toString() : locations[0]._id.toString(),
-                "date": nextWeek.toISOString().split('T')[0],
-                "startTime": "17:00",
-                "endTime": "19:00",
+                "startTime": new Date(nextWeek.getFullYear(), nextWeek.getMonth(), nextWeek.getDate(), 17, 0).toISOString(),
+                "endTime": new Date(nextWeek.getFullYear(), nextWeek.getMonth(), nextWeek.getDate(), 19, 0).toISOString(),
                 "sport": "tennis",
-                "numOfPlayers": 6,
+                "desiredParticipants": 6,
+                "courtNumber": Math.ceil(Math.random() * locations[0].facilities.tennis.numCourts),
                 "skillLevel": "beginner"
             }
         ];
@@ -379,11 +379,11 @@ async function seedGames() {
                 await gameData.addGame(
                     game.userId,
                     game.locationId,
-                    game.date,
                     game.startTime,
                     game.endTime,
                     game.sport,
-                    game.numOfPlayers,
+                    game.desiredParticipants,
+                    game.courtNumber,
                     game.skillLevel
                 );
                 successCount++;
