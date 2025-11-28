@@ -79,6 +79,7 @@ router.post("/signup", async (req, res) => {
     const newUser = await userData.addUser(firstName, lastName, email, password, anonymousUser);
 
     req.session.user = {
+      userId: newUser._id.toString(),
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,

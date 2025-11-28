@@ -1,0 +1,36 @@
+<div class="inbox-container">
+    <h1>Your Inbox ({{messages.length}})</h1>
+
+    {{#if messages}}
+    {{#if messages.length}}
+    <p class="inbox-intro">Your messages.</p>
+            <ul class="inbox-list">
+                {{#each messages}}
+                    <li class="inbox-item">
+                        <div class="inbox-item-main">
+                            <div class="inbox-media">
+                                <div class="inbox-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></div>
+                                <div class="inbox-text">
+                                    <div class="inbox-title">{{this.title}}</div>
+                                    <div class="inbox-body">{{this.body}}</div>
+                                </div>
+                            </div>
+                            <div class="inbox-actions">
+                                {{#if this.secondary}}
+                                  <a class="btn btn-secondary" href="{{this.secondary.href}}">{{this.secondary.label}}</a>
+                                {{/if}}
+                                {{#if this.primary}}
+                                  <a class="btn btn-primary" href="{{this.primary.href}}">{{this.primary.label}}</a>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+    {{else}}
+    <p class="inbox-empty">No pending review requests</p>
+    {{/if}}
+    {{else}}
+    <p class="inbox-empty">No pending review requests</p>
+    {{/if}}
+</div>
