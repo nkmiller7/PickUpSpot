@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
       user: req.session.user
     });
   } catch (e) {
-    res.status(500).json({ error: e.toString() });
+    return res.status(500).render('errors/404', { error: e.toString() });
   }
 });
 
@@ -163,7 +163,7 @@ router
       reviews: reviewList, averageRating: averageRating, singleLocation: true, 
       user: req.session.user, locationId: id, hasVisited: hasVisited, alreadyReviewed: alreadyReviewed});
   } catch (e) {
-    res.status(404).json({ error: e.toString() });
+    return res.status(404).render('errors/404', { error: e.toString() });
   }
 })
   .post(async(req, res) => {
@@ -289,7 +289,7 @@ router
     try{
       res.redirect(`/locations/${req.params.id}`);
     }catch(e){
-      res.status(500).json({error: e});
+      return res.status(500).render('errors/404', { error: e.toString() });
     }
 })
   .delete(async(req, res) => {
@@ -408,7 +408,7 @@ router
     try{
       res.redirect(`/locations/${req.params.id}`);
     }catch(e){
-      res.status(500).json({error: e});
+      return res.status(500).render('errors/404', { error: e.toString() });
     }
   })
   

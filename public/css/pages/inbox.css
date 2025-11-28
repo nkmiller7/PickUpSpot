@@ -1,0 +1,126 @@
+.inbox-container {
+  max-width: 920px;
+  margin: 1.25rem auto;
+  padding: 0 1rem;
+}
+
+.inbox-intro {
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.inbox-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.inbox-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  transition: box-shadow 120ms ease, transform 120ms ease;
+}
+
+.inbox-item-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+.inbox-media {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inbox-icon {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.inbox-icon i {
+  font-size: 22px;
+  color: #000000;
+  line-height: 1;
+}
+
+.inbox-title {
+  font-weight: 700;
+  font-size: 18px;
+  color: #0b2545;
+  line-height: 1.1;
+}
+
+.inbox-body {
+  margin-top: 6px;
+  color: #000000;
+  font-size: 14px;
+}
+
+.inbox-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #2b7cff;
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background: #f3f6fb;
+  color: #0b3a66;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+@media (max-width: 640px) {
+  .inbox-item {
+    padding: 10px;
+  }
+  .inbox-item-main {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .inbox-actions {
+    justify-content: flex-start;
+  }
+  .inbox-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+  .inbox-title {
+    font-size: 16px;
+  }
+}

@@ -24,6 +24,9 @@
     {{#if isProfilePage}}
       <link rel="stylesheet" href="/public/css/pages/profile.css">
     {{/if}}
+    {{#if isInboxPage}}
+      <link rel="stylesheet" href="/public/css/pages/inbox.css">
+    {{/if}}
 
 </head>
 
@@ -50,6 +53,7 @@
                     </button>
                     <div class="dropdown-menu">
                         <a href="/profile">View Profile</a>
+                        <a href="/inbox">My Inbox</a>
                         <a href="/logout">Sign Out</a>
                     </div>
                 </div>
