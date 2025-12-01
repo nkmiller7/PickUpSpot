@@ -43,6 +43,9 @@ app.engine("handlebars", exphbs.engine({
             array.push(i);
         }
         return array;
+    },
+    upperFirstLetter: function(str) {
+        return (str[0].toUpperCase() + str.slice(1));
     }
   }
 }));
