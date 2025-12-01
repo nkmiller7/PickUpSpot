@@ -368,7 +368,8 @@
 .profile-container .location-address,
 .profile-container .location-phone {
   display: flex;
-  align-items: flex-start;
+  align-items: center; 
+  gap: 8px; 
 }
 
 .profile-container .location-details {
