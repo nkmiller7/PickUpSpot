@@ -1,5 +1,10 @@
 <div class="search-bar">
-    <form action="/locations" method="GET" class="search-form">
+        <form action="/locations" method="GET" class="search-form"
+            data-search-term="{{searchValues.searchTerm}}"
+            data-search-sport="{{searchValues.sport}}"
+            data-search-accessible="{{searchValues.accessible}}"
+            data-search-courttype="{{searchValues.courtType}}"
+            data-search-indooroutdoor="{{searchValues.indoorOutdoor}}">
         <div class="search-input-row">
             <input type="text" name="searchTerm" placeholder="Search locations..." value="{{searchValues.searchTerm}}"
                 class="search-input">
@@ -110,87 +115,4 @@
 
     
 
-<script>
-    //runs after page load
-    // preserves search values, disableds irrelevant filters
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchValues = {
-            sport: '{{searchValues.sport}}',
-            accessible: '{{searchValues.accessible}}',
-            courtType: '{{searchValues.courtType}}',
-            indoorOutdoor: '{{searchValues.indoorOutdoor}}'
-        };
-
-        const sportSelect = document.querySelector('select[name="sport"]');
-        const accessibleSelect = document.querySelector('select[name="accessible"]');
-        const courtTypeSelect = document.querySelector('select[name="courtType"]');
-        const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
-
-        if (sportSelect && searchValues.sport) {
-            sportSelect.value = searchValues.sport;
-        }
-        if (accessibleSelect && searchValues.accessible) {
-            accessibleSelect.value = searchValues.accessible;
-        }
-        if (courtTypeSelect && searchValues.courtType) {
-            courtTypeSelect.value = searchValues.courtType;
-        }
-        if (indoorOutdoorSelect && searchValues.indoorOutdoor) {
-            indoorOutdoorSelect.value = searchValues.indoorOutdoor;
-        }
-
-        function toggleFilters() {
-            const selectedSport = sportSelect.value;
-            if (selectedSport === 'basketball') {
-                courtTypeSelect.disabled = true;
-                indoorOutdoorSelect.disabled = true;
-                courtTypeSelect.style.opacity = '0.5';
-                indoorOutdoorSelect.style.opacity = '0.5';
-            } else {
-                courtTypeSelect.disabled = false;
-                indoorOutdoorSelect.disabled = false;
-                courtTypeSelect.style.opacity = '1';
-                indoorOutdoorSelect.style.opacity = '1';
-            }
-        }
-
-        toggleFilters();
-
-        if (sportSelect) {
-            sportSelect.addEventListener('change', toggleFilters);
-        }
-    });
-
-    document.querySelectorAll(".favorite-btn").forEach(btn => {
-        btn.addEventListener("click", async (e) => {
-            e.preventDefault();
-            const icon = btn.querySelector("i");
-            const locationId = btn.dataset.id;
-            const isFavorited = icon.classList.contains("favorited");
-
-            icon.classList.toggle("favorited");
-            icon.classList.toggle("fas");
-            icon.classList.toggle("far");
-
-            try {
-                const response = await fetch("/profile/update-favorites", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ locationId, action: isFavorited ? "remove" : "add" })
-                });
-
-                if (!response.ok) {
-                    throw "Failed to update favorites";
-                }
-            } catch (error) {
-                console.error(error);
-                icon.classList.toggle("favorited");
-                icon.classList.toggle("fas");
-                icon.classList.toggle("far");
-            }
-        });
-    });
-</script>
+<script src="/public/js/locations.js" defer></script>
