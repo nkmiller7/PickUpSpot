@@ -6,7 +6,7 @@
     <div class="profile-info">
       <h1 class="profile-name">{{user.firstName}} {{user.lastName}}</h1>
       <p class="profile-email">{{user.email}}</p>
-      <p class="profile-member-since">Member since {{user.createdAt}}</p>
+      <p class="profile-member-since">Member since {{user.createdAtFmt}}</p>
     </div>
   </div>
 
@@ -92,7 +92,7 @@
             <h2 class="location-name">{{name}}</h2>
             <div class="location-info">
               <p class="location-hours">
-                <i class="fas fa-clock"></i>{{openingTime}} - {{closingTime}}
+                <i class="fas fa-clock"></i>{{convertToAMPM openingTime}} - {{convertToAMPM closingTime}}
               </p>
               <p class="location-address">
                 <i class="fas fa-map-marker-alt"></i> {{location.address}}

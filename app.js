@@ -46,6 +46,15 @@ app.engine("handlebars", exphbs.engine({
     },
     upperFirstLetter: function(str) {
         return (str[0].toUpperCase() + str.slice(1));
+    },
+    convertToAMPM(time24hr) {
+        let [hr, min] = time24hr.split(":");
+        const isPM = hr >= 12;
+        if (hr === 0)
+            hr = 12;
+        else if (hr > 12)
+            hr -= 12;
+        return isPM ? `${hr}:${min} PM` : `${hr}:${min} AM`;
     }
   }
 }));
