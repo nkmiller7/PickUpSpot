@@ -6,7 +6,13 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const user = await userData.getUserByEmail(req.session.user.email);
+    let user = await userData.getUserByEmail(req.session.user.email);
+    user.createdAtFmt = user.createdAt.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
     const usersReviews = await reviewData.getReviewsByUserId(
       user._id.toString()
     );

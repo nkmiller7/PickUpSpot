@@ -6,7 +6,7 @@
             {{#if location.phone}}
             <p class="location-phone"><i class="fas fa-phone"></i> {{location.phone}}</p>
             {{/if}}
-            <p class="location-hours"><i class="fas fa-clock"></i> {{location.openingTime}} - {{location.closingTime}}</p>
+            <p class="location-hours"><i class="fas fa-clock"></i> {{convertToAMPM location.openingTime}} - {{convertToAMPM location.closingTime}}</p>
         </div>
     </div>
 

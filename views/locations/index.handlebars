@@ -80,7 +80,7 @@
                     {{/if}}
                 </button>
                 <div class="location-info">
-                    <p class="location-hours"><i class="fas fa-clock"></i>{{openingTime}} - {{closingTime}}</p>
+                    <p class="location-hours"><i class="fas fa-clock"></i>{{convertToAMPM openingTime}} - {{convertToAMPM closingTime}}</p>
                     <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
                     {{#if phone}}
                     <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
