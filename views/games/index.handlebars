@@ -18,11 +18,11 @@
                         </div>
                         <div class="game-info-row">
                             <i class="fas fa-clock"></i>
-                            <span class="game-time">{{startTime}} - {{endTime}}</span>
+                            <span class="game-time">{{startTimeFmt}} - {{endTimeFmt}}</span>
                         </div>
                         <div class="game-info-row">
                             <i class="fas fa-users"></i>
-                            <span class="game-participants">{{registeredPlayers.length}}/{{desiredParticipants}} players</span>
+                            <span class="game-participants">{{registeredPlayers.length}}/{{desiredParticipants}} Players</span>
                         </div>
                     </div>
                     <div class="game-actions">
@@ -30,10 +30,10 @@
                             <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
                         {{else if hasJoined}}
                             <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
-                            <a id="leave-game" href="placeholder" class="game-btn drop-game-btn" data-game-id="{{_id}}">Leave Game</a>
+                            <a href="placeholder" class="leave-game game-btn drop-game-btn" data-game-id="{{_id}}">Leave Game</a>
                         {{else}}
                             <a href="/games/{{_id}}" class="game-btn view-location-btn">View Details</a>
-                            <a id="join-game" href="placeholder" class="game-btn view-location-btn" data-game-id="{{_id}}">Tag Along</a>
+                            <a href="placeholder" class="join-game game-btn view-location-btn" data-game-id="{{_id}}">Tag Along</a>
                         {{/if}}
                     </div>
                 </div>
@@ -41,7 +41,7 @@
         </div>
         <div class="games-location-scheduler">
             <div class="scheduling-filters">
-                <form>
+                <form method="POST" action="/games/create" id="scheduling-form">
                     <select name="sport" class="scheduling-filter">
                         {{#if location.facilities.basketball.numCourts}}
                         <option value="basketball">Basketball</option>
@@ -53,18 +53,26 @@
                     </select>
 
                     <select name="court" class="scheduling-filter">
-
+                        {{#if location.facilities.basketball.numCourts}}
+                            {{#each (range 1 location.facilities.basketball.numCourts)}}
+                                <option value="Court {{this}}">Court {{this}}</option>
+                            {{/each}}
+                        {{else}}
+                            {{#each (range 1 location.facilities.tennis.numCourts)}}
+                                <option value="Court {{this}}">Court {{this}}</option>
+                            {{/each}}
+                        {{/if}}
                     </select>
 
-                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                    <input type="number" name="desiredParticipants" class="scheduling-filter">
                 </form>
             </div>
 
-            <div class="scheduling-grid">
-                <div class="grid-item" data-row="0" data-col="0"></div>
-                <div class="grid-item" data-row="0" data-col="1"></div>
-                <div class="grid-item" data-row="1" data-col="0"></div>
-                <div class="grid-item" data-row="1" data-col="1"></div>
+            <div id="scheduling-grid" class="scheduling-grid">
+            </div>
+
+            <div class="scheduling-submit-container">
+                <button form="scheduling-form" type="submit" class="search-button scheduling-submit">Schedule Game</button>
             </div>
         </div>
     </div>
@@ -73,16 +81,167 @@
 {{/if}}
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const leaveGameATag = document.getElementById("leave-game");
-        if (leaveGameATag) {
-            leaveGameATag.addEventListener("click", async function(e) {
-                e.preventDefault();
-                const leaveGameUrl = leaveGameATag.href;
-                const reqBody = {
-                    gameId: leaveGameATag.dataset.gameId,
-                };
+    let selectedTimes = [];
 
+    function buildSchedulingGrid() {
+        const schedulingGrid = document.getElementById("scheduling-grid");
+        const courtFilter = document.querySelector('select[name="court"]');
+        const sportFilter = document.querySelector('select[name="sport"]');
+        selectedTimes = [];
+
+        if (schedulingGrid && courtFilter && sportFilter) {
+            schedulingGrid.innerHTML = "";
+            
+            let games = {{{json games}}};
+            let scheduledGames = games.filter((game) => {
+                return  game.sport === sportFilter.value && 
+                        game.courtNumber === parseInt(courtFilter.value.split(" ")[1]);
+            });
+
+            for (let i = 0; i < scheduledGames.length; ++i) {
+                scheduledGames[i].startTime = new Date(scheduledGames[i].startTime);
+                scheduledGames[i].endTime = new Date(scheduledGames[i].endTime);
+            }
+            let schedulingTimeBlocks = {{{location.schedulingTimeBlocks}}};
+            for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
+                schedulingTimeBlocks[i] = new Date(schedulingTimeBlocks[i]);
+            }
+            let schedulingDateBlocks = {{{location.schedulingDateBlocks}}};
+            for (let i = 0; i < schedulingDateBlocks.length; ++i) {
+                schedulingDateBlocks[i] = new Date(schedulingDateBlocks[i]);
+            }
+
+            const topLeftCell = document.createElement("div");
+            topLeftCell.className = "grid-corner";
+            schedulingGrid.appendChild(topLeftCell);
+
+            for (let i = 0; i < schedulingDateBlocks.length; ++i) {
+                const label = document.createElement("div");
+                label.className = "grid-col-label";
+                label.textContent = schedulingDateBlocks[i].toLocaleDateString("en-US", 
+                                                                              {
+                                                                                timeZone: "America/New_York", 
+                                                                                year: "numeric", 
+                                                                                month: "2-digit", 
+                                                                                day: "2-digit"
+                                                                              });
+                schedulingGrid.appendChild(label);
+            }
+
+            for (let i = 0; i < schedulingTimeBlocks.length; ++i) {
+                const label = document.createElement("div");
+                label.className = "grid-row-label";
+                label.textContent = schedulingTimeBlocks[i].toLocaleTimeString("en-US", 
+                                                                              {
+                                                                                timeZone: "America/New_York", 
+                                                                                hour: "2-digit", 
+                                                                                minute: "2-digit",
+                                                                                hour12: true
+                                                                              });
+                schedulingGrid.appendChild(label);
+
+                for (let j = 0; j < schedulingDateBlocks.length; ++j) {
+                    const cell = document.createElement("div");
+                    const cellDateTime = new Date(
+                        schedulingDateBlocks[j].getFullYear(),
+                        schedulingDateBlocks[j].getMonth(),
+                        schedulingDateBlocks[j].getDate(),
+                        schedulingTimeBlocks[i].getHours(),
+                        schedulingTimeBlocks[i].getMinutes(),
+                        0,
+                        0
+                    );
+
+                    const scheduledGame = scheduledGames.find((game) => {
+                        return game.startTime <= cellDateTime && cellDateTime < game.endTime;
+                    });
+
+                    cell.className = scheduledGame === undefined ? "grid-available-item" : "grid-taken-item";
+                    cell.id = `${i}-${j}`;
+                    cell.addEventListener("click", function() {
+                        const timeBlockIndex = cell.id.split("-")[0];
+                        const dateBlockIndex = cell.id.split("-")[1];
+                        const selectedDateTime = new Date(
+                            schedulingDateBlocks[dateBlockIndex].getFullYear(),
+                            schedulingDateBlocks[dateBlockIndex].getMonth(),
+                            schedulingDateBlocks[dateBlockIndex].getDate(),
+                            schedulingTimeBlocks[timeBlockIndex].getHours(),
+                            schedulingTimeBlocks[timeBlockIndex].getMinutes(),
+                            0,
+                            0
+                        );
+
+                        if (cell.className === "grid-taken-item") {
+                            showNotification("This time slot is already taken.", "error");
+                            return;
+                        } else if (cell.className === "grid-selected-item") {
+                            if (selectedTimes[0].getTime() === selectedDateTime.getTime()) {
+                                cell.className = "grid-available-item";
+                                selectedTimes.shift();
+                                return;
+                            } else if (selectedTimes[selectedTimes.length - 1].getTime() === selectedDateTime.getTime()) {
+                                cell.className = "grid-available-item";
+                                selectedTimes.pop();
+                                return;
+                            } 
+                            for (let i = 1; i < selectedTimes.length - 1; ++i) {
+                                if (selectedTimes[i].getTime() === selectedDateTime.getTime()) {
+                                    for (let j = i; j < selectedTimes.length; ++j) {
+                                        const time = selectedTimes[j];
+                                        const timeBlockIdx = schedulingTimeBlocks.findIndex((block) => {
+                                            return  block.getHours() === time.getHours() &&
+                                                    block.getMinutes() === time.getMinutes();
+                                        });
+                                        const dateBlockIdx = dateBlockIndex;
+                                        const cellToUpdate = document.getElementById(`${timeBlockIdx}-${dateBlockIdx}`);
+                                        cellToUpdate.classList.replace("grid-selected-item", "grid-available-item");
+                                    }
+                                    selectedTimes.splice(i, selectedTimes.length - i);
+                                    break;
+                                }
+                            }
+                        } else {
+                            if (selectedTimes.length >= 3) {
+                                showNotification("You cannot schedule a game for more than 3 hours.", "error");
+                                return;
+                            }
+
+                            if (selectedTimes.length > 0) {
+                                if (selectedDateTime > selectedTimes[selectedTimes.length - 1]) {
+                                    const diffInHours = (selectedDateTime - selectedTimes[selectedTimes.length - 1]) / (1000 * 60 * 60);
+                                    if (diffInHours !== 1) {
+                                        showNotification("Please select contiguous time slots only.", "error");
+                                        return;
+                                    }
+                                    selectedTimes.push(selectedDateTime);
+                                } else {
+                                    const diffInHours = (selectedTimes[0] - selectedDateTime) / (1000 * 60 * 60);
+                                    if (diffInHours !== 1) {
+                                        showNotification("Please select contiguous time slots only.", "error");
+                                        return;
+                                    }
+                                    selectedTimes.unshift(selectedDateTime);
+                                }
+                            } else {
+                                selectedTimes.push(selectedDateTime);
+                            }
+                            cell.className = "grid-selected-item";
+                        }
+                    });
+
+                    schedulingGrid.appendChild(cell);
+                }
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const leaveGameATags = document.getElementsByClassName("leave-game");
+        for (let i = 0; i < leaveGameATags.length; ++i) {
+            leaveGameATags[i].addEventListener("click", async function(e) {
+                e.preventDefault();
+                const leaveGameUrl = leaveGameATags[i].href;
+                const reqBody = { gameId: leaveGameATags[i].dataset.gameId };
                 const response = await fetch("/games/leave", {
                     method: "POST",
                     headers: {
@@ -99,22 +258,19 @@
             });
         }
 
-        const joinGameATag = document.getElementById("join-game");
-        if (joinGameATag) {
-            joinGameATag.addEventListener("click", async function(e) {
+        const joinGameATags = document.getElementsByClassName("join-game");
+        for (let i = 0; i < joinGameATags.length; ++i) {
+            joinGameATags[i].addEventListener("click", async function(e) {
                 e.preventDefault();
-                const joinGameUrl = joinGameATag.href;
-                const reqBody = {
-                    gameId: joinGameATag.dataset.gameId,
-                };
-
+                const joinGameUrl = joinGameATags[i].href;
+                const reqBody = { gameId: joinGameATags[i].dataset.gameId };
                 const response = await fetch("/games/join", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(reqBody),
-                })
+                });
                 if (!response.ok) {
                     showNotification("Failed to join game due to scheduling conflict.", "error");
                 } else {
@@ -140,10 +296,54 @@
                     opt.value = `Court ${i+1}`;
                     courtFilter.appendChild(opt);
                 }
+                buildSchedulingGrid();
             })
         }
 
+        const courtFilter = document.querySelector('select[name="court"]');
+        if (courtFilter) {
+            courtFilter.addEventListener("change", function(e) {
+                buildSchedulingGrid();
+            })
+        }
 
+        const schedulingForm = document.getElementById("scheduling-form");
+        if (schedulingForm) {
+            schedulingForm.addEventListener("submit", async function(e) {
+                e.preventDefault();
+                if (selectedTimes.length === 0) {
+                    showNotification("Please select at least one time slot to create a game.", "error");
+                    return;
+                }
+
+                const endTime = selectedTimes[selectedTimes.length - 1];
+                endTime.setHours(endTime.getHours() + 1);
+                const createGameBody = {
+                    locationId: "{{location._id}}",
+                    userId: "{{user.userId}}",
+                    startTime: selectedTimes[0].toISOString(),
+                    endTime: endTime.toISOString(),
+                    desiredParticipants: parseInt(schedulingForm.desiredParticipants.value),
+                    sport: sportFilter.value,
+                    courtNumber: parseInt(courtFilter.value.split(" ")[1]),
+                    skillLevel: "beginner",
+                }
+                const response = await fetch("/games/create", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(createGameBody),
+                });
+                if (!response.ok) {
+                    showNotification("Failed to create game.", "error");
+                } else {
+                    window.location.reload();
+                }
+            });
+        }
+
+        buildSchedulingGrid();
     });
 
     function showNotification(message, type) {

@@ -68,7 +68,56 @@ router.get("/locations/:id", async (req, res) => {
       if (gameList[i].userId.toString() === userId) {
         gameList[i].isCreator = true;
       }
+      gameList[i].date = gameList[i].startTime.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      gameList[i].startTimeFmt = gameList[i].startTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      gameList[i].endTimeFmt = gameList[i].endTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     }
+
+    /*
+     * Scheduling grid needs the times of the park's operation.
+     */
+    let openingTime = new Date(
+      2000,
+      1,
+      1,
+      location.openingTime.split(":")[0],
+      location.openingTime.split(":")[1]
+    );
+    let closingTime = new Date(
+      2000,
+      1,
+      1,
+      location.closingTime.split(":")[0],
+      location.closingTime.split(":")[1]
+    );
+    let schedulingTimeBlocks = [];
+    while (openingTime < closingTime) {
+      schedulingTimeBlocks.push(openingTime);
+      openingTime = new Date(openingTime.getTime() + 60 * 60000);
+    }
+    location.schedulingTimeBlocks = JSON.stringify(schedulingTimeBlocks);
+
+    /*
+     * Scheduling grid also needs the following 7 days (starting from tomorrow's date).
+     */
+    let schedulingDateBlocks = [];
+    for (let i = 1; i <= 7; ++i) {
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() + i);
+      schedulingDateBlocks.push(date);
+    }
+    location.schedulingDateBlocks = JSON.stringify(schedulingDateBlocks);
 
     res.render("games/index", {
       isGamesPage: true,
@@ -96,10 +145,12 @@ router.post("/create", async (req, res) => {
   try {
     const locationId = validation.checkId(req.body.locationId, "Location ID");
     const userId = validation.checkId(req.session.user.userId, "User ID");
-    const gameDate = validation.checkDate(req.body.date, "Game Date");
     const sport = validation.checkSport(req.body.sport, "Sport");
-    const startTime = validation.checkTime(req.body.startTime, "Start Time");
-    const endTime = validation.checkTime(req.body.endTime, "End Time");
+    const startTime = validation.checkISO8601String(
+      req.body.startTime,
+      "Start Time"
+    );
+    const endTime = validation.checkISO8601String(req.body.endTime, "End Time");
     const desiredParticipants = validation.checkNumber(
       req.body.desiredParticipants,
       "Desired Participants"
@@ -115,11 +166,11 @@ router.post("/create", async (req, res) => {
     const createdGame = await gameData.addGame(
       userId,
       locationId,
-      gameDate,
       startTime,
       endTime,
       sport,
       desiredParticipants,
+      courtNumber,
       skillLevel
     );
     res.json(createdGame);
