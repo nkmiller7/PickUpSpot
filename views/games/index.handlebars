@@ -8,7 +8,7 @@
             {{#each games}}
                 <div class="games-location-card">
                     <div class="game-header">
-                        <h3 class="game-location-name">{{creatorFirstName}} {{creatorLastName}}'s Game</h3>
+                        <h3 class="game-location-name">{{creatorFirstName}} {{creatorLastName}}'s {{upperFirstLetter skillLevel}} Game</h3>
                         <span class="game-status-badge status-{{status}}">{{status}}</span>
                     </div>
                     <div class="game-info">
@@ -64,7 +64,7 @@
                         {{/if}}
                     </select>
 
-                    <input type="number" name="desiredParticipants" class="scheduling-filter">
+                    
                 </form>
             </div>
 
@@ -72,6 +72,24 @@
             </div>
 
             <div class="scheduling-submit-container">
+                <select form="scheduling-form" name="desiredParticipants" class="scheduling-filter">
+                    {{#if location.facilities.basketball.numCourts}}
+                        {{#each (range 2 20)}}
+                            <option value="{{this}}">{{this}} Players</option>
+                        {{/each}}
+                    {{else}}
+                        {{#each (range 2 8)}}
+                            <option value="{{this}}">{{this}} Players</option>
+                        {{/each}}
+                    {{/if}}
+                </select>
+
+                <select form="scheduling-form" name="skillLevel" class="scheduling-filter">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+                
                 <button form="scheduling-form" type="submit" class="search-button scheduling-submit">Schedule Game</button>
             </div>
         </div>
@@ -284,18 +302,33 @@
             sportFilter.addEventListener("change", function(e) {
                 const courtFilter = document.querySelector('select[name="court"]');
                 courtFilter.innerHTML = "";
+
+                const desiredParticipantsSelect = document.querySelector('select[name="desiredParticipants"]')
+                desiredParticipantsSelect.innerHTML = "";
+
                 let numCourts = 0;
+                let maxParticipants = 0;
                 if (e.target.value === "basketball") {
                     numCourts = {{location.facilities.basketball.numCourts}};
+                    maxParticipants = 20;
                 } else {
                     numCourts = {{location.facilities.tennis.numCourts}};
+                    maxParticipants = 8;
                 }
+
                 for (let i = 0; i < numCourts; ++i) {
                     const opt = document.createElement("option");
                     opt.textContent = `Court ${i+1}`;
                     opt.value = `Court ${i+1}`;
                     courtFilter.appendChild(opt);
                 }
+                for (let i = 1; i < maxParticipants; ++i) {
+                    const opt = document.createElement("option");
+                    opt.textContent = `${i+1} Players`;
+                    opt.value=`${i+1}`;
+                    desiredParticipantsSelect.appendChild(opt);
+                }
+
                 buildSchedulingGrid();
             })
         }
@@ -326,7 +359,7 @@
                     desiredParticipants: parseInt(schedulingForm.desiredParticipants.value),
                     sport: sportFilter.value,
                     courtNumber: parseInt(courtFilter.value.split(" ")[1]),
-                    skillLevel: "beginner",
+                    skillLevel: schedulingForm.skillLevel.value,
                 }
                 const response = await fetch("/games/create", {
                     method: "POST",
