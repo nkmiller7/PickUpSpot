@@ -14,13 +14,13 @@
 }
 
 .games-location-cards {
-    border: 1px solid #000;
+    border: 2px solid #2563eb;
     border-radius: 10px;
     background-color: #eeeeee;
     overflow-y: auto;
     flex: 0 0 50%;
     max-width: 50%;
-    max-height: 80vh;
+    max-height: 70vh;
     box-sizing: border-box;
     padding: 1rem;
 }
@@ -155,7 +155,7 @@
 }
 
 .games-location-scheduler {
-    border: 1px solid #000;
+    border: 2px solid #2563eb;
     border-radius: 10px;
     padding: 1rem;
     margin: 1rem;
@@ -170,6 +170,7 @@
     flex-wrap: nowrap;
     width: 100%;
     overflow-x: auto;
+    padding-bottom: 0.5rem;
 }
 
 .scheduling-filter {
@@ -194,7 +195,7 @@
 .scheduling-grid {
   display: grid;
   grid-template-columns: repeat(8, 100px);
-  grid-auto-rows: 30px;
+  grid-auto-rows: 40px;
   border: 1px solid #ccc;
   width: fit-content;
 }
