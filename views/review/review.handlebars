@@ -3,7 +3,8 @@
     <form 
         action = "/reviews/review/{{locationId}}" 
         method = "POST"
-        class="new-review-form" >
+        class="new-review-form"
+        id="review-form" >
         {{#if alreadyReviewed}}
             <input type="hidden" name="_method" value="PUT">
         {{/if}}
@@ -41,4 +42,7 @@
         {{/each}}
     </ul>
     {{/if}}
+    <div class="error-list" id="review-client-errors" style="display: none;">          
+    </div>
 </article>
+<script src="/public/js/review.js"></script>

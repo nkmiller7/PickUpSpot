@@ -82,7 +82,7 @@
         </div>
         {{/if}}
         <div class = "add-comment-container">
-            <form action="/locations/{{locationId}}" method="POST" class="comment-form">
+            <form action="/locations/{{locationId}}" method="POST" class="comment-form" id="comment-form">
                 <label for = "comment" class="add-comment-label">Add a Comment</label>
                 <input id="comment" type="text" name="content" placeholder="Write your message here" 
                 value="{{formData.content}}" required
@@ -97,7 +97,10 @@
                 </li>
                 {{/each}}
             </ul>
-            {{/if}}   
+            {{/if}}
+            <div class="error-list" id="forum-client-errors" style="display: none;">
+                
+            </div>
         </div>
     </div>
     <div class = "review-section">
@@ -156,7 +159,7 @@
     .bindPopup('Park Location')
     .openPopup();
 </script>
-
+<script src="/public/js/forum.js"></script>
 
 
 
