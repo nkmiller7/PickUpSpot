@@ -62,7 +62,7 @@
                     Name: Anonymous<br>
                     {{/unless}}
                     Comment: {{content}}<br>
-                    Posted: {{createdAt}}
+                    Posted: {{convertToAMPM (getTime createdAt)}}
                     {{#if byUser}}
                     <form
                         action="/locations/{{../locationId}}"
@@ -118,7 +118,7 @@
                     {{/unless}}
                     Rating: {{rating}}<br>
                     Comment: {{comment}}<br>
-                    Posted: {{updatedAt}}<br>
+                    Posted: {{convertToAMPM (getTime updatedAt)}}<br>
                 </li>
              {{/each}}
              </ul>
