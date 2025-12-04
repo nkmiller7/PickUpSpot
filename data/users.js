@@ -139,7 +139,7 @@ const exportedMethods = {
   async userExists(email) {
     email = validation.checkEmail(email, "Email");
     const userCollection = await users();
-    const user = await userCollection.findOne({ email: email});
+    const user = await userCollection.findOne({ email: {"$regex": email, "$options": "i"}});
     return user !== null;
   }
 
