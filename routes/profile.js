@@ -67,6 +67,17 @@ router.get("/", async (req, res) => {
         index ===
         self.findIndex((g) => g._id.toString() === game._id.toString())
     );
+   
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    userGamesWithLocations = userGamesWithLocations.filter((game) => {
+      const start = new Date(game.startTime);
+      start.setHours(0, 0, 0, 0);
+      return start >= today;
+    });
+
     for (let i = 0; i < userGamesWithLocations.length; ++i) {
       userGamesWithLocations[i].date = userGamesWithLocations[
         i
