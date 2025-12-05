@@ -30,6 +30,7 @@
 }
 
 .location-address,
+.location-reports,
 .location-phone,
 .location-hours {
     display: flex;
@@ -41,6 +42,7 @@
 }
 
 .location-address i,
+.location-reports i,
 .location-phone i,
 .location-hours i {
     color: #2563eb;

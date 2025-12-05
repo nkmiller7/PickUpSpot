@@ -47,6 +47,10 @@ app.engine("handlebars", exphbs.engine({
     upperFirstLetter: function(str) {
         return (str[0].toUpperCase() + str.slice(1));
     },
+    getTime: function(stamp) {
+      let stampList= stamp.split(" ");
+      return stampList[4];
+    },
     convertToAMPM(time24hr) {
         let [hr, min] = time24hr.split(":");
         const isPM = hr >= 12;

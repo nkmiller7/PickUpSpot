@@ -169,25 +169,28 @@ async function seedReviews() {
                 "userId": users[0]._id.toString(),
                 "locationId": locations[0]._id.toString(),
                 "rating": 5,
-                "comment": "This park is awesome! I had so much fun!"
+                "comment": "This park is awesome! I had so much fun!",
+                "isReported": true
             },
             {
                 "userId": users[9]._id.toString(),
                 "locationId": locations[18]._id.toString(),
                 "rating": 3,
-                "comment": "This park is just ok."
+                "comment": "This park is just ok.",
+                "isReported": false
             },
             {
                 "userId": users[7]._id.toString(),
                 "locationId": locations[14]._id.toString(),
                 "rating": 1,
-                "comment": "This park is falling apart! It's sad to see :("
+                "comment": "This park is falling apart! It's sad to see :(",
+                "isReported": false
             },
         ];
         
         for (const review of reviewData) {
             try {
-                await reviewMethods.addReview(review.userId, review.locationId, review.rating, review.comment);
+                await reviewMethods.addReview(review.userId, review.locationId, review.rating, review.comment, review.isReported);
                 successCount++;
             } catch (e) {
                 errorCount++;
