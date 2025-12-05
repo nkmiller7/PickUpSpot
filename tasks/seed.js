@@ -127,13 +127,8 @@ async function seedUsers() {
         let i = 0;
         for (const user of userData) {
             try {
-                if(user.firstName === "Jared"){
-                    await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[0]._id.toString(), locations[i]._id.toString(), locations[i+1]._id.toString()]);
-                }else{
-                    await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[i]._id.toString(), locations[i+1]._id.toString()]);
-                }
-                successCount++;
-                i= i+2;
+                    await userMethods.addUser(user.firstName, user.lastName, user.email, user.password, user.isAnonymous, [locations[0]._id.toString(), locations[1]._id.toString(), locations[2]._id.toString(), locations[3]._id.toString(), locations[4]._id.toString(), locations[5]._id.toString(), locations[6]._id.toString()]);
+                    successCount++;
             } catch (e) {
                 errorCount++;
                 console.error(`Error adding user ${user.firstName}: ${e}`);
@@ -173,19 +168,98 @@ async function seedReviews() {
                 "isReported": true
             },
             {
-                "userId": users[9]._id.toString(),
-                "locationId": locations[18]._id.toString(),
+                "userId": users[4]._id.toString(),
+                "locationId": locations[0]._id.toString(),
+                "rating": 2.7,
+                "comment": "I'm not going to lie, this park has been better. The facilities need to be maintained better.",
+                "isReported": false
+            },
+            {
+                "userId": users[8]._id.toString(),
+                "locationId": locations[0]._id.toString(),
+                "rating": 4.8,
+                "comment": "I had a blast playing fun games with my old buddies here! Great time!",
+                "isReported": true
+            },
+            {
+                "userId": users[5]._id.toString(),
+                "locationId": locations[1]._id.toString(),
                 "rating": 3,
                 "comment": "This park is just ok.",
                 "isReported": false
             },
             {
+                "userId": users[9]._id.toString(),
+                "locationId": locations[1]._id.toString(),
+                "rating": 4,
+                "comment": "Great park, but I will say that there is construction currently being done on a number of the courts, so it might not be the best idea to come here right now.",
+                "isReported": true
+            },
+            {
+                "userId": users[2]._id.toString(),
+                "locationId": locations[1]._id.toString(),
+                "rating": 1,
+                "comment": "Gosh, it seems like they have been doing construction forever. When will this park finally open back up???!!",
+                "isReported": true
+            },
+            {
                 "userId": users[7]._id.toString(),
-                "locationId": locations[14]._id.toString(),
+                "locationId": locations[1]._id.toString(),
+                "rating": 3.8,
+                "comment": "Some solid facilities at this park! I will say it gets a little too crowded here sometimes, so I prefer to go to other parks during peak weekend hours",
+                "isReported": false
+            },
+            {
+                "userId": users[7]._id.toString(),
+                "locationId": locations[2]._id.toString(),
                 "rating": 1,
                 "comment": "This park is falling apart! It's sad to see :(",
                 "isReported": false
             },
+            {
+                "userId": users[2]._id.toString(),
+                "locationId": locations[2]._id.toString(),
+                "rating": 1.1,
+                "comment": "Will this park ever not be closed??? Used to come here all the time with my friends to play a pickup game or two, but it feels like this place is never open.",
+                "isReported": true
+            },
+            {
+                "userId": users[8]._id.toString(),
+                "locationId": locations[2]._id.toString(),
+                "rating": 1.5,
+                "comment": "Personally, the worst park I've ever been to. I do not like this place and I am never going here again.",
+                "isReported": false
+            },
+            {
+                "userId": users[3]._id.toString(),
+                "locationId": locations[3]._id.toString(),
+                "rating": 3.5,
+                "comment": "A pretty good park! At the basketball court, one of the hoops is currently broken which I thought was worth mentioning. The tennis courts are awesome, though!",
+                "isReported": false
+            },
+            {
+                "userId": users[6]._id.toString(),
+                "locationId": locations[3]._id.toString(),
+                "rating": 4.8,
+                "comment": "I've been coming here since I was just a kid, and it never gets old! Me and my friends frequently come here to play games of pickleball. Love it!",
+                "isReported": false
+            },
+            {
+                "userId": users[1]._id.toString(),
+                "locationId": locations[4]._id.toString(),
+                "rating": 2.5,
+                "comment": "Eh, I've seen better. The courts need more maintenance work, and there is this one group of teens who are always too rowdy when I am trying to have a peaceful Tuesday afternoon game. Shouldn't they be in school?",
+                "isReported": false
+            },
+            {
+                "userId": users[0]._id.toString(),
+                "locationId": locations[4]._id.toString(),
+                "rating": 2.7,
+                "comment": "Would come here so much more often if it wasn't for that group of annoying teenagers causing some sort of trouble. It's getting really aggrevating.",
+                "isReported": false
+            },
+
+
         ];
         
         for (const review of reviewData) {
@@ -228,6 +302,21 @@ async function seedForums() {
                 "userId": users[0]._id.toString(),
                 "content": "This park is awesome! I had so much fun!"
             },
+             {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[1]._id.toString(),
+                "content": "Nothing beats a sunny, clear day at this park playing pickleball!"
+            },
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[2]._id.toString(),
+                "content": "Why is everyone here so good at playing tennis? I need to up my game!"
+            },
+            {
+                "locationId": locations[0]._id.toString(),
+                "userId": users[8]._id.toString(),
+                "content": "A lot of great food trucks have been coming around this park lately! Yum!"
+            },
             {
                 "locationId": locations[0]._id.toString(),
                 "userId": users[9]._id.toString(),
@@ -237,6 +326,56 @@ async function seedForums() {
                 "locationId": locations[0]._id.toString(),
                 "userId": users[7]._id.toString(),
                 "content": "This park is falling apart! It's sad to see :("
+            },
+            {
+                "locationId": locations[1]._id.toString(),
+                "userId": users[4]._id.toString(),
+                "content": "I had a fun time today playing tennis at this park! Thanks to all who were part of my game!"
+            },
+            {
+                "locationId": locations[1]._id.toString(),
+                "userId": users[8]._id.toString(),
+                "content": "I can't wait until the upcoming pickup game this Saturday! I'm gonna score like never before!"
+            },
+            {
+                "locationId": locations[1]._id.toString(),
+                "userId": users[3]._id.toString(),
+                "content": "You can't beat me at Pickleball. There's just no possible way. Won't happen."
+            },
+            {
+                "locationId": locations[2]._id.toString(),
+                "userId": users[7]._id.toString(),
+                "content": "Is it just me, or did the basketball hoops get lower? It's getting easier and easier to dunk on all of you!"
+            },
+            {
+                "locationId": locations[2]._id.toString(),
+                "userId": users[8]._id.toString(),
+                "content": "The best time of day to come to this park is early in the morning. Many of the courts are still open, so you have a lot of space to just enjoy the game with your friends."
+            },
+             {
+                "locationId": locations[2]._id.toString(),
+                "userId": users[5]._id.toString(),
+                "content": "Can this park stay open a bit later please? Me and my friends like playing basketball late into the night!"
+            },
+            {
+                "locationId": locations[3]._id.toString(),
+                "userId": users[5]._id.toString(),
+                "content": "Hey all! Looking for a few people to join my pickup game on Thursday. I am not very advanced, so beginner level players are preferred."
+            },
+            {
+                "locationId": locations[3]._id.toString(),
+                "userId": users[9]._id.toString(),
+                "content": "There is one tennis court where a lot of birds have decided to do their business. This court definitely needs some cleaning!"
+            },
+            {
+                "locationId": locations[4]._id.toString(),
+                "userId": users[2]._id.toString(),
+                "content": "Wow, this park was really crowded today! I have to say, it makes sense though, because these courts are state-of-the-art!"
+            },
+            {
+                "locationId": locations[4]._id.toString(),
+                "userId": users[0]._id.toString(),
+                "content": "I tell ya, those teenagers who are always here are really annoying. I want to just play in peace, but they are always causing havoc!"
             },
         ];
         
