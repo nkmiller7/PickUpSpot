@@ -31,37 +31,54 @@ router.get("/:id", async (req, res) => {
       month: "long",
       day: "numeric",
     });
-    game.startTimeFmt = game.startTime.toLocaleTimeString(
-      "en-US",
-      {
-        hour: "2-digit",
-        minute: "2-digit",
-      }
-    );
+    game.startTimeFmt = game.startTime.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     game.endTimeFmt = game.endTime.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     });
 
-    const gameLocation = await locationData.getLocationById(game.locationId.toString());
+    const gameLocation = await locationData.getLocationById(
+      game.locationId.toString()
+    );
     game.locationName = gameLocation.name;
 
     game.numRegisteredPlayers = game.registeredPlayers.length;
     game.registeredPlayersNames = [];
     for (let i = 0; i < game.numRegisteredPlayers; ++i) {
-        const curUser = await userData.getUserById(game.registeredPlayers[i].toString());
-        game.registeredPlayersNames[i] = "Anonymous User";
-        if (curUser.isAnonymous === false) {
-            game.registeredPlayersNames[i] = `${curUser.firstName} ${curUser.lastName}`;
-        }
+      const curUser = await userData.getUserById(
+        game.registeredPlayers[i].toString()
+      );
+      game.registeredPlayersNames[i] = "Anonymous User";
+      if (curUser.isAnonymous === false) {
+        game.registeredPlayersNames[
+          i
+        ] = `${curUser.firstName} ${curUser.lastName}`;
+      }
     }
 
     res.render("games/single", {
       isGameDetailsPage: true,
-      isUserGameCreator: id === game.userId.toString(),
+      isUserGameCreator:
+        req.session.user.userId.toString() === game.userId.toString(),
       game: game,
       user: req.session.user,
     });
+  } catch (e) {
+    res.status(404).json({ error: e.toString() });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = validation.checkId(req.params.id);
+    const game = await gameData.getGameById(id);
+
+    await gameData.deleteGame(id, req.session.user.userId.toString());
+
+    res.json({message: "Game deleted."});
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }

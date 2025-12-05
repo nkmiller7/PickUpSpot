@@ -18,4 +18,45 @@
             </ul>
         </div>
     </div>
+
+    {{#if isUserGameCreator}}
+    <div class="game-creator-section">
+        <h2>Game Creator Controls</h2>
+        <a href="/games/{{game._id}}" class="delete-game-btn">Delete Game</a>
+    </div>
+    {{/if}}
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let deleteGameATag = document.getElementsByClassName("delete-game-btn");
+        if (deleteGameATag.length > 0) {
+            deleteGameATag[0].addEventListener("click", async function(e) {
+                e.preventDefault();
+                const deleteGameUrl = deleteGameATag[0].href;
+                const response = await fetch(deleteGameUrl, {
+                    method: "DELETE",
+                });
+                if (response.ok) {
+                    window.location.replace("locations/{{game.locationId}}");
+                } else {
+                    showNotification("Failed to delete the game.", "error");
+                }
+            })
+        }
+    });
+
+    function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.classList.add("show");
+        }, 10);
+        setTimeout(() => {
+            notification.classList.remove("show");
+        setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    };
+</script>
