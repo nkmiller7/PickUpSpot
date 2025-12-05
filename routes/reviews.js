@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import { reviewData } from '../data/index.js';
+import { locationData } from '../data/index.js';
 import validation from '../data/validation.js';
 import { users } from "../config/mongoCollections.js"; 
 import { reviews } from  "../config/mongoCollections.js"; 
@@ -97,8 +98,14 @@ router
       return;
     }
     try{
-      const {rating, comment} = formData;
-      const newReview= await reviewData.addReview(userId, locationId, rating, comment);
+      let isReported;
+      if(formData.reportCheckbox){
+        isReported=true;
+      }else{
+        isReported=false;
+      }
+      let {rating, comment} = formData;
+      const newReview= await reviewData.addReview(userId, locationId, rating, comment, isReported);
       res.redirect(`/locations/${locationId}`);
     }catch(e){
       res.status(500).json({error: e.toString()});
@@ -140,6 +147,12 @@ router
     }catch(e){
        errors.push(e);
     }
+    let isReported;
+    if(formData.reportCheckbox){
+      isReported=true;
+    }else{
+      isReported=false;
+    }
     try{
       const userCollection = await users();
       const user = await userCollection.findOne({email: req.session.user.email});
@@ -175,7 +188,7 @@ router
     }
     try{
       const {rating, comment} = formData;
-      const updatedReview= await reviewData.updateReview(userId, locationId, rating, comment);
+      const updatedReview= await reviewData.updateReview(userId, locationId, rating, comment, isReported);
       res.redirect(`/locations/${locationId}`);
     }catch(e){
       res.status(500).json({error: e.toString()});

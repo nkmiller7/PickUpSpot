@@ -51,13 +51,14 @@ const exportedMethods = {
                 location: location,
                 phone: phone || existingLocation.phone,
                 info: info || existingLocation.info,
+                numberOfReports: existingLocation.numberOfReports,
                 location: {
                     address: location,
                     coordinates: (lat && lon) ? {
                         lat: lat,
                         lon: lon
                     } : existingLocation.location.coordinates
-                }
+                },
             };
 
             const facilities = {
@@ -126,7 +127,8 @@ const exportedMethods = {
                         lat: parseFloat(lat),
                         lon: parseFloat(lon)
                     } : null
-                }
+                },
+                numberOfReports: 0
             };
 
             const insertInfo = await locationCollection.insertOne(newLocation);
@@ -169,6 +171,33 @@ const exportedMethods = {
             }
         }
         }).toArray();
+    },
+    async updateLocationReports(locationId, operation){
+        if(!locationId){
+            throw 'Error: Location ID not provided';
+        }
+        if(!operation){
+            throw 'Error: operation not provided';
+        }
+        locationId= validation.checkId(locationId, "Location ID");
+        operation= validation.checkString(operation, "Operation");
+        if(operation!=="+" && operation!=="-"){
+            throw 'Error: Invalid Operation';
+        }
+        const location = await this.getLocationById(locationId)
+        let newNumReports;
+        if(operation==="+"){
+            newNumReports = location.numberOfReports + 1;
+        }else{
+            newNumReports = location.numberOfReports - 1;
+        }
+        const locationCollection = await locations();
+        const locationUpdated = await locationCollection.updateOne({"_id": new ObjectId(locationId)}, {$set: {"numberOfReports": newNumReports}});
+        if(locationUpdated.matchedCount === 0){
+            throw 'Error: No location found with this ID.'
+        }
+        return (await this.getLocationById(locationId)).numberOfReports;
+        
     }
 };
 

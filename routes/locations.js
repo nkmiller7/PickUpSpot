@@ -136,6 +136,7 @@ router
             userName: user.firstName + " " + user.lastName,
             rating: r.rating,
             comment: r.comment,
+            isReported: r.isReported,
             createdAt: r.createdAt,
             updatedAt: createdAtString,
           });
@@ -143,6 +144,7 @@ router
           reviewList.push({
             rating: r.rating,
             comment: r.comment,
+            isReported: r.isReported,
             createdAt: r.createdAt,
             updatedAt: createdAtString,
           });
@@ -235,6 +237,7 @@ router
           userName: user.firstName + " " + user.lastName,
           rating: r.rating,
           comment: r.comment,
+          isReported: r.isReported,
           createdAt: r.createdAt,
           updatedAt: createdAtString,
         });
@@ -242,6 +245,7 @@ router
         reviewList.push({
           rating: r.rating,
           comment: r.comment,
+          isReported: r.isReported,
           createdAt: r.createdAt,
           updatedAt: createdAtString,
         });
@@ -362,6 +366,7 @@ router
           userName: user.firstName + " " + user.lastName,
           rating: r.rating,
           comment: r.comment,
+          isReported: r.isReported,
           createdAt: r.createdAt,
           updatedAt: createdAtString,
         });
@@ -369,6 +374,7 @@ router
         reviewList.push({
           rating: r.rating,
           comment: r.comment,
+          isReported: r.isReported,
           createdAt: r.createdAt,
           updatedAt: createdAtString,
         });
