@@ -1,0 +1,85 @@
+/* Game Details Container */
+.game-details-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Game Header */
+.game-header {
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.game-name {
+    font-size: 2.5rem;
+    color: #1e293b;
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+}
+
+.game-basic-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.game-location,
+.game-date,
+.game-hours {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: #475569;
+    margin: 0;
+}
+
+/* Players Section */
+.players-section {
+    margin-bottom: 3rem;
+}
+
+.players-section h2 {
+    font-size: 1.8rem;
+    color: #1e293b;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.attending-players ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.attending-players li {
+    background: #f1f5f9;
+    padding: 1.0rem;
+    border-radius: 8px;
+    border-left: 4px solid #2563eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.attending-players li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.attending-players li br {
+    margin-bottom: 0.5rem;
+}
+
+.attending-players li {
+    position: relative; 
+}

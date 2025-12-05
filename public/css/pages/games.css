@@ -195,7 +195,7 @@
 .scheduling-grid {
   display: grid;
   grid-template-columns: repeat(8, 100px);
-  grid-auto-rows: 40px;
+  grid-auto-rows: 36px;
   border: 1px solid #ccc;
   width: fit-content;
 }

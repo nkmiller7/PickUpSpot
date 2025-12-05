@@ -17,7 +17,51 @@ router.get("/:id", async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
     const game = await gameData.getGameById(id);
-    res.json(game);
+
+    /* Initialize game fields for rendering. */
+    const gameCreator = await userData.getUserById(game.userId.toString());
+    game.creatorFirstName = "Anonymous";
+    game.creatorLastName = "User";
+    if (gameCreator.isAnonymous === false) {
+      game.creatorFirstName = gameCreator.firstName;
+      game.creatorLastName = gameCreator.lastName;
+    }
+    game.date = game.startTime.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    game.startTimeFmt = game.startTime.toLocaleTimeString(
+      "en-US",
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    );
+    game.endTimeFmt = game.endTime.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const gameLocation = await locationData.getLocationById(game.locationId.toString());
+    game.locationName = gameLocation.name;
+
+    game.numRegisteredPlayers = game.registeredPlayers.length;
+    game.registeredPlayersNames = [];
+    for (let i = 0; i < game.numRegisteredPlayers; ++i) {
+        const curUser = await userData.getUserById(game.registeredPlayers[i].toString());
+        game.registeredPlayersNames[i] = "Anonymous User";
+        if (curUser.isAnonymous === false) {
+            game.registeredPlayersNames[i] = `${curUser.firstName} ${curUser.lastName}`;
+        }
+    }
+
+    res.render("games/single", {
+      isGameDetailsPage: true,
+      isUserGameCreator: id === game.userId.toString(),
+      game: game,
+      user: req.session.user,
+    });
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
@@ -73,10 +117,13 @@ router.get("/locations/:id", async (req, res) => {
         month: "long",
         day: "numeric",
       });
-      gameList[i].startTimeFmt = gameList[i].startTime.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      gameList[i].startTimeFmt = gameList[i].startTime.toLocaleTimeString(
+        "en-US",
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      );
       gameList[i].endTimeFmt = gameList[i].endTime.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",

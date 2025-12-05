@@ -1,0 +1,21 @@
+<div class="game-details-container">
+    <div class="game-header">
+        <h1 class="game-name">{{game.creatorFirstName}} {{game.creatorLastName}}'s {{upperFirstLetter game.skillLevel}} {{upperFirstLetter game.sport}} Game</h1>
+        <div class="game-basic-info">
+            <p class="game-location"><i class="fas fa-map-marker-alt"></i>{{game.locationName}}</p>
+            <p class="game-date"><i class="fas fa-calendar"></i>{{game.date}}</p>
+            <p class="game-hours"><i class="fas fa-clock"></i>{{game.startTimeFmt}} - {{game.endTimeFmt}}</p>
+        </div>
+    </div>
+
+    <div class="players-section">
+        <h2>Attending Players</h2>
+        <div class="attending-players">
+            <ul>
+            {{#each game.registeredPlayersNames}}
+            <li>{{this}}</li>
+            {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>
