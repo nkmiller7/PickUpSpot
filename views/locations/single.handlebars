@@ -7,6 +7,7 @@
             <p class="location-phone"><i class="fas fa-phone"></i> {{location.phone}}</p>
             {{/if}}
             <p class="location-hours"><i class="fas fa-clock"></i> {{convertToAMPM location.openingTime}} - {{convertToAMPM location.closingTime}}</p>
+            <p class="location-reports"><i class="fas fa-exclamation-triangle"></i>Closure/Construction Reports: {{location.numberOfReports}}</p>
         </div>
     </div>
 
@@ -62,7 +63,7 @@
                     Name: Anonymous<br>
                     {{/unless}}
                     Comment: {{content}}<br>
-                    Posted: {{createdAt}}
+                    Posted: {{convertToAMPM (getTime createdAt)}}
                     {{#if byUser}}
                     <form
                         action="/locations/{{../locationId}}"
@@ -118,7 +119,12 @@
                     {{/unless}}
                     Rating: {{rating}}<br>
                     Comment: {{comment}}<br>
-                    Posted: {{updatedAt}}<br>
+                    {{#if isReported}}
+                    Reported Closure/Construction: Yes
+                    {{else}}
+                    Reported Closure/Construction: No
+                    {{/if}}<br>
+                    Posted: {{convertToAMPM (getTime updatedAt)}}<br>
                 </li>
              {{/each}}
              </ul>

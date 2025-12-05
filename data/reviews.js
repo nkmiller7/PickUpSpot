@@ -1,5 +1,6 @@
 import { reviews } from "../config/mongoCollections.js";
 import validation from './validation.js';
+import locationData from "./locations.js";
 import { ObjectId } from 'mongodb';
 import { users } from "../config/mongoCollections.js"; 
 
@@ -35,7 +36,7 @@ const exportedMethods = {
     return reviewList;
   },
 
-  async addReview(userId, locationId, rating, comment) {
+  async addReview(userId, locationId, rating, comment, isReported) {
     userId = validation.checkId(userId, "User Id");
     userId = await validation.userExists(userId);
     const userCollection = await users();
@@ -62,11 +63,15 @@ const exportedMethods = {
     if(exists_letters===false){
       throw 'Error: Review comment must contain letters'
     }
+    if(typeof isReported!=="boolean"){
+      throw 'Error: isReported must be a boolean'
+    }
     const newReview = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
       rating: rating,
       comment: comment,
+      isReported: isReported,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -74,11 +79,14 @@ const exportedMethods = {
     const reviewCollection = await reviews();
     const insertInfo = await reviewCollection.insertOne(newReview);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add review';
+    if(isReported===true){
+        await locationData.updateLocationReports(locationId, "+");
+    }
     const newId = insertInfo.insertedId.toString();
     const review = await this.getReviewById(newId);
     return review;
   },
-  async updateReview(userId, locationId, rating, comment){
+  async updateReview(userId, locationId, rating, comment, isReported){
     userId = validation.checkId(userId, "User Id");
     userId = await validation.userExists(userId);
     const userCollection = await users();
@@ -99,11 +107,15 @@ const exportedMethods = {
     if(oldReview.length===0){
       throw `Could not update the review with User ID ${userId} and Location ID ${locationId}`;
     }
+    if(typeof isReported!== "boolean"){
+      throw 'isReported must be a boolean';
+    }
      let updatedReviewInfo = {
       userId: userIdData,
       locationId: locationIdData,
       rating: rating,
       comment: comment,
+      isReported: isReported,
       createdAt: oldReview[0].createdAt,
       updatedAt: new Date()
     };
@@ -114,6 +126,15 @@ const exportedMethods = {
     );
     if (!updateInfo)
       throw `Could not update the review with User ID ${userId} and Location ID ${locationId}`;
+    if(isReported){
+      if(!oldReview[0].isReported){
+        await locationData.updateLocationReports(locationId, "+");
+      }
+    }else{
+      if(oldReview[0].isReported){
+        await locationData.updateLocationReports(locationId, "-");
+      }
+    }
     return updateInfo.value;
   }
 };
