@@ -4,15 +4,6 @@ import validation from "../data/validation.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const gameList = await gameData.getAllGames();
-    res.json(gameList);
-  } catch (e) {
-    res.status(500).json({ error: e.toString() });
-  }
-});
-
 router.get("/:id", async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
