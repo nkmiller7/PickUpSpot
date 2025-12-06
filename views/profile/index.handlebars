@@ -63,9 +63,9 @@
             </div>
             <div class="game-actions">
               {{#if isOwner}}
-                <a href="/locations/{{location._id}}" class="game-btn view-location-btn">View Location</a>
+                <a href="/games/{{_id}}" class="game-btn view-location-btn">Game Details</a>
               {{else}}
-                <a href="/locations/{{location._id}}" class="game-btn view-location-btn">View Location</a>
+                <a href="/games/{{_id}}" class="game-btn view-location-btn">Game Details</a>
                 <button class="game-btn drop-game-btn" data-game-id="{{_id}}">Drop Game</button>
               {{/if}}
             </div>
