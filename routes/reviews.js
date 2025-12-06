@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import e, {Router} from 'express';
 import { reviewData } from '../data/index.js';
 import { locationData } from '../data/index.js';
 import validation from '../data/validation.js';
@@ -36,7 +36,7 @@ router
     }else{
       alreadyReviewed= true;
     }
-    res.render('review/review', {locationId: locationId, alreadyReviewed: alreadyReviewed, isReview: true});
+    res.render('review/review', {locationId: locationId, alreadyReviewed: alreadyReviewed, isReview: true, user: user});
   }catch(e){
     res.status(500).json({ error: e.toString() });
   }
@@ -46,6 +46,7 @@ router
     let errors = [];
     let locationId;
     let userId;
+    
     try{
       formData.rating = validation.checkNumber(formData.rating, 'Rating');
       if (formData.rating < 1 || formData.rating > 5) throw 'Error: Rating must be between 1 and 5';
@@ -87,13 +88,15 @@ router
       errors.push(e);
     }
     if (errors.length > 0){
+
       res.render(`review/review`, {
         locationId: locationId,
         errors: errors,
         hasErrors: true,
         rating: formData.rating,
         comment: formData.comment,
-        isReview: true
+        isReview: true,
+        user: this.user
       });
       return;
     }
@@ -182,7 +185,8 @@ router
         rating: formData.rating,
         alreadyReviewed: true,
         comment: formData.comment,
-        isReview: true
+        isReview: true,
+        user: this.user
       });
       return;
     }
