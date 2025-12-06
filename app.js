@@ -53,6 +53,7 @@ app.engine("handlebars", exphbs.engine({
     },
     convertToAMPM(time24hr) {
         let [hr, min] = time24hr.split(":");
+        hr = Number(hr);
         const isPM = hr >= 12;
         if (hr === 0)
             hr = 12;
