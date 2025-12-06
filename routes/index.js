@@ -23,7 +23,7 @@ const constructorMethod = (app) => {
   });
 
   app.use("{*splat}", (req, res) => {
-    return res.status(404).render("errors/404");
+    return res.status(404).render("errors/404", { user: req.session.user });
   });
 };
 
