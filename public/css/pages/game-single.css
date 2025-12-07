@@ -98,11 +98,20 @@
     gap: 0.5rem;
 }
 
+.game-creator-section h3 {
+    font-size: 1.3rem;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .delete-game-btn {
     display: inline-block;
     padding: 0.8rem 2.5rem;
-    margin-right: 15px;
+    margin-top: 15px;
     margin-left: 15px;
+    margin-right: 15px;
     background: linear-gradient(135deg, #eb2525 0%, #d81d1d 100%);
     color: white;
     text-decoration: none;
@@ -121,6 +130,53 @@
 
 .delete-game-btn:active {
     transform: translateY(0);
+}
+
+.update-game-btn {
+    display: inline-block;
+    padding: 0.8rem 2.5rem;
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+}
+
+.update-game-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.4);
+}
+
+.update-game-btn:active {
+    transform: translateY(0);
+}
+
+.update-game-select {
+    display: block;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px; 
+    background: white;
+    font-size: 13px;
+    min-width: 100px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.update-game-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 2px 12px rgba(0, 123, 255, 0.3);
 }
 
 /* Notifications */

@@ -31,8 +31,14 @@ app.use(session({
 app.engine("handlebars", exphbs.engine({ 
   defaultLayout: "main",
   helpers: {
+    lt: function (a, b) {
+        return a < b;
+    },
+    gt : function (a, b) {
+        return a > b;
+    },
     eq: function(a, b) {
-      return a === b;
+      return a == b;
     },
     json: function(a) {
         return JSON.stringify(a);
