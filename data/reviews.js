@@ -46,6 +46,11 @@ const exportedMethods = {
     if(!user.parksAttended.includes(locationId)){
       throw "Error: User must have visited the park to leave a review";
     }
+    const reviewCollection = await reviews();
+    let userReviews= await reviewCollection.find({$and: [{userId: new ObjectId(userId)}, {locationId: new ObjectId(locationId)}]}).toArray();
+    if(userReviews.length > 0){
+      throw "Error: User has already reviewed this park";
+    }
     rating = validation.checkNumber(rating, 'Rating');
     if (rating < 1 || rating > 5) throw 'Error: Rating must be between 1 and 5';
     if (rating.toString().includes(".") && rating.toString().split(".")[1].length > 1){
@@ -75,8 +80,6 @@ const exportedMethods = {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-
-    const reviewCollection = await reviews();
     const insertInfo = await reviewCollection.insertOne(newReview);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add review';
     if(isReported===true){

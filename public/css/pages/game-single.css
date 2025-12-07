@@ -1,0 +1,151 @@
+/* Game Details Container */
+.game-details-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Game Header */
+.game-header {
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.game-name {
+    font-size: 2.5rem;
+    color: #1e293b;
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+}
+
+.game-basic-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.game-location,
+.game-date,
+.game-hours {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: #475569;
+    margin: 0;
+}
+
+/* Players Section */
+.players-section {
+    margin-bottom: 3rem;
+}
+
+.players-section h2 {
+    font-size: 1.8rem;
+    color: #1e293b;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.attending-players ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.attending-players li {
+    background: #f1f5f9;
+    padding: 1.0rem;
+    border-radius: 8px;
+    border-left: 4px solid #2563eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.attending-players li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.attending-players li br {
+    margin-bottom: 0.5rem;
+}
+
+.attending-players li {
+    position: relative; 
+}
+
+/* Game Creator Section */
+.game-creator-section {
+    margin-bottom: 3rem;
+}
+
+.game-creator-section h2 {
+    font-size: 1.8rem;
+    color: #1e293b;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.delete-game-btn {
+    display: inline-block;
+    padding: 0.8rem 2.5rem;
+    margin-right: 15px;
+    margin-left: 15px;
+    background: linear-gradient(135deg, #eb2525 0%, #d81d1d 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(235, 37, 37, 0.3);
+}
+
+.delete-game-btn:hover {
+    background: linear-gradient(135deg, #d81d1d 0%, #af1e1e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(235, 37, 37, 0.4);
+}
+
+.delete-game-btn:active {
+    transform: translateY(0);
+}
+
+/* Notifications */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification-success {
+  background: #48bb78;
+}
+
+.notification-error {
+  background: #e53e3e;
+}

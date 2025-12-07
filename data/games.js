@@ -1,7 +1,6 @@
 import { games } from "../config/mongoCollections.js";
 import validation from "./validation.js";
 import { ObjectId } from "mongodb";
-import { locations } from "../config/mongoCollections.js";
 import { locationData } from "../data/index.js";
 
 const exportedMethods = {
@@ -54,20 +53,25 @@ const exportedMethods = {
     userId = validation.checkId(userId, "User ID");
 
     const gameCollection = await games();
-    const game = await gameCollection.findOne({ _id : new ObjectId(gameId)});
+    const game = await gameCollection.findOne({ _id: new ObjectId(gameId) });
 
     if (!game) throw `Error: Game with ID ${gameId} not found`;
 
-    const updatedPlayers = game.registeredPlayers.filter((playerId) => playerId.toString() !== userId);
+    const updatedPlayers = game.registeredPlayers.filter(
+      (playerId) => playerId.toString() !== userId
+    );
 
-    if (updatedPlayers.length === game.registeredPlayers.length) throw "Error: User with ID not found in registered players"; 
-  
+    if (updatedPlayers.length === game.registeredPlayers.length)
+      throw "Error: User with ID not found in registered players";
+
     const updateInfo = await gameCollection.updateOne(
       { _id: new ObjectId(gameId) },
       { $set: { registeredPlayers: updatedPlayers } }
     );
-    
-    const updatedGame = await gameCollection.findOne({ _id: new ObjectId(gameId) });
+
+    const updatedGame = await gameCollection.findOne({
+      _id: new ObjectId(gameId),
+    });
     return updatedGame;
   },
 
@@ -85,19 +89,18 @@ const exportedMethods = {
     userId = await validation.userExists(userId);
     locationId = validation.checkId(locationId, "Location ID");
     locationId = await validation.locationExists(locationId);
-    
+
     startTime = validation.checkISO8601String(startTime, "Start Time");
     endTime = validation.checkISO8601String(endTime, "End Time");
-    startTime = new Date(startTime)
-    endTime = new Date(endTime)
+    startTime = new Date(startTime);
+    endTime = new Date(endTime);
 
     sport = validation.checkSport(sport, "Sport");
     courtNumber = validation.checkNumber(courtNumber, "Court Number");
     skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");
 
-    if (endTime <= startTime)
-      throw "Error: End time must be after start time";
-    if (((endTime - startTime) / (1000 * 60)) > 180)
+    if (endTime <= startTime) throw "Error: End time must be after start time";
+    if ((endTime - startTime) / (1000 * 60) > 180)
       throw "Error: Game duration cannot exceed 3 hours";
 
     const location = await locationData.getLocationById(locationId);
@@ -132,7 +135,7 @@ const exportedMethods = {
         throw "Error: Too many players for basketball";
       }
     }
-    
+
     const newGame = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),
@@ -203,6 +206,29 @@ const exportedMethods = {
       { returnDocument: "after" }
     );
     return updatedGame;
+  },
+
+  async deleteGame(gameId, userId) {
+    // Validation
+    gameId = validation.checkId(gameId, "Game ID");
+    userId = validation.checkId(userId, "User ID");
+    gameId = await validation.gameExists(gameId);
+    userId = await validation.userExists(userId);
+
+    const gameToDelete = await this.getGameById(gameId);
+
+    // Ensure the user trying to delete the game is the creator
+    if (gameToDelete.userId.toString() !== userId) {
+      throw "Error: User is not the creator of the game";
+    }
+
+    const gameCollection = await games();
+    const result = await gameCollection.deleteOne({
+      _id: new ObjectId(gameId),
+    });
+    if (result.deletedCount !== 1) {
+      throw "Error: Failed to delete the game";
+    }
   },
 };
 
