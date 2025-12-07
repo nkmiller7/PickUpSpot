@@ -62,14 +62,39 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.patch("/:id", async (req, res) => {
+  try {
+    let gameId = validation.checkId(req.params.id, "Game ID");
+    let userId = validation.checkId(req.session.user.userId.toString(), "User ID");
+    gameId = await validation.gameExists(gameId);
+    userId = await validation.userExists(userId);
+
+    const skillLevel = validation.checkSkillLevel(
+      req.body.skillLevel,
+      "Skill Level"
+    );
+    const desiredParticipants = validation.checkNumber(
+      req.body.desiredParticipants,
+      "Desired Participants"
+    );
+
+    const result = await gameData.updateGame(gameId, userId, desiredParticipants, skillLevel);
+    res.json(result);
+  } catch (e) {
+    res.status(404).json({ error: e.toString() });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   try {
-    const id = validation.checkId(req.params.id);
-    const game = await gameData.getGameById(id);
+    let gameId = validation.checkId(req.params.id, "Game ID");
+    let userId = validation.checkId(req.session.user.userId.toString(), "User ID");
+    gameId = await validation.gameExists(gameId);
+    userId = await validation.userExists(userId);
 
-    await gameData.deleteGame(id, req.session.user.userId.toString());
+    await gameData.deleteGame(id, userId);
 
-    res.json({message: "Game deleted."});
+    res.json({ message: "Game deleted." });
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }

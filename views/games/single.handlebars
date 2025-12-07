@@ -22,6 +22,53 @@
     {{#if isUserGameCreator}}
     <div class="game-creator-section">
         <h2>Game Creator Controls</h2>
+
+        <form method="POST" action="/games/{{game._id}}" id="update-game-form">
+            <h3>Skill Level</h3>
+            <select name="skillLevel" class="update-game-select">
+                <option value="beginner" {{#if (eq "beginner" game.skillLevel)}} selected {{/if}}>Beginner</option>
+                <option value="intermediate" {{#if (eq "intermediate" game.skillLevel)}} selected {{/if}}>Intermediate</option>
+                <option value="advanced" {{#if (eq "advanced" game.skillLevel)}} selected {{/if}}>Advanced</option>
+            </select>
+
+            <h3>Desired Participants</h3>
+            {{#if (eq "basketball" game.sport)}}
+                <select name="desiredParticipants" class="update-game-select">
+                    <option value="2" {{#if (eq 2 game.desiredParticipants)}} selected {{/if}} {{#if (lt 2 game.numRegisteredPlayers)}} disabled {{/if}}>2 Players</option>
+                    <option value="3" {{#if (eq 3 game.desiredParticipants)}} selected {{/if}} {{#if (lt 3 game.numRegisteredPlayers)}} disabled {{/if}}>3 Players</option>
+                    <option value="4" {{#if (eq 4 game.desiredParticipants)}} selected {{/if}} {{#if (lt 4 game.numRegisteredPlayers)}} disabled {{/if}}>4 Players</option>
+                    <option value="5" {{#if (eq 5 game.desiredParticipants)}} selected {{/if}} {{#if (lt 5 game.numRegisteredPlayers)}} disabled {{/if}}>5 Players</option>
+                    <option value="6" {{#if (eq 6 game.desiredParticipants)}} selected {{/if}} {{#if (lt 6 game.numRegisteredPlayers)}} disabled {{/if}}>6 Players</option>
+                    <option value="7" {{#if (eq 7 game.desiredParticipants)}} selected {{/if}} {{#if (lt 7 game.numRegisteredPlayers)}} disabled {{/if}}>7 Players</option>
+                    <option value="8" {{#if (eq 8 game.desiredParticipants)}} selected {{/if}} {{#if (lt 8 game.numRegisteredPlayers)}} disabled {{/if}}>8 Players</option>
+                    <option value="9" {{#if (eq 9 game.desiredParticipants)}} selected {{/if}} {{#if (lt 9 game.numRegisteredPlayers)}} disabled {{/if}}>9 Players</option>
+                    <option value="10" {{#if (eq 10 game.desiredParticipants)}} selected {{/if}} {{#if (lt 10 game.numRegisteredPlayers)}} disabled {{/if}}>10 Players</option>
+                    <option value="11" {{#if (eq 11 game.desiredParticipants)}} selected {{/if}} {{#if (lt 11 game.numRegisteredPlayers)}} disabled {{/if}}>11 Players</option>
+                    <option value="12" {{#if (eq 12 game.desiredParticipants)}} selected {{/if}} {{#if (lt 12 game.numRegisteredPlayers)}} disabled {{/if}}>12 Players</option>
+                    <option value="13" {{#if (eq 13 game.desiredParticipants)}} selected {{/if}} {{#if (lt 13 game.numRegisteredPlayers)}} disabled {{/if}}>13 Players</option>
+                    <option value="14" {{#if (eq 14 game.desiredParticipants)}} selected {{/if}} {{#if (lt 14 game.numRegisteredPlayers)}} disabled {{/if}}>14 Players</option>
+                    <option value="15" {{#if (eq 15 game.desiredParticipants)}} selected {{/if}} {{#if (lt 15 game.numRegisteredPlayers)}} disabled {{/if}}>15 Players</option>
+                    <option value="16" {{#if (eq 16 game.desiredParticipants)}} selected {{/if}} {{#if (lt 16 game.numRegisteredPlayers)}} disabled {{/if}}>16 Players</option>
+                    <option value="17" {{#if (eq 17 game.desiredParticipants)}} selected {{/if}} {{#if (lt 17 game.numRegisteredPlayers)}} disabled {{/if}}>17 Players</option>
+                    <option value="18" {{#if (eq 18 game.desiredParticipants)}} selected {{/if}} {{#if (lt 18 game.numRegisteredPlayers)}} disabled {{/if}}>18 Players</option>
+                    <option value="19" {{#if (eq 19 game.desiredParticipants)}} selected {{/if}} {{#if (lt 19 game.numRegisteredPlayers)}} disabled {{/if}}>19 Players</option>
+                    <option value="20" {{#if (eq 20 game.desiredParticipants)}} selected {{/if}} {{#if (lt 20 game.numRegisteredPlayers)}} disabled {{/if}}>20 Players</option>
+                </select>
+            {{else}}
+                <select name="desiredParticipants" class="update-game-select">
+                    <option value="2" {{#if (eq 2 game.desiredParticipants)}} selected {{/if}} {{#if (lt 2 game.numRegisteredPlayers)}} disabled {{/if}}>2 Players</option>
+                    <option value="3" {{#if (eq 3 game.desiredParticipants)}} selected {{/if}} {{#if (lt 3 game.numRegisteredPlayers)}} disabled {{/if}}>3 Players</option>
+                    <option value="4" {{#if (eq 4 game.desiredParticipants)}} selected {{/if}} {{#if (lt 4 game.numRegisteredPlayers)}} disabled {{/if}}>4 Players</option>
+                    <option value="5" {{#if (eq 5 game.desiredParticipants)}} selected {{/if}} {{#if (lt 5 game.numRegisteredPlayers)}} disabled {{/if}}>5 Players</option>
+                    <option value="6" {{#if (eq 6 game.desiredParticipants)}} selected {{/if}} {{#if (lt 6 game.numRegisteredPlayers)}} disabled {{/if}}>6 Players</option>
+                    <option value="7" {{#if (eq 7 game.desiredParticipants)}} selected {{/if}} {{#if (lt 7 game.numRegisteredPlayers)}} disabled {{/if}}>7 Players</option>
+                    <option value="8" {{#if (eq 8 game.desiredParticipants)}} selected {{/if}} {{#if (lt 8 game.numRegisteredPlayers)}} disabled {{/if}}>8 Players</option>
+                </select>
+            {{/if}}
+
+            <button type="submit" class="update-game-btn">Update Game</button>
+        </form>
+
         <a href="/games/{{game._id}}" class="delete-game-btn">Delete Game</a>
     </div>
     {{/if}}
@@ -29,7 +76,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        let deleteGameATag = document.getElementsByClassName("delete-game-btn");
+        const deleteGameATag = document.getElementsByClassName("delete-game-btn");
         if (deleteGameATag.length > 0) {
             deleteGameATag[0].addEventListener("click", async function(e) {
                 e.preventDefault();
@@ -43,6 +90,30 @@
                     showNotification("Failed to delete the game.", "error");
                 }
             })
+        }
+
+        const updateGameForm = document.getElementById("update-game-form");
+        if (updateGameForm) {
+            updateGameForm.addEventListener("submit", async function(e) {
+                e.preventDefault();
+
+                const updateGameBody = {
+                    skillLevel: updateGameForm.skillLevel.value,
+                    desiredParticipants: parseInt(updateGameForm.desiredParticipants.value)
+                };
+                const response = await fetch(updateGameForm.action, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updateGameBody),
+                });
+                if (!response.ok) {
+                    showNotification("Failed to update game.", "error");
+                } else {
+                    window.location.reload();
+                }
+            });
         }
     });
 

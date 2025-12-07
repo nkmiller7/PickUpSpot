@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
               }
             }
           }, 500);
+
+          window.location.reload();
         } else {
           throw new Error("Failed to drop game");
         }

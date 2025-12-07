@@ -205,6 +205,48 @@ const exportedMethods = {
       gameToJoin,
       { returnDocument: "after" }
     );
+    if (updatedGame === null) {
+      throw "Error: Failed to update game";
+    }
+    return updatedGame;
+  },
+
+  async updateGame(gameId, userId, desiredParticipants, skillLevel) {
+    // Validation
+    gameId = validation.checkId(gameId, "Game ID");
+    userId = validation.checkId(userId, "User ID");
+    gameId = await validation.gameExists(gameId);
+    userId = await validation.userExists(userId);
+    skillLevel = validation.checkSkillLevel(skillLevel, "Skill Level");
+    desiredParticipants = validation.checkNumber(
+      desiredParticipants,
+      "Desired Participants"
+    );
+
+    let gameToUpdate = await this.getGameById(gameId);
+
+    // Ensure the user trying to update the game is the creator
+    if (gameToUpdate.userId.toString() !== userId) {
+      throw "Error: User is not the creator of the game";
+    }
+    // Ensure the number of desired participants isn't below the number of actively registered players
+    if (desiredParticipants < gameToUpdate.registeredPlayers.length) {
+      throw "Error: Cannot reduce the number of desired participants below the current number of registered players";
+    }
+
+    gameToUpdate.skillLevel = skillLevel;
+    gameToUpdate.desiredParticipants = desiredParticipants;
+
+    const gameCollection = await games();
+    const updatedGame = await gameCollection.findOneAndReplace(
+      { _id: new ObjectId(gameId) },
+      gameToUpdate,
+      { returnDocument: "after" }
+    );
+    if (updatedGame === null) {
+      throw "Error: Failed to update game";
+    }
+
     return updatedGame;
   },
 
