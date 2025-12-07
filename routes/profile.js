@@ -6,6 +6,7 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   try {
+    if (!req.session.user) return res.redirect("/");
     let user = await userData.getUserByEmail(req.session.user.email);
     user.createdAtFmt = user.createdAt.toLocaleDateString("en-US", {
       year: "numeric",
@@ -114,6 +115,7 @@ router.get("/", async (req, res) => {
 
 router.post("/toggle-anonymous", async (req, res) => {
   try {
+    if (!req.session.user) return res.status(401).json({ error: "Not authenticated" });
     let { isAnonymous } = req.body;
 
     if (typeof isAnonymous !== "boolean") {
@@ -142,6 +144,7 @@ router.post("/toggle-anonymous", async (req, res) => {
 
 router.post("/update-favorites", async (req, res) => {
   try {
+    if (!req.session.user) return res.status(401).json({ error: "Not authenticated" });
     const user = await userData.getUserByEmail(req.session.user.email);
     const { locationId, action } = req.body;
 

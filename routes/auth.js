@@ -38,7 +38,7 @@ router.post("/login", async (req, res) => {
       email: user.email,
       isAnonymous: user.isAnonymous || false
     };
-    return res.redirect("/locations");
+    return res.redirect("/home");
   } catch (e) {
     let errorMessage = "Invalid email or password";
     
@@ -86,7 +86,7 @@ router.post("/signup", async (req, res) => {
       isAnonymous: newUser.isAnonymous || false
     };
 
-    return res.redirect("/locations");
+    return res.redirect("/home");
   } catch (e) {
     return res.status(400).render("signup/index", {
       layout: "landing",
