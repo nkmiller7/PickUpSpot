@@ -92,7 +92,7 @@ router.delete("/:id", async (req, res) => {
     gameId = await validation.gameExists(gameId);
     userId = await validation.userExists(userId);
 
-    await gameData.deleteGame(id, userId);
+    await gameData.deleteGame(gameId, userId);
 
     res.json({ message: "Game deleted." });
   } catch (e) {
