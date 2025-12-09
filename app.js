@@ -109,6 +109,13 @@ app.use("/login", (req, res, next) => {
   next();
 });
 
+app.use("/signup", (req, res, next) => {
+  if (req.session.user)
+    return res.redirect("/locations");
+  req.method = "POST";
+  next();
+});
+
 configRoutesFunction(app);
 
 app.listen(3000, () => {
