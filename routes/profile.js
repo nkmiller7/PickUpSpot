@@ -166,4 +166,22 @@ router.post("/update-favorites", async (req, res) => {
   }
 });
 
+router.post("/update-location", async (req, res) => {
+  try {
+    if (!req.session.user) return res.status(401).json({ error: "Not authenticated" });
+    const { lat, lng } = req.body;
+
+    const userLat = parseFloat(lat);
+    const userLng = parseFloat(lng);
+    if (isNaN(userLat) || isNaN(userLng) || userLat < -90 || userLat > 90 || userLng < -180 || userLng > 180) {
+      return res.status(400).json({ error: "Invalid coordinates" });
+    }
+
+    req.session.user.location = { lat: userLat, lng: userLng };
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 export default router;

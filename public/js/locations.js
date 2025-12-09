@@ -2,6 +2,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('.search-form');
     if (!form) return;
 
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                fetch('/profile/update-location', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({lat: position.coords.latitude,lng: position.coords.longitude})
+                }).catch(err => console.warn('Failed to update location:', err));
+            },
+            () => console.warn('Geolocation permissions denied'),
+            { timeout: 5000 }
+        );
+    }
+
     const { searchTerm, searchSport, searchAccessible, searchCourttype, searchIndooroutdoor } = form.dataset;
 
     const sportSelect = document.querySelector('select[name="sport"]');
@@ -9,6 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const courtTypeSelect = document.querySelector('select[name="courtType"]');
     const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
     const searchInput = document.querySelector('input[name="searchTerm"]');
+
+    form.addEventListener('submit', (e) => {
+        if (searchInput && searchInput.value.trim() === '') {
+            searchInput.value = '';
+        }
+    });
 
     if (searchInput && typeof searchTerm !== 'undefined') {
         searchInput.value = searchTerm;

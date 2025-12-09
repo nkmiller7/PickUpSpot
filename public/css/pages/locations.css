@@ -249,6 +249,21 @@
   color: #ff4b4b;
 }
 
+.location-distance {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.location-distance i {
+    color: #333;
+    width: 16px;
+}
+
 
 /* Responsive design for smaller screens */
 @media (max-width: 1024px) {
