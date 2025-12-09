@@ -112,8 +112,13 @@
             
             let games = {{{json games}}};
             let scheduledGames = games.filter((game) => {
-                return  game.sport === sportFilter.value && 
+                if (sportFilter.value === "pickleball" || sportFilter.value === "tennis") {
+                    return  game.sport === "tennis" || game.sport === "pickleball" && 
+                            game.courtNumber === parseInt(courtFilter.value.split(" ")[1]);
+                } else {
+                    return  game.sport === "basketball" && 
                         game.courtNumber === parseInt(courtFilter.value.split(" ")[1]);
+                }
             });
 
             for (let i = 0; i < scheduledGames.length; ++i) {
