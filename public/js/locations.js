@@ -24,6 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const indoorOutdoorSelect = document.querySelector('select[name="indoorOutdoor"]');
     const searchInput = document.querySelector('input[name="searchTerm"]');
 
+    form.addEventListener('submit', (e) => {
+        if (searchInput && searchInput.value.trim() === '') {
+            searchInput.value = '';
+        }
+    });
+
     if (searchInput && typeof searchTerm !== 'undefined') {
         searchInput.value = searchTerm;
     }
