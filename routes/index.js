@@ -1,7 +1,6 @@
 import userRoutes from "./users.js";
 import locationRoutes from "./locations.js";
 import reviewRoutes from "./reviews.js";
-import forumRoutes from "./forums.js";
 import aboutRoutes from "./about.js";
 import authRoutes from "./auth.js"
 import gameRoutes from "./games.js";
