@@ -1,10 +1,7 @@
 <div class="search-bar">
-        <form action="/locations" method="GET" class="search-form"
-            data-search-term="{{searchValues.searchTerm}}"
-            data-search-sport="{{searchValues.sport}}"
-            data-search-accessible="{{searchValues.accessible}}"
-            data-search-courttype="{{searchValues.courtType}}"
-            data-search-indooroutdoor="{{searchValues.indoorOutdoor}}">
+    <form action="/locations" method="GET" class="search-form" data-search-term="{{searchValues.searchTerm}}"
+        data-search-sport="{{searchValues.sport}}" data-search-accessible="{{searchValues.accessible}}"
+        data-search-courttype="{{searchValues.courtType}}" data-search-indooroutdoor="{{searchValues.indoorOutdoor}}">
         <div class="search-input-row">
             <input type="text" name="searchTerm" placeholder="Search locations..." value="{{searchValues.searchTerm}}"
                 class="search-input">
@@ -47,72 +44,76 @@
     <p>Found {{resultCount}} location(s) {{#if searchValues.searchTerm}}for "{{searchValues.searchTerm}}"{{/if}}</p>
 </div>
 {{else}}
-    {{#if resultCount}}
-        <div class="search-results-info">
-            <p>Showing {{resultCount}} location(s)</p>
-        </div>
-    {{/if}}
+{{#if resultCount}}
+<div class="search-results-info">
+    <p>Showing {{resultCount}} location(s)</p>
+</div>
+{{/if}}
 {{/if}}
 
 
-    <div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
-        {{#if locations.length}}
-            {{#each locations}}
-            <div class="location-card">
-                <h2 class="location-name">{{name}}
-                    {{#if facilities.tennis.numCourts}}
-                        <i class="ph ph-tennis-ball"></i>
-                    {{/if}}
-                    {{#if facilities.basketball.numCourts}}
-                        <i class="ph ph-basketball"></i>
-                    {{/if}}
-                    {{#if facilities.tennis.numCourts}}
-                        {{#if (eq facilities.tennis.surfaceType "Hard")}}
-                            <i class="ph ph-ping-pong" title="Pickleball available (hard courts)"></i>
-                        {{/if}}
-                    {{/if}}
-                </h2>
-                <button class="favorite-btn" data-id="{{_id}}">
-                    {{#if isFavorite}}
-                        <i class="fas fa-heart favorited"></i>
-                    {{else}}
-                        <i class="far fa-heart"></i>
-                    {{/if}}
-                </button>
-                <div class="location-info">
-                    <p class="location-hours"><i class="fas fa-clock"></i>{{convertToAMPM openingTime}} - {{convertToAMPM closingTime}}</p>
-                    <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
-                    {{#if phone}}
-                    <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
-                    {{/if}}
-                    {{#if info}}
-                    <p class="location-details">{{info}}</p>
-                    {{/if}}
-                </div>
-                <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
-            </div>
-            {{/each}}
-        {{else}}
-            <div class="no-results">
-                <div class="no-results-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h3 class="no-results-title">No locations found</h3>
-                <p class="no-results-message">
-                    Try adjusting your search filters or search for something else.
-                </p>
-                <div class="no-results-suggestions">
-                    <p class="suggestions-title">Suggestions:</p>
-                    <ul>
-                        <li>Try searching for a different location name</li>
-                        <li>Clear some filters to broaden your search</li>
-                        <li>Check for typos in your search term</li>
-                    </ul>
-                </div>
-            </div>
-        {{/if}}
+<div class="locations-container{{#unless locations.length}} no-results-container{{/unless}}">
+    {{#if locations.length}}
+    {{#each locations}}
+    <div class="location-card">
+        <h2 class="location-name">{{name}}
+            {{#if facilities.tennis.numCourts}}
+            <i class="ph ph-tennis-ball"></i>
+            {{/if}}
+            {{#if facilities.basketball.numCourts}}
+            <i class="ph ph-basketball"></i>
+            {{/if}}
+            {{#if facilities.tennis.numCourts}}
+            {{#if (eq facilities.tennis.surfaceType "Hard")}}
+            <i class="ph ph-ping-pong" title="Pickleball available (hard courts)"></i>
+            {{/if}}
+            {{/if}}
+        </h2>
+        <button class="favorite-btn" data-id="{{_id}}">
+            {{#if isFavorite}}
+            <i class="fas fa-heart favorited"></i>
+            {{else}}
+            <i class="far fa-heart"></i>
+            {{/if}}
+        </button>
+        <div class="location-info">
+            {{#if distance}}
+            <p class="location-distance"><i class="fa-solid fa-map-pin"></i>{{distance}} miles away</p>
+            {{/if}}
+            <p class="location-hours"><i class="fas fa-clock"></i>{{convertToAMPM openingTime}} - {{convertToAMPM
+                closingTime}}</p>
+            <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
+            {{#if phone}}
+            <p class="location-phone"><i class="fas fa-phone"></i> {{phone}}</p>
+            {{/if}}
+            {{#if info}}
+            <p class="location-details">{{info}}</p>
+            {{/if}}
+        </div>
+        <a href="/locations/{{_id}}" class="view-details-btn">View Details</a>
     </div>
+    {{/each}}
+    {{else}}
+    <div class="no-results">
+        <div class="no-results-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <h3 class="no-results-title">No locations found</h3>
+        <p class="no-results-message">
+            Try adjusting your search filters or search for something else.
+        </p>
+        <div class="no-results-suggestions">
+            <p class="suggestions-title">Suggestions:</p>
+            <ul>
+                <li>Try searching for a different location name</li>
+                <li>Clear some filters to broaden your search</li>
+                <li>Check for typos in your search term</li>
+            </ul>
+        </div>
+    </div>
+    {{/if}}
+</div>
 
-    
+
 
 <script src="/public/js/locations.js" defer></script>

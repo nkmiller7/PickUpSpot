@@ -3,7 +3,7 @@ import { locationData } from "../data/index.js";
 import { forumData } from "../data/index.js";
 import { userData } from "../data/index.js";
 import { reviewData } from "../data/index.js";
-import { searchLocation } from "../data/Query.js";
+import { searchLocation,haversineDistance } from "../data/Query.js";
 import { users } from "../config/mongoCollections.js";
 import validation from "../data/validation.js";
 import { reviews } from "../config/mongoCollections.js";
@@ -66,6 +66,17 @@ router.get("/", async (req, res) => {
 
     locationList = locationList.map((location) => {
       let isFavorite = user.favorites.includes(location._id.toString());
+
+      if (req.session.user?.location && location.location?.coordinates) {
+        const userLat = req.session.user.location.lat;
+        const userLng = req.session.user.location.lng;
+        const { lat: locLat, lon: locLng } = location.location.coordinates;
+        
+        if (locLat && locLng) {
+          location.distance = haversineDistance(userLat, userLng, locLat, locLng).toFixed(1);
+        }
+      }
+
       return { ...location, isFavorite };
     });
 
