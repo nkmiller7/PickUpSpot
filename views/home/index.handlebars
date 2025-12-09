@@ -1,22 +1,23 @@
 <div class="home-container">
   {{#if isLoggedIn}}
-    <div class="home-content">
-      <h1>Welcome, {{user.firstName}}!</h1>
-      <h2>PickUpSpot</h2>
-      <p>Discover and review sports courts in your area. Find the perfect place
-        to play your favorite sport.</p>
-      <div class="button-group">
-        <a href="/locations" class="btn-primary">Explore Courts</a>
-        <a href="/profile" class="btn-secondary">Profile</a>
-        <a href="/logout" class="btn-secondary">Sign Out</a>
-      </div>
+  <div class="home-content">
+    <h1>Welcome, {{user.firstName}}!</h1>
+    <h2>PickUpSpot</h2>
+    <p>Find the perfect place
+      to play your favorite sport, and build an amazing community.</p>
+    <div class="button-group">
+      <a href="/locations" class="btn-primary">Explore Courts</a>
+      <a href="/profile" class="btn-secondary">Profile</a>
+      <a href="/logout" class="btn-secondary">Sign Out</a>
     </div>
+  </div>
   {{else}}
-    <div class="home-content">
-      <h1>Welcome to PickUpSpot</h1>
-      <h2>"For the love of the game!"</h2>
-      <p>Discover and review sports courts in your area. Find the perfect place
-        to play your favorite sport.</p>
-    </div>
+  <div class="home-content">
+    <h1>Welcome to PickUpSpot</h1>
+    <h2>"For the love of the game!"</h2>
+    <p>Find the perfect place
+      to play your favorite sport, and build an amazing community.</p>
+    <p>Please log in or sign up to continue.</p>
+  </div>
   {{/if}}
 </div>
