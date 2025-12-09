@@ -3,9 +3,9 @@ import locationRoutes from "./locations.js";
 import reviewRoutes from "./reviews.js";
 import forumRoutes from "./forums.js";
 import aboutRoutes from "./about.js";
-import authRoutes from "./auth.js"
+import authRoutes from "./auth.js";
 import gameRoutes from "./games.js";
-import profileRoutes from "./profile.js"; 
+import profileRoutes from "./profile.js";
 import inboxRoutes from "./inbox.js";
 import homeRoutes from "./home.js";
 
@@ -15,13 +15,16 @@ const constructorMethod = (app) => {
   app.use("/reviews", reviewRoutes);
   app.use("/forums", forumRoutes);
   app.use("/about", aboutRoutes);
-  app.use("/games", gameRoutes)
-  app.use("/profile", profileRoutes); 
+  app.use("/games", gameRoutes);
+  app.use("/profile", profileRoutes);
   app.use("/inbox", inboxRoutes);
   app.use("/", authRoutes);
-  app.use("/home", homeRoutes);
   app.get("/", (req, res) => {
-    return res.render("landing/index", { layout: "landing" });
+    return res.render("home/index", {
+      user: req.session.user,
+      isLoggedIn: !!req.session.user,
+      isHomePage: true
+    });
   });
 
   app.use("{*splat}", (req, res) => {

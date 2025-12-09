@@ -105,14 +105,14 @@ app.use("/users", (req, res, next) => {
 app.use("/login", (req, res, next) => {
   if (req.session.user)
     return res.redirect("/locations");
-  req.method = "POST";
+  // req.method = "POST";
   next();
 });
 
 app.use("/signup", (req, res, next) => {
   if (req.session.user)
     return res.redirect("/locations");
-  req.method = "POST";
+  // req.method = "POST";
   next();
 });
 
