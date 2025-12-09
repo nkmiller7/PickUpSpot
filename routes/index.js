@@ -13,7 +13,6 @@ const constructorMethod = (app) => {
   app.use("/users", userRoutes);
   app.use("/locations", locationRoutes);
   app.use("/reviews", reviewRoutes);
-  app.use("/forums", forumRoutes);
   app.use("/about", aboutRoutes);
   app.use("/games", gameRoutes)
   app.use("/profile", profileRoutes); 

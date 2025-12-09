@@ -58,7 +58,7 @@ router.get("/:id", async (req, res) => {
       user: req.session.user,
     });
   } catch (e) {
-    res.status(404).json({ error: e.toString() });
+    res.status(404).render("errors/404", {error: e.toString() });
   }
 });
 
@@ -81,7 +81,7 @@ router.patch("/:id", async (req, res) => {
     const result = await gameData.updateGame(gameId, userId, desiredParticipants, skillLevel);
     res.json(result);
   } catch (e) {
-    res.status(404).json({ error: e.toString() });
+    res.status(404).render("errors/404", {error: e.toString() });
   }
 });
 
@@ -96,7 +96,7 @@ router.delete("/:id", async (req, res) => {
 
     res.json({ message: "Game deleted." });
   } catch (e) {
-    res.status(404).json({ error: e.toString() });
+    res.status(404).render("errors/404", {error: e.toString() });
   }
 });
 
@@ -106,7 +106,7 @@ router.get("/users/:id", async (req, res) => {
     const gameList = await gameData.getGamesByUserId(id);
     res.json(gameList);
   } catch (e) {
-    res.status(404).json({ error: e.toString() });
+    res.status(404).render("errors/404", {error: e.toString() });
   }
 });
 
@@ -206,7 +206,7 @@ router.get("/locations/:id", async (req, res) => {
       user: req.session.user,
     });
   } catch (e) {
-    res.status(404).json({ error: e.toString() });
+    res.status(404).render("errors/404", {error: e.toString() });
   }
 });
 
@@ -269,7 +269,7 @@ router.post("/leave", async (req, res) => {
     );
     res.status(200).json({ message: "Successfully dropped from game" });
   } catch (e) {
-    res.status(404).json({ error: e.toString() });
+    res.status(404).render("errors/404", {error: e.toString() });
   }
 });
 
