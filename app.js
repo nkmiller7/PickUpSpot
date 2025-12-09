@@ -76,11 +76,6 @@ app.use("/about", (req, res, next) => {
     return res.redirect("/");
   next();
 });
-app.use("/forums", (req, res, next) => {
-  if (!req.session.user)
-    return res.redirect("/");
-  next();
-});
 app.use("/games", (req, res, next) => {
   if (!req.session.user)
     return res.redirect("/");
