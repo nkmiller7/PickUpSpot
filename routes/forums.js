@@ -1,3 +1,4 @@
+/*
 import {Router} from 'express';
 import { forumData } from '../data/index.js';
 import { userData } from '../data/index.js';
@@ -64,3 +65,4 @@ router.post('/locations/:id', async(req, res) => {
 
 
 export default router;
+*/

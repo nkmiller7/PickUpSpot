@@ -76,11 +76,6 @@ app.use("/about", (req, res, next) => {
     return res.redirect("/");
   next();
 });
-app.use("/forums", (req, res, next) => {
-  if (!req.session.user)
-    return res.redirect("/");
-  next();
-});
 app.use("/games", (req, res, next) => {
   if (!req.session.user)
     return res.redirect("/");
@@ -103,6 +98,13 @@ app.use("/users", (req, res, next) => {
 });
 
 app.use("/login", (req, res, next) => {
+  if (req.session.user)
+    return res.redirect("/locations");
+  req.method = "POST";
+  next();
+});
+
+app.use("/signup", (req, res, next) => {
   if (req.session.user)
     return res.redirect("/locations");
   req.method = "POST";

@@ -8,6 +8,7 @@ import { ObjectId } from "mongodb";
 
 const router = Router();
 
+/*
 router.get('/', async (req, res) => {
   try {
     const reviewList = await reviewData.getAllReviews();
@@ -16,13 +17,14 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: e.toString() });
   }
 });
+*/
 
 router
 .route('/review/:id')
 .get(async (req, res) => {
   try{
     let alreadyReviewed;
-    const locationId= req.params.id;
+    const locationId= validation.checkId(req.params.id);
     const userCollection = await users();
     const user = await userCollection.findOne({email: req.session.user.email});
     if(!user){
@@ -38,7 +40,7 @@ router
     }
     res.render('review/review', {locationId: locationId, alreadyReviewed: alreadyReviewed, isReview: true, user: user});
   }catch(e){
-    res.status(500).json({ error: e.toString() });
+    res.status(404).render("errors/404", { error: e.toString() });
   }
 })
 .post(async (req, res) => {
@@ -46,7 +48,11 @@ router
     let errors = [];
     let locationId;
     let userId;
-    
+    try{
+      locationId = validation.checkId(req.params.id, "Location ID");
+    }catch(e){
+       res.status(404).render("errors/404", { error: e.toString() });
+    }
     try{
       formData.rating = validation.checkNumber(formData.rating, 'Rating');
       if (formData.rating < 1 || formData.rating > 5) throw 'Error: Rating must be between 1 and 5';
@@ -71,11 +77,6 @@ router
       }
     }catch(e){
       errors.push(e);
-    }
-    try{
-      locationId = validation.checkId(req.params.id, "Location ID");
-    }catch(e){
-       errors.push(e);
     }
     try{
       const userCollection = await users();
@@ -120,6 +121,11 @@ router
     let locationId;
     let userId;
     try{
+      locationId = validation.checkId(req.params.id, "Location ID");
+    }catch(e){
+       res.status(404).render("errors/404", { error: e.toString() });
+    }
+    try{
       formData.rating = validation.checkNumber(formData.rating, 'Rating');
       if (formData.rating < 1 || formData.rating > 5) throw 'Error: Rating must be between 1 and 5';
       if (formData.rating.toString().includes(".") && formData.rating.toString().split(".")[1].length > 1){
@@ -143,12 +149,6 @@ router
       }
     }catch(e){
       errors.push(e);
-    }
-    
-    try{
-      locationId = validation.checkId(req.params.id, "Location ID");
-    }catch(e){
-       errors.push(e);
     }
     let isReported;
     if(formData.reportCheckbox){
@@ -198,7 +198,7 @@ router
       res.status(500).json({error: e.toString()});
     }
   });
-
+/*
 router.get('/:id', async (req, res) => {
   try {
     const id = validation.checkId(req.params.id);
@@ -227,8 +227,9 @@ router.get('/locations/:id', async (req, res) => {
   } catch (e) {
     res.status(404).json({ error: e.toString() });
   }
-});
 
+});
+*/
 
 
 export default router;
