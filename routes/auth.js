@@ -5,23 +5,31 @@ import bcrypt from "bcrypt";
 
 const router = Router();
 
-
 router.get("/signup", (req, res) => {
   return res.render("signup/index", { layout: "landing" });
 });
-
 
 router.get("/login", (req, res) => {
   if (req.session.user) {
     return res.redirect("/locations");
   }
-  return res.redirect("/");
+  return res.render("login/index", { layout: "landing" });
 });
 
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
+    if (!email || !password) {
+      return res.status(400).render("login/index", {
+        layout: "landing",
+        error: "Email and password are required",
+        formData: {
+          email: (req.body && req.body.email) || "",
+        },
+      });
+    }
+
     const validPassword = validation.checkString(password, "Password");
 
     const user = await userData.getUserByEmail(email);
@@ -36,12 +44,12 @@ router.post("/login", async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      isAnonymous: user.isAnonymous || false
+      isAnonymous: user.isAnonymous || false,
     };
-    return res.redirect("/home");
+    return res.redirect("/");
   } catch (e) {
     let errorMessage = "Invalid email or password";
-    
+
     if (e.message && e.message.includes("Email")) {
       errorMessage = "Please enter a valid email address";
     } else if (e.message && e.message.includes("User not found")) {
@@ -51,13 +59,13 @@ router.post("/login", async (req, res) => {
     } else if (e.message && e.message.includes("Incorrect password")) {
       errorMessage = "Incorrect password";
     }
-    
-    return res.status(400).render("landing/index", {
-      layout: "landing", 
+
+    return res.status(400).render("login/index", {
+      layout: "landing",
       error: errorMessage,
       formData: {
-        email: req.body.email || ""
-      }
+        email: (req.body && req.body.email) || "",
+      },
     });
   }
 });
@@ -69,34 +77,57 @@ router.get("/logout", (req, res) => {
 
 router.post("/signup", async (req, res) => {
   try {
-    const { firstName, lastName, email, password, isAnonymous,isOfAge } = req.body;
-    const anonymousUser = isAnonymous === "on"; 
+    const { firstName, lastName, email, password, isAnonymous, isOfAge } =
+      req.body;
 
-    if(!isOfAge){
-      throw new Error("You must confirm that you are at least 18 years old to sign up.");
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).render("signup/index", {
+        layout: "landing",
+        error: "First name, last name, email, and password are all required",
+        formData: {
+          firstName: (req.body && req.body.firstName) || "",
+          lastName: (req.body && req.body.lastName) || "",
+          email: (req.body && req.body.email) || "",
+          isAnonymous: (req.body && req.body.isAnonymous) || false,
+        },
+      });
     }
 
-    const newUser = await userData.addUser(firstName, lastName, email, password, anonymousUser);
+    const anonymousUser = isAnonymous === "on";
+
+    if (!isOfAge) {
+      throw new Error(
+        "You must confirm that you are at least 18 years old to sign up."
+      );
+    }
+
+    const newUser = await userData.addUser(
+      firstName,
+      lastName,
+      email,
+      password,
+      anonymousUser
+    );
 
     req.session.user = {
       userId: newUser._id.toString(),
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,
-      isAnonymous: newUser.isAnonymous || false
+      isAnonymous: newUser.isAnonymous || false,
     };
 
-    return res.redirect("/home");
+    return res.redirect("/");
   } catch (e) {
     return res.status(400).render("signup/index", {
       layout: "landing",
       error: e.message || "Signup failed. Please try again.",
       formData: {
-        firstName: req.body.firstName || "",
-        lastName: req.body.lastName || "",
-        email: req.body.email || "",
-        isAnonymous: req.body.isAnonymous || false
-      }
+        firstName: (req.body && req.body.firstName) || "",
+        lastName: (req.body && req.body.lastName) || "",
+        email: (req.body && req.body.email) || "",
+        isAnonymous: (req.body && req.body.isAnonymous) || false,
+      },
     });
   }
 });
