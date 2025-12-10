@@ -13,25 +13,25 @@
     <div>
         <label>
             First Name
-            <input type="text" name="firstName" placeholder="First Name" value="{{formData.firstName}}" autocomplete="given-name" required>
+            <input type="text" name="firstName" placeholder="First Name" value="{{formData.firstName}}" autocomplete="given-name">
         </label>
     </div>
     <div>
         <label>
             Last Name
-            <input type="text" name="lastName" placeholder="Last Name" value="{{formData.lastName}}" autocomplete="family-name" required>
+            <input type="text" name="lastName" placeholder="Last Name" value="{{formData.lastName}}" autocomplete="family-name">
         </label>
     </div>
     <div>
         <label>
             Email
-            <input type="email" name="email" placeholder="Email" value="{{formData.email}}" autocomplete="email" required>
+            <input type="email" name="email" placeholder="Email" value="{{formData.email}}" autocomplete="email">
         </label>
     </div>
     <div>
         <label>
             Password
-            <input type="password" name="password" placeholder="Password" autocomplete="new-password" required>
+            <input type="password" name="password" placeholder="Password" autocomplete="new-password">
         </label>
     </div>
     <div class="toggle-container">
@@ -43,7 +43,7 @@
     </div>
     <div class="ageCheckbox-container">
         <label class="ageCheckbox-label">
-            <input type="checkbox" name="isOfAge" class="age-input" {{#if formData.isOfAge}}checked{{/if}} required>
+            <input type="checkbox" name="isOfAge" class="age-input" {{#if formData.isOfAge}}checked{{/if}}>
             <span class="ageCheckbox-label-text">I confirm that I am at least 18 years old.</span>
         </label>
     </div>
@@ -55,3 +55,5 @@
     </div>
 </form>
 </div>
+
+<script src="/public/js/auth.js"></script>
