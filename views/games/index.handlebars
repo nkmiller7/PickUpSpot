@@ -354,7 +354,7 @@
                     return;
                 }
 
-                const endTime = selectedTimes[selectedTimes.length - 1];
+                const endTime = new Date(selectedTimes[selectedTimes.length - 1].getTime());
                 endTime.setHours(endTime.getHours() + 1);
                 const createGameBody = {
                     locationId: "{{location._id}}",
