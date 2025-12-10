@@ -53,6 +53,10 @@ app.engine("handlebars", exphbs.engine({
     upperFirstLetter: function(str) {
         return (str[0].toUpperCase() + str.slice(1));
     },
+    getDate: function(stamp) {
+      let stampList = stamp.split(" ");
+      return stampList[1]+ " " +stampList[2] +" "+stampList[3]
+    },
     getTime: function(stamp) {
       let stampList= stamp.split(" ");
       return stampList[4];
