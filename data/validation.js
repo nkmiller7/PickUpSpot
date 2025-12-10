@@ -107,11 +107,7 @@ const exportedMethods = {
       throw "Error: date inputs must be of type Date";
     }
 
-    return (
-      (startTimeAndDateA === startTimeAndDateB && endTimeAndDateA === endTimeAndDateB) ||
-      (startTimeAndDateA >= startTimeAndDateB && startTimeAndDateA < endTimeAndDateB) ||
-      (endTimeAndDateA >= startTimeAndDateB && endTimeAndDateA < endTimeAndDateB)
-    );
+    return startTimeAndDateA < endTimeAndDateB && startTimeAndDateB < endTimeAndDateA;
   },
   isLetter(c) {
     return (
