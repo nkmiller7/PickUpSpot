@@ -140,24 +140,26 @@ router
       const ratings = [];
       for (let r of reviewsOld) {
         let user = await userData.getUserById(r.userId.toString());
-        let createdAtList = r.updatedAt.toString().split(":");
+        let createdAtList = r.createdAt.toString().split(":");
         let createdAtString = createdAtList[0] + ":" + createdAtList[1];
+        let updatedAtList = r.updatedAt.toString().split(":");
+        let updatedAtString = updatedAtList[0] + ":" + updatedAtList[1];
         if (user.isAnonymous === false) {
           reviewList.push({
             userName: user.firstName + " " + user.lastName,
             rating: r.rating,
             comment: r.comment,
             isReported: r.isReported,
-            createdAt: r.createdAt,
-            updatedAt: createdAtString,
+            createdAt: createdAtString,
+            updatedAt: updatedAtString,
           });
         } else {
           reviewList.push({
             rating: r.rating,
             comment: r.comment,
             isReported: r.isReported,
-            createdAt: r.createdAt,
-            updatedAt: createdAtString,
+            createdAt: createdAtString,
+            updatedAt: updatedAtString,
           });
         }
         ratings.push(r.rating);

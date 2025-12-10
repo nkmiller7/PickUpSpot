@@ -63,7 +63,7 @@
                     Name: Anonymous<br>
                     {{/unless}}
                     Comment: {{content}}<br>
-                    Posted: {{convertToAMPM (getTime createdAt)}}
+                    Posted: {{getDate createdAt}} {{convertToAMPM (getTime createdAt)}}
                     {{#if byUser}}
                     <form
                         action="/locations/{{../locationId}}"
@@ -124,7 +124,10 @@
                     {{else}}
                     Reported Closure/Construction: No
                     {{/if}}<br>
-                    Posted: {{convertToAMPM (getTime updatedAt)}}<br>
+                    Posted: {{getDate createdAt}} {{convertToAMPM (getTime createdAt)}}<br>
+                    {{#if ../alreadyReviewed}}
+                    Last Edited: {{getDate updatedAt}} {{convertToAMPM (getTime updatedAt)}}
+                    {{/if}}
                 </li>
              {{/each}}
              </ul>
