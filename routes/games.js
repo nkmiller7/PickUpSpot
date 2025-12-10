@@ -231,6 +231,7 @@ router.post("/create", async (req, res) => {
       "Start Time"
     );
     const endTime = validation.checkISO8601String(req.body.endTime, "End Time");
+    // console.log(startTime, endTime);
     const desiredParticipants = validation.checkNumber(
       req.body.desiredParticipants,
       "Desired Participants"
@@ -253,8 +254,10 @@ router.post("/create", async (req, res) => {
       courtNumber,
       skillLevel
     );
+    // console.log(createdGame);
     res.json(createdGame);
   } catch (e) {
+    // console.log(e); 
     res.status(500).json({ error: e.toString() });
   }
 });

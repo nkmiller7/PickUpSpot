@@ -136,6 +136,23 @@ const exportedMethods = {
       }
     }
 
+    const userGames = await this.getGamesByUserIdParticipant(userId);
+    const userGamesOwnered = await this.getGamesByUserId(userId);
+    const allUserGames = userGames.concat(userGamesOwnered);
+
+    const isConflict = allUserGames.some((game) =>
+      validation.timeConflictExist(
+        startTime,
+        endTime,
+        game.startTime,
+        game.endTime
+      )
+    );
+
+    if (isConflict) {
+      throw "Error: User has a scheduling conflict with another game";
+    }
+
     const newGame = {
       userId: new ObjectId(userId),
       locationId: new ObjectId(locationId),

@@ -354,7 +354,7 @@
                     return;
                 }
 
-                const endTime = selectedTimes[selectedTimes.length - 1];
+                const endTime = new Date(selectedTimes[selectedTimes.length - 1].getTime());
                 endTime.setHours(endTime.getHours() + 1);
                 const createGameBody = {
                     locationId: "{{location._id}}",
@@ -374,7 +374,7 @@
                     body: JSON.stringify(createGameBody),
                 });
                 if (!response.ok) {
-                    showNotification("Failed to create game.", "error");
+                    showNotification((await response.json()).error, "error");
                 } else {
                     window.location.reload();
                 }
