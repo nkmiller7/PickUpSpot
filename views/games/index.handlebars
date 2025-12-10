@@ -374,7 +374,7 @@
                     body: JSON.stringify(createGameBody),
                 });
                 if (!response.ok) {
-                    showNotification("Failed to create game.", "error");
+                    showNotification((await response.json()).error, "error");
                 } else {
                     window.location.reload();
                 }
