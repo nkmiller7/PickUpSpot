@@ -107,6 +107,16 @@ function validateSignupForm(form, errorContainer) {
             if (!/[0-9]/.test(password)) {
                 errors.push('Password must contain at least one number');
             }
+            let specialChars = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+            let hasSpecial= false;
+            for(let c of password){
+                if(specialChars.includes(c)){
+                hasSpecial=true;
+                }
+            }
+            if(hasSpecial===false){
+                errors.push('Password must contain at least one special character');
+            }
         } else {
             errors.push('Password is required');
         }

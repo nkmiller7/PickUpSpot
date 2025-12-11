@@ -24,7 +24,7 @@
     "firstName": "Marc",
     "lastName": "Sulsenti",
     "email": "marc@example.com",
-    "password": "bfo^Rbvnmwpef",
+    "password": "bfo!Rbvnmw0",
     "isAnonymous": true
     },
     {
@@ -66,7 +66,7 @@
     "firstName": "Aaron",
     "lastName": "Klappholtz",
     "email": "aaron@example.com",
-    "password": "Cy72q3fonieg&",
+    "password": "Cy72q3fonieg!",
     "isAnonymous": false
     }
 ]
