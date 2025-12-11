@@ -6,12 +6,15 @@ import bcrypt from "bcrypt";
 const router = Router();
 
 router.get("/signup", (req, res) => {
+  if (req.session.user) {
+    return res.redirect("/");
+  }
   return res.render("signup/index", { layout: "landing" });
 });
 
 router.get("/login", (req, res) => {
   if (req.session.user) {
-    return res.redirect("/locations");
+    return res.redirect("/");
   }
   return res.render("login/index", { layout: "landing" });
 });

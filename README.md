@@ -4,7 +4,13 @@ Stevens Institute of Technology CS 546 Web Programming Final Project
 ## About PickUpSpot
 A web application that helps users discover and review sports courts and recreational facilities in their area. Users can search by location, sport type, and amenities, view detailed court information, leave reviews, and save favorite spots.
 
-PickUpSpot uses New York City Parks Open Data for its location informaton.S
+PickUpSpot uses New York City Parks Open Data for its location informaton.
+
+https://data.cityofnewyork.us/Recreation/Directory-of-Basketball-Courts/b937-zdky/about_data
+
+https://data.cityofnewyork.us/Recreation/Directory-of-Tennis-Courts/dies-sqgi/about_data
+
+
 
 ## Team Members
 - Noah Miller
@@ -51,6 +57,9 @@ Search and discover sports courts. Filter by sport type (basketball, tennis, pic
 ### Location Details
 Detailed information about a specific court including address, amenities, reviews, ratings, and the option to leave your own review.
 
+### Games
+This is the page meant for scheduling games. Scheduling is done via a heatmap. Users here may either create their own game or tag along with others. If they created their own game, the user can edit or delete their game at this page. The users can also view the details of other games scheduled. 
+
 ### Reviews
 View all reviews you've written and leave new reviews for courts you've visited.
 
@@ -67,7 +76,8 @@ Information about PickUpSpot and its creators.
 
 
 We hope you enjoy using PickUpSpot!
-- The PickUpSpot team
+
+The PickUpSpot team
 
 
 

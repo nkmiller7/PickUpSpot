@@ -112,6 +112,17 @@ router
       const userId = user._id.toString();
       const id = validation.checkId(req.params.id);
       const location = await locationData.getLocationById(id);
+      
+      if (req.session.user?.location && location.location?.coordinates) {
+        const userLat = req.session.user.location.lat;
+        const userLng = req.session.user.location.lng;
+        const { lat: locLat, lon: locLng } = location.location.coordinates;
+        
+        if (locLat && locLng) {
+          location.distance = haversineDistance(userLat, userLng, locLat, locLng).toFixed(1);
+        }
+      }
+      
       const forumOld = await forumData.getForumMessagesByLocationId(id);
       const forum = [];
       for (let c of forumOld.reverse()) {

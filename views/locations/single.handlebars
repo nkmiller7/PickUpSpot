@@ -2,6 +2,9 @@
     <div class="location-header">
         <h1 class="location-name">{{location.name}}</h1>
         <div class="location-basic-info">
+            {{#if location.distance}}
+            <p class="location-distance"><i class="fa-solid fa-map-pin"></i> {{location.distance}} miles</p>
+            {{/if}}
             <p class="location-address"><i class="fas fa-map-marker-alt"></i> {{location.location.address}}</p>
             {{#if location.phone}}
             <p class="location-phone"><i class="fas fa-phone"></i> {{location.phone}}</p>

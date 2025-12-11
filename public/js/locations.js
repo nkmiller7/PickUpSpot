@@ -9,7 +9,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({lat: position.coords.latitude,lng: position.coords.longitude})
-                }).catch(err => console.warn('Failed to update location:', err));
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isFirstUpdate) {
+                        location.reload();
+                    }
+                })
+                .catch(err => console.warn('Failed to update location:', err));
             },
             () => console.warn('Geolocation permissions denied'),
             { timeout: 5000 }

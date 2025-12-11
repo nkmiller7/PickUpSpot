@@ -76,8 +76,6 @@ app.engine("handlebars", exphbs.engine({
 app.set("view engine", "handlebars");
 
 app.use("/about", (req, res, next) => {
-  if (!req.session.user)
-    return res.redirect("/");
   next();
 });
 app.use("/games", (req, res, next) => {
@@ -103,14 +101,14 @@ app.use("/users", (req, res, next) => {
 
 app.use("/login", (req, res, next) => {
   if (req.session.user)
-    return res.redirect("/locations");
+    return res.redirect("/");
   // req.method = "POST";
   next();
 });
 
 app.use("/signup", (req, res, next) => {
   if (req.session.user)
-    return res.redirect("/locations");
+    return res.redirect("/");
   // req.method = "POST";
   next();
 });
