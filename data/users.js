@@ -86,12 +86,43 @@ const exportedMethods = {
     } catch (e) {
       throw new Error("Please enter a valid email address");
     }
-    
+    /*
+    if (passwordInput) {
+          const password = passwordInput.value;
+          if (password.length < 8) {
+              errors.push('Password must be at least 8 characters');
+          }
+          if (!/[A-Z]/.test(password)) {
+              errors.push('Password must contain at least one uppercase letter');
+          }
+          if (!/[0-9]/.test(password)) {
+              errors.push('Password must contain at least one number');
+          }
+      } else {
+          errors.push('Password is required');
+      }
+          */
     // Validate password
     try {
       password = validation.checkString(password, 'Password');
       if(password.length < 8){
         throw new Error("Password must be at least 8 characters long");
+      }
+      if (!/[A-Z]/.test(password)) {
+        throw new Error('Password must contain at least one uppercase letter');
+      }
+      if (!/[0-9]/.test(password)) {
+        throw new Error('Password must contain at least one number');
+      }
+      let specialChars = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+      let hasSpecial= false;
+      for(let c of password){
+        if(specialChars.includes(c)){
+          hasSpecial=true;
+        }
+      }
+      if(hasSpecial===false){
+        throw new Error('Password must contain at least one special character');
       }
     } catch (e) {
       throw new Error(e.message || "Password is required");

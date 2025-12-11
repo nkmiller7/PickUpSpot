@@ -95,7 +95,6 @@ router.post("/signup", async (req, res) => {
         },
       });
     }
-
     const anonymousUser = isAnonymous === "on";
 
     if (!isOfAge) {
