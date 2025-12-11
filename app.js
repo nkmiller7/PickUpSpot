@@ -76,8 +76,6 @@ app.engine("handlebars", exphbs.engine({
 app.set("view engine", "handlebars");
 
 app.use("/about", (req, res, next) => {
-  if (!req.session.user)
-    return res.redirect("/");
   next();
 });
 app.use("/games", (req, res, next) => {
