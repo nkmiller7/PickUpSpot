@@ -193,9 +193,39 @@
     transform: translateY(-5px);
 }
 
+.location-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
 .location-name {
     color: #333;
-    margin-bottom: .25rem;
+    margin-bottom: 0;
+    font-size: 1.5rem;
+    flex: 1;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.2);
+}
+
+.location-sports-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
     font-size: 1.5rem;
 }
 
@@ -222,6 +252,7 @@
     background-color: #007bff;
     color: white;
     padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
     border-radius: 5px;
     text-decoration: none;
     transition: background-color 0.2s ease-in-out;
