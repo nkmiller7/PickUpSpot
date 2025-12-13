@@ -104,7 +104,7 @@ const exportedMethods = {
           */
     // Validate password
     try {
-      password = validation.checkString(password, 'Password');
+      password = validation.checkStringPass(password, 'Password');
       if(password.length < 8){
         throw new Error("Password must be at least 8 characters long");
       }
@@ -113,6 +113,9 @@ const exportedMethods = {
       }
       if (!/[0-9]/.test(password)) {
         throw new Error('Password must contain at least one number');
+      }
+      if(password.includes(" ")){
+        throw new Error('Password contains an empty space');
       }
       let specialChars = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
       let hasSpecial= false;

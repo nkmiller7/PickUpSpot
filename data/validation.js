@@ -22,6 +22,13 @@ const exportedMethods = {
       throw `Error: ${varName} cannot be an empty string or string with just spaces`;
     return strVal;
   },
+  checkStringPass(strVal, varName){
+    if (!strVal) throw `Error: You must supply a ${varName}!`;
+    if (typeof strVal !== "string") throw `Error: ${varName} must be a string!`;
+    if (strVal.length === 0)
+      throw `Error: ${varName} cannot be an empty string or string with just spaces`;
+    return strVal;
+  },
   checkNumber(numVal, varName) {
     if (numVal === undefined || numVal === null)
       throw `Error: You must supply a ${varName}.`;
@@ -119,7 +126,7 @@ const exportedMethods = {
     return c.charCodeAt(0) >= 128 && c.charCodeAt(0) <= 165;
   },
   checkName(name, varName) {
-    if (name.length < 2 || name.length > 50) {
+    if (name.length < 2 || name.length > 20) {
       throw `Error: Invalid ${varName} length`;
     }
     for (let c of name) {
