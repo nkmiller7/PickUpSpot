@@ -10,8 +10,6 @@ https://data.cityofnewyork.us/Recreation/Directory-of-Basketball-Courts/b937-zdk
 
 https://data.cityofnewyork.us/Recreation/Directory-of-Tennis-Courts/dies-sqgi/about_data
 
-
-
 ## Team Members
 - Noah Miller
 - Jacob Pellini
@@ -31,7 +29,7 @@ https://data.cityofnewyork.us/Recreation/Directory-of-Tennis-Courts/dies-sqgi/ab
    npm install
    ```
 
-3. Seed the database (optional)
+3. Seed the database
    ```bash
    npm run seed
    ```
@@ -42,6 +40,12 @@ https://data.cityofnewyork.us/Recreation/Directory-of-Tennis-Courts/dies-sqgi/ab
    ```
 
 5. Open `http://localhost:3000` in your browser
+
+Feel free to create your own account or you can use the account information below to login to an account that has some pre-seeded data. 
+
+Account Info:
+Email: noah@example.com
+Password: $2a$10$XdvNkfdNIL8F8xsuIUeSbN
 
 ## Pages
 
