@@ -80,7 +80,7 @@ router.get("/logout", (req, res) => {
 
 router.post("/signup", async (req, res) => {
   try {
-    const { firstName, lastName, email, password, isAnonymous, isOfAge } =
+    const { firstName, lastName, email, password, confirmPassword, isAnonymous, isOfAge } =
       req.body;
 
     if (!firstName || !lastName || !email || !password) {
@@ -102,7 +102,11 @@ router.post("/signup", async (req, res) => {
         "You must confirm that you are at least 18 years old to sign up."
       );
     }
-
+    if(password!==confirmPassword){
+      throw new Error(
+        "Passwords do not match."
+      )
+    }
     const newUser = await userData.addUser(
       firstName,
       lastName,
