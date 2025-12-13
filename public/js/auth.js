@@ -46,8 +46,8 @@ function validateName(name, fieldName, errors) {
         return;
     }
     
-    if (trimmed.length > 20) {
-        errors.push(`${fieldName} cannot exceed 20 characters`);
+    if (trimmed.length > 50) {
+        errors.push(`${fieldName} cannot exceed 50 characters`);
         return;
     }
     
@@ -58,6 +58,7 @@ function validateName(name, fieldName, errors) {
                 isAccented(c) ||
                 c === "'" ||
                 c === "-" ||
+                c.charCodeAt(0) === 32 ||
                 c === "."
             )
         ) {
@@ -77,7 +78,6 @@ function validateSignupForm(form, errorContainer) {
     const lastNameInput = document.querySelector('input[name="lastName"]');
     const emailInput = document.querySelector('input[name="email"]');
     const ageCheckbox = document.querySelector('input[name="isOfAge"]');
-    const confirmPasswordInput = document.querySelector('input[name="confirmPassword"]');
 
     form.addEventListener('submit', (e) => {
         const errors = [];
@@ -107,9 +107,6 @@ function validateSignupForm(form, errorContainer) {
             if (!/[0-9]/.test(password)) {
                 errors.push('Password must contain at least one number');
             }
-            if(password.includes(" ")){
-                errors.push('Password contains an empty space');
-            }
             let specialChars = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
             let hasSpecial= false;
             for(let c of password){
@@ -123,12 +120,7 @@ function validateSignupForm(form, errorContainer) {
         } else {
             errors.push('Password is required');
         }
-        if(confirmPasswordInput){
-            const confirmPassword = confirmPasswordInput.value;
-            if(confirmPassword !== passwordInput.value){
-                errors.push('Passwords do not match');
-            }
-        }
+
         if (ageCheckbox && !ageCheckbox.checked) {
             errors.push('You must confirm you are at least 18 years old');
         }
